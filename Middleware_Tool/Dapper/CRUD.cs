@@ -20,7 +20,7 @@ namespace Dapper
             SetDialect(_dialect);
         }
 
-        private static string _connstring = "server = 127.0.0.1; User Id = root; password = password; database = log4; Persist Security Info = True; charset='gbk';";
+        private static string _connstring = "server = 127.0.0.1; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
 
         public static IDbConnection ConnStr { get; private set; }
 

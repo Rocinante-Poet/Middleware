@@ -56,6 +56,7 @@ namespace Middleware_Model
         public int UserID { get; set; }
 
         public string Name { get; set; }
+        public string Pwd { get; set; }
         public string Remark { get; set; }
         public int Power_ID { get; set; }
         public string UserState { get; set; }

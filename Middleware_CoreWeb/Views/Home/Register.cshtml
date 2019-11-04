@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Register";
+    Layout = "_layout";
+}
+
+<body class="bg-dark">
+    <div class="container">
+        <div class="card card-login mx-auto mt-5">
+            <div class="card-header">Register an Account</div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="text" id="inputName" class="form-control" placeholder="Name" required="required">
+                            <label for="inputName">登录名称</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
+                            <label for="inputPassword">登录密码</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required="required">
+                            <label for="confirmPassword">确认密码</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="text" id="inputRemark" class="form-control" placeholder="Remark" required="required">
+                            <label for="inputRemark">用户姓名或工号</label>
+                        </div>
+                    </div>
+                    <a id="BtnRegister" class="btn btn-primary btn-block">注册</a>
+                </form>
+                <div class="text-center">
+                    <a class="d-block small mt-3" href="/Home/Login">登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(function () {
+        $('#BtnRegister').click(function () {
+            if ($('#inputName').val() == "" || $('#inputPassword').val() == "" || $('#inputRemark').val() == "") {
+                alert("字段不能为空!");
+                return;
+            } else if ($('#inputPassword').val() != $('#confirmPassword').val()) {
+                alert("密码不一致！请重新输入。");
+                $('#inputPassword').val("");
+                $('#confirmPassword').val("");
+                return;
+            }
+            $.ajax({
+                type: 'Put',
+                url: '/api/Login',
+                contentType: 'application/json',
+                data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val(), "Remark": $('#inputRemark').val() }),
+                datatype: 'json',
+                success: function (res) {
+                    if (res.success) {
+                        toastr.success('注册成功，3秒后自动跳转。')
+                        setTimeout(function () {
+                            window.location.href = "/Home/Login";
+                        }, 2500);
+                    }
+                    else {
+                        toastr.error(res.message);
+                    }
+                },
+                error: function (e) {
+                    toastr.error(e.responseText);
+                }
+            });
+        });
+    });
+</script>
