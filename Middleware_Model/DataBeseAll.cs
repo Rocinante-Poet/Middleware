@@ -61,4 +61,10 @@ namespace Middleware_Model
         public int Power_ID { get; set; }
         public string UserState { get; set; }
     }
+
+    public class Task { 
+    
+    
+    
+    }
 }
