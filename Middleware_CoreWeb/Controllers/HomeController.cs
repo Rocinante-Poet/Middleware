@@ -32,7 +32,7 @@ namespace Middleware_CoreWeb.Controllers
 
         public IActionResult Main()
         {
-            return View(new NavigatorBarModel());
+            return View();
         }
     }
 }

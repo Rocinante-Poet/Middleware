@@ -50,7 +50,7 @@ namespace Middleware_CoreWeb
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 RequestPath = "/node_modules",
