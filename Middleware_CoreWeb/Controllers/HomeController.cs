@@ -19,5 +19,15 @@ namespace Middleware_CoreWeb.Controllers
         {
             return View();
         }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        public IActionResult ForgotPWD()
+        {
+            return View();
+        }
     }
 }
