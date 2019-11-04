@@ -19,5 +19,10 @@ namespace Middleware_CoreWeb.Controllers
         {
             return View();
         }
+
+        public IActionResult Main()
+        {
+            return View(new NavigatorBarModel());
+        }
     }
 }
