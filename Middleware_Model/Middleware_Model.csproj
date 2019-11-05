@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="menu_model.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Middleware_Tool\Middleware_Tool.csproj" />
   </ItemGroup>
 
