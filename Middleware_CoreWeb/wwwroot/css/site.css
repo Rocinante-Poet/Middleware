@@ -113,7 +113,7 @@ body.trans-mute * {
     padding: 15px 15px 0 15px;
     margin-left: 0;
     left: 0;
-    bottom: 40px;
+    bottom: 0px;
     right: 0;
     top: 89px;
     transition: margin-left .3s ease-in-out;

@@ -3,11 +3,11 @@
     Layout = "_BaseLayout";
 }
 @section css {
-    <link href="~/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/node_modules/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="~/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/node_modules/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
-    <link href="~/css/theme.css?" rel="stylesheet" />
+    @RenderSection("css", false)
+    <link href="~/css/theme.css" rel="stylesheet" />
     <link href="~/css/theme-responsive.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/css/site-responsive.css" rel="stylesheet" />
@@ -195,7 +195,10 @@
 </section>
 @section javascript {
     <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/node_modules/popper.js/dist/umd/popper.js"></script>
+    <script src="~/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    @RenderSection("javascript", false)
     <script src="~/js/common-scripts.js"></script>
 }

@@ -9,7 +9,9 @@
     "toastr": "2.1.4",
     "startbootstrap-sb-admin": "5.1.1",
     "font-awesome": "4.7.0",
-    "overlayscrollbars": "1.10.0"
-    
+    "overlayscrollbars": "1.10.0",
+    "bootstrap-table": "1.15.5",
+    "bootstrap-select": "1.13.12",
+    "popper.js": "1.16.0"
   }
 }

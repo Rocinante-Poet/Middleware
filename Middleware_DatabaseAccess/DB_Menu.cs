@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Middleware_Model;
+using Middleware_DatabaseAccess;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,10 +10,14 @@ namespace Middleware_DatabaseAccess
 {
     public class DB_Menu
     {
-        /// <summary>
-        ///
-        /// </summary>
-        /// <returns></returns>
+        public IEnumerable<menu_model> GetList()
+        {
+            return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
+            {
+                return connection.GetList<menu_model>();
+            });
+        }
+
         public IEnumerable<menu_model> GetFatherList()
         {
             return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Middleware_DatabaseAccess;
-using Middleware_Model;
+using Middleware_DatabaseAccess;
 using Newtonsoft.Json;
 
 namespace Middleware_CoreWeb.Controllers.api

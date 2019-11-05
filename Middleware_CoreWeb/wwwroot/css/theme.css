@@ -627,7 +627,8 @@ input.pending {
 }
 
     .bootstrap-table .fixed-table-body .table td > a {
-        display: block;
+        display: inline-block;
+        color:white;
     }
 
     .bootstrap-table .fixed-table-toolbar .columns-right .btn-group .dropdown-menu {

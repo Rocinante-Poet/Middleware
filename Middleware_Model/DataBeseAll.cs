@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_Model
+namespace Middleware_DatabaseAccess
 {
     public class DataBeseAll
     {
