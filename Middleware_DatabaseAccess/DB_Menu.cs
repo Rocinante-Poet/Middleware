@@ -24,7 +24,6 @@ namespace Middleware_Model
             {
                 return connection.GetList<menu_model>(new { menuid = Id });
             });
-           
         }
     }
 }
