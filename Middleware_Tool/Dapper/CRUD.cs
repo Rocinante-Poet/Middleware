@@ -34,7 +34,7 @@ namespace Dapper
             SetDialect(_dialect);
         }
 
-        private static string _connstring = "server = 118.31.71.216; User Id = root; password = password; database = wcs; ";
+        private static string _connstring = "server = 118.31.71.216; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
         //public static IDbConnection connection { get; private set; }
         //private static string _connstring = "server = 127.0.0.1; User Id = root; password = 123456; database = wcs; Persist Security Info = True; charset='gbk';";
 
@@ -168,7 +168,6 @@ namespace Dapper
                 }
             }
         }
-
 
         /// <summary>
         /// 执行SQL语句返回受影响行数(事务)

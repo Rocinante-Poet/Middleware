@@ -23,9 +23,12 @@ namespace Middleware_CoreWeb.Controllers
 
 
 
+        public class PowerController : Controller
+        {
+            public IActionResult Admin() => View();
+        }
 
 
 
-       
     }
 }

@@ -10,9 +10,8 @@ namespace Middleware_DatabaseAccess
     public class DB_User
     {
         /// <summary>
-        ///
+        /// 登录
         /// </summary>
-        /// <param name="_user"></param>
         /// <returns></returns>
         public bool DBLogin(Userinfo _user)
         {
@@ -26,6 +25,10 @@ namespace Middleware_DatabaseAccess
             });
         }
 
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <returns></returns>
         public bool DBRegister(Userinfo _user)
         {
             return CRUD.ExcuteSql<bool>(connection =>
