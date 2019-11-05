@@ -27,7 +27,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Returns a single entity by a single id from table T.</returns>
-        public static async Task<T> GetAsync<T>(object id, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static async Task<T> GetAsync<T>(this IDbConnection ConnStr, object id, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var idProps = GetIdProperties(currenttype).ToList();
@@ -78,7 +78,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Gets a list of entities with optional exact match where conditions</returns>
-        public static Task<IEnumerable<T>> GetListAsync<T>(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<IEnumerable<T>> GetListAsync<T>(this IDbConnection ConnStr, object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
@@ -117,7 +117,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Gets a list of entities with optional SQL where conditions</returns>
-        public static Task<IEnumerable<T>> GetListAsync<T>(string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<IEnumerable<T>> GetListAsync<T>(this IDbConnection ConnStr, string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
@@ -144,9 +144,9 @@ namespace Dapper
         /// <typeparam name="T"></typeparam>
         /// <param name="connection"></param>
         /// <returns>Gets a list of all entities</returns>
-        public static Task<IEnumerable<T>> GetListAsync<T>()
+        public static Task<IEnumerable<T>> GetListAsync<T>(this IDbConnection ConnStr)
         {
-            return GetListAsync<T>(new { });
+            return ConnStr.GetListAsync<T>(new { });
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Gets a list of entities with optional exact match where conditions</returns>
-        public static Task<IEnumerable<T>> GetListPagedAsync<T>(int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<IEnumerable<T>> GetListPagedAsync<T>(this IDbConnection ConnStr,int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             if (string.IsNullOrEmpty(_getPagedListSql))
                 throw new Exception("GetListPage is not supported with the current SQL Dialect");
@@ -215,9 +215,9 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The ID (primary key) of the newly inserted record if it is identity using the int? type, otherwise null</returns>
-        public static Task<int?> InsertAsync<TEntity>(TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<int?> InsertAsync<TEntity>(this IDbConnection ConnStr, TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            return InsertAsync<int?, TEntity>(entityToInsert, transaction, commandTimeout);
+            return ConnStr.InsertAsync<int?, TEntity>(entityToInsert, transaction, commandTimeout);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The ID (primary key) of the newly inserted record if it is identity using the defined type, otherwise null</returns>
-        public static async Task<TKey> InsertAsync<TKey, TEntity>(TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static async Task<TKey> InsertAsync<TKey, TEntity>(this IDbConnection ConnStr, TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var idProps = GetIdProperties(entityToInsert).ToList();
 
@@ -310,7 +310,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of affected records</returns>
-        public static Task<int> UpdateAsync<TEntity>(TEntity entityToUpdate, IDbTransaction transaction = null, int? commandTimeout = null, System.Threading.CancellationToken? token = null)
+        public static Task<int> UpdateAsync<TEntity>(this IDbConnection ConnStr, TEntity entityToUpdate, IDbTransaction transaction = null, int? commandTimeout = null, System.Threading.CancellationToken? token = null)
         {
             var idProps = GetIdProperties(entityToUpdate).ToList();
 
@@ -347,7 +347,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of records affected</returns>
-        public static Task<int> DeleteAsync<T>(T entityToDelete, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<int> DeleteAsync<T>(this IDbConnection ConnStr, T entityToDelete, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var idProps = GetIdProperties(entityToDelete).ToList();
 
@@ -382,7 +382,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of records affected</returns>
-        public static Task<int> DeleteAsync<T>(object id, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<int> DeleteAsync<T>(this IDbConnection ConnStr, object id, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var idProps = GetIdProperties(currenttype).ToList();
@@ -432,7 +432,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of records affected</returns>
-        public static Task<int> DeleteListAsync<T>(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<int> DeleteListAsync<T>(this IDbConnection ConnStr, object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
@@ -467,7 +467,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of records affected</returns>
-        public static Task<int> DeleteListAsync<T>(string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<int> DeleteListAsync<T>(this IDbConnection ConnStr, string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             if (string.IsNullOrEmpty(conditions))
                 throw new ArgumentException("DeleteList<T> requires a where clause");
@@ -501,7 +501,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Returns a count of records.</returns>
-        public static Task<int> RecordCountAsync<T>(string conditions = "", object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<int> RecordCountAsync<T>(this IDbConnection ConnStr, string conditions = "", object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
@@ -529,7 +529,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Returns a count of records.</returns>
-        public static Task<int> RecordCountAsync<T>(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static Task<int> RecordCountAsync<T>(this IDbConnection ConnStr, object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
