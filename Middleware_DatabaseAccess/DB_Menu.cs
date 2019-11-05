@@ -6,7 +6,7 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Middleware_Model
+namespace Middleware_DatabaseAccess
 {
     public class DB_Menu
     {

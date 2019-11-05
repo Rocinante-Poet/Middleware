@@ -20,7 +20,7 @@ namespace Middleware_CoreWeb.Controllers.api
         /// 登录
         /// </summary>
         /// <returns> Json </returns>
-        [HttpPost]
+        [HttpPost]//("/Login")
         public JsonResult LoginUser([FromBody] Userinfo _user)
         {
             var _return = db.DBLogin(_user);
@@ -34,7 +34,7 @@ namespace Middleware_CoreWeb.Controllers.api
         /// 注册
         /// </summary>
         /// <returns> Json </returns>
-        [HttpPut]
+        [HttpPut]//("/Reg")
         public JsonResult Register([FromBody] Userinfo _user)
         {
             var _return = db.DBRegister(_user);

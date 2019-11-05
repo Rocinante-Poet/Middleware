@@ -77,7 +77,7 @@
                 }
                 $.ajax({
                     type: 'Put',
-                    url: '/api/Login',
+                    url: '/Login',
                     contentType: 'application/json',
                     data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val(), "Remark": $('#inputRemark').val() }),
                     datatype: 'json',
@@ -85,7 +85,7 @@
                         if (res.success) {
                             toastr.success('注册成功，3秒后自动跳转。')
                             setTimeout(function () {
-                                window.location.href = "/Home/Login";
+                                window.location.href = "/Login";
                             }, 2500);
                         }
                         else {

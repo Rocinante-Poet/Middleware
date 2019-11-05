@@ -49,7 +49,7 @@ namespace Middleware_CoreWeb
             // 认证授权
             var authOptions = new AuthBuilder()
                .Security("aaaafsfsfdrhdhrejtrjrt", "ASPNETCORE", "ASPNETCORE")
-               .Jump("accoun/login", "account/error", false, false)
+               .Jump("login", "error", false, false)
                .Time(TimeSpan.FromMinutes(20))
                .InfoScheme(new CZGL.Auth.Models.AuthenticateScheme
                {
@@ -57,8 +57,8 @@ namespace Middleware_CoreWeb
                    TokenIssued = "登录验证失败!",
                    NoPermissions = "登录验证失败!"
                }).Build();
-            services.AddRoleService(authOptions);
             services.AddSingleton<IRoleEventsHadner, RoleEvents>();
+            services.AddRoleService(authOptions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,18 +68,12 @@ namespace Middleware_CoreWeb
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 RequestPath = "/node_modules",
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
-            });
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=login}/{id?}");
             });
 
             // 启用中间件服务生成Swagger
@@ -92,9 +86,20 @@ namespace Middleware_CoreWeb
             });
 
             // 认证授权
-            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseAuthentication();
+
+            //app.UseAuthentication();
+            //app.UseAuthorization();
             app.UseMiddleware<RoleMiddleware>();
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+                      {
+                          endpoints.MapControllerRoute(
+                              name: "default",
+                              pattern: "{controller=Home}/{action=Login}/{id?}");
+                      });
         }
     }
 }

@@ -9,6 +9,9 @@ namespace Middleware_CoreWeb.Models
 {
     public class RoleEvents : IRoleEventsHadner
     {
+        /// <summary>
+        /// 授权开始前
+        /// </summary>
         public async Task Start(HttpContext httpContext)
         {
             await Task.CompletedTask;
@@ -16,18 +19,22 @@ namespace Middleware_CoreWeb.Models
 
         public void TokenEbnormal(object eventsInfo)
         {
+            throw new NotImplementedException();
         }
 
         public void TokenIssued(object eventsInfo)
         {
+            throw new NotImplementedException();
         }
 
         public void NoPermissions(object eventsInfo)
         {
+            throw new NotImplementedException();
         }
 
         public void Success(object eventsInfo)
         {
+            throw new NotImplementedException();
         }
 
         public async Task End(HttpContext httpContext)
