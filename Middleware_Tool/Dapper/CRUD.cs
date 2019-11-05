@@ -22,7 +22,6 @@ namespace Dapper
 
         private static string _connstring = "server = 127.0.0.1; User Id = root; password = 123456; database = wcs; Persist Security Info = True; charset='gbk';";
 
-        public static IDbConnection ConnStr { get; private set; }
 
         private static Dialect _dialect = Dialect.MySQL;
         private static string _encapsulation;
@@ -37,6 +36,153 @@ namespace Dapper
 
         private static ITableNameResolver _tableNameResolver = new TableNameResolver();
         private static IColumnNameResolver _columnNameResolver = new ColumnNameResolver();
+
+
+
+        /// <summary>
+        /// 从连接池获取SQL连接
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public static IDbConnection CreateConnection()
+        {
+            return SetDialect(_dialect);
+        }
+
+        /// <summary>
+        /// 执行SQL语句
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static void ExcuteSql(Action<IDbConnection> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                try
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+                    action.Invoke(connection);
+                }
+                catch (Exception ex) { }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+        //
+
+
+        /// <summary>
+        /// 执行SQL语句(事务)
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static void ExcuteSql( Action<IDbConnection, IDbTransaction> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+                    action.Invoke(connection, transaction);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    transaction.Dispose();
+                    //Log4NetHelper.WriteErrorLog(ex.Message, ex);
+                }
+                finally { connection.Close(); }
+            }
+        }
+
+
+        /// <summary>
+        /// 执行SQL语句返回受影响行数
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static int ExcuteSql( Func<IDbConnection, int> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                try
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+                    return action.Invoke(connection);
+                }
+                catch (Exception ex) { return 0; }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 执行SQL语句返回受影响行数(事务)
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static int ExcuteSql(Func<IDbConnection, IDbTransaction, int> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+                    var count = action.Invoke(connection, transaction);
+                    transaction.Commit();
+                    return count;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    transaction.Dispose();
+                    return 0;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 执行SQL语句返回 T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static T ExcuteSql<T>(Func<IDbConnection, T> action)
+        {
+            T obj = default(T);
+            using (IDbConnection connection = CreateConnection())
+            {
+                try
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+                    obj = action.Invoke(connection);
+                }
+                catch (Exception ex) { }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return obj;
+        }
+
 
         /// <summary>
         /// Append a Cached version of a strinbBuilderAction result based on a cacheKey
@@ -72,8 +218,9 @@ namespace Dapper
         /// Sets the database dialect
         /// </summary>
         /// <param name="dialect"></param>
-        public static void SetDialect(Dialect dialect)
+        public static IDbConnection SetDialect(Dialect dialect)
         {
+            IDbConnection ConnStr = null;
             switch (dialect)
             {
                 case Dialect.PostgreSQL:
@@ -106,13 +253,14 @@ namespace Dapper
                     break;
 
                 default:
-                    ConnStr = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
+                     ConnStr = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
                     _dialect = Dialect.MySQL;
                     _encapsulation = "`{0}`";
                     _getIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
                     _getPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {Offset},{RowsPerPage}";
                     break;
             }
+            return ConnStr;
         }
 
         /// <summary>
@@ -147,7 +295,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>从表T 一个ID返回一个单一的实体</returns>
-        public static T Get<T>(object id, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static T Get<T>(this IDbConnection ConnStr, object id, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var idProps = GetIdProperties(currenttype).ToList();
@@ -197,7 +345,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>获取具有可选的精确匹配的条件的实体列表</returns>
-        public static IEnumerable<T> GetList<T>(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static IEnumerable<T> GetList<T>(this IDbConnection ConnStr, object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
@@ -235,7 +383,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Gets a list of entities with optional SQL where conditions</returns>
-        public static IEnumerable<T> GetList<T>(string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static IEnumerable<T> GetList<T>(this IDbConnection ConnStr, string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
@@ -262,9 +410,9 @@ namespace Dapper
         /// <typeparam name="T"></typeparam>
         /// <param name="connection"></param>
         /// <returns>Gets a list of all entities</returns>
-        public static IEnumerable<T> GetList<T>()
+        public static IEnumerable<T> GetList<T>(this IDbConnection ConnStr)
         {
-            return GetList<T>(new { });
+            return ConnStr.GetList<T>(new { });
         }
 
         /// <summary>
@@ -286,7 +434,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Gets a paged list of entities with optional exact match where conditions</returns>
-        public static IEnumerable<T> GetListPaged<T>(int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static IEnumerable<T> GetListPaged<T>(this IDbConnection ConnStr, int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             if (string.IsNullOrEmpty(_getPagedListSql))
                 throw new Exception("GetListPage is not supported with the current SQL Dialect");
@@ -337,9 +485,9 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>如果是identity的int?类型，返回新插入的记录的ID（主键）,否则返回null</returns>
-        public static int? Insert<TEntity>(TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int? Insert<TEntity>(this IDbConnection ConnStr, TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            return Insert<int?, TEntity>(entityToInsert, transaction, commandTimeout);
+            return Insert<int?, TEntity>(ConnStr,entityToInsert, transaction, commandTimeout);
         }
 
         /// <summary>
@@ -356,7 +504,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>如果是identity的int?类型，返回新插入的记录的ID（主键）,否则返回null</returns>
-        public static TKey Insert<TKey, TEntity>(TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static TKey Insert<TKey, TEntity>(this IDbConnection ConnStr, TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var idProps = GetIdProperties(entityToInsert).ToList();
 
@@ -433,7 +581,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>影响的行数</returns>
-        public static int Update<TEntity>(TEntity entityToUpdate, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int Update<TEntity>(this IDbConnection ConnStr, TEntity entityToUpdate, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var masterSb = new StringBuilder();
             StringBuilderCache(masterSb, $"{typeof(TEntity).FullName}_Update", sb =>
@@ -471,7 +619,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of records effected</returns>
-        public static int Delete<T>(T entityToDelete, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int Delete<T>(this IDbConnection ConnStr, T entityToDelete, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var masterSb = new StringBuilder();
             StringBuilderCache(masterSb, $"{typeof(T).FullName}_Delete", sb =>
@@ -508,7 +656,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>影响的行数</returns>
-        public static int Delete<T>(object id, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int Delete<T>(this IDbConnection ConnStr, object id, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var idProps = GetIdProperties(currenttype).ToList();
@@ -558,7 +706,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of records affected</returns>
-        public static int DeleteList<T>(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int DeleteList<T>(this IDbConnection ConnStr, object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var masterSb = new StringBuilder();
             StringBuilderCache(masterSb, $"{typeof(T).FullName}_DeleteWhere{whereConditions?.GetType()?.FullName}", sb =>
@@ -596,7 +744,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>The number of records affected</returns>
-        public static int DeleteList<T>(string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int DeleteList<T>(this IDbConnection ConnStr, string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var masterSb = new StringBuilder();
             StringBuilderCache(masterSb, $"{typeof(T).FullName}_DeleteWhere{conditions}", sb =>
@@ -633,7 +781,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Returns a count of records.</returns>
-        public static int RecordCount<T>(string conditions = "", object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int RecordCount<T>(this IDbConnection ConnStr, string conditions = "", object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
@@ -661,7 +809,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Returns a count of records.</returns>
-        public static int RecordCount<T>(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int RecordCount<T>(this IDbConnection ConnStr, object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var currenttype = typeof(T);
             var name = GetTableName(currenttype);
