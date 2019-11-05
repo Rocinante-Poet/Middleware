@@ -1,40 +1,40 @@
 (function ($) {
-    $.fn.extend({
-        autoScrollSidebar: function (options) {
-            var option = $.extend({ target: null, offsetTop: 0 }, options);
-            var $navItem = option.target;
-            if ($navItem === null || $navItem.length === 0) return this;
+    //$.fn.extend({
+    //    autoScrollSidebar: function (options) {
+    //        var option = $.extend({ target: null, offsetTop: 0 }, options);
+    //        var $navItem = option.target;
+    //        if ($navItem === null || $navItem.length === 0) return this;
 
-            // sidebar scroll animate
-            var middle = this.outerHeight() / 2;
-            var top = $navItem.offset().top + option.offsetTop - this.offset().top;
-            var $scrollInstance = this[0]["__overlayScrollbars__"];
-            if (top > middle) {
-                if ($scrollInstance) $scrollInstance.scroll({ x: 0, y: top - middle }, 500, "swing");
-                else this.animate({ scrollTop: top - middle });
-            }
-            return this;
-        },
-        addNiceScroll: function () {
-            if ($(window).width() > 768) {
-                this.overlayScrollbars({
-                    className: 'os-theme-light',
-                    scrollbars: {
-                        autoHide: 'leave',
-                        autoHideDelay: 100
-                    },
-                    overflowBehavior: {
-                        x: "hidden",
-                        y: "scroll"
-                    }
-                });
-            }
-            else {
-                this.css('overflow', 'auto');
-            }
-            return this;
-        }
-    });
+    //        // sidebar scroll animate
+    //        var middle = this.outerHeight() / 2;
+    //        var top = $navItem.offset().top + option.offsetTop - this.offset().top;
+    //        var $scrollInstance = this[0]["__overlayScrollbars__"];
+    //        if (top > middle) {
+    //            if ($scrollInstance) $scrollInstance.scroll({ x: 0, y: top - middle }, 500, "swing");
+    //            else this.animate({ scrollTop: top - middle });
+    //        }
+    //        return this;
+    //    },
+    //    addNiceScroll: function () {
+    //        if ($(window).width() > 768) {
+    //            this.overlayScrollbars({
+    //                className: 'os-theme-light',
+    //                scrollbars: {
+    //                    autoHide: 'leave',
+    //                    autoHideDelay: 100
+    //                },
+    //                overflowBehavior: {
+    //                    x: "hidden",
+    //                    y: "scroll"
+    //                }
+    //            });
+    //        }
+    //        else {
+    //            this.css('overflow', 'auto');
+    //        }
+    //        return this;
+    //    }
+    //});
 
     $.fn.extend({
         nestMenu: function (callback) {
@@ -200,15 +200,15 @@ $(function () {
     //    }, 5000);
     //}
 
-    var $sideMenu = $(".sidebar ul");
+    //var $sideMenu = $(".sidebar ul");
 
-    // breadcrumb
-    var $breadNav = $('#breadNav, .main-header .breadcrumb-item:last');
-    var arch = $sideMenu.find('a.active').last();
-    $breadNav.removeClass('d-none').text(arch.text() || $('title').text());
+    //// breadcrumb
+    //var $breadNav = $('#breadNav, .main-header .breadcrumb-item:last');
+    //var arch = $sideMenu.find('a.active').last();
+    //$breadNav.removeClass('d-none').text(arch.text() || $('title').text());
 
-    // custom scrollbar
-    $sidebar = $('.sidebar').addNiceScroll().autoScrollSidebar({ target: arch.parent(), offsetTop: arch.parent().innerHeight() / 2 });
+    //// custom scrollbar
+    //$sidebar = $('.sidebar').addNiceScroll().autoScrollSidebar({ target: arch.parent(), offsetTop: arch.parent().innerHeight() / 2 });
 
     // 大于 768 时考虑网站设置 收缩侧边栏
     if ($(window).width() > 768) {
@@ -295,7 +295,7 @@ $(function () {
     window.CheckboxHtmlTemplate = '<div class="form-group col-md-3 col-sm-4 col-6"><label title="{3}" data-toggle="tooltip" role="checkbox" aria-checked="false" class="form-checkbox is-{2}"><span class="checkbox-input"><span class="checkbox-inner"></span><input type="checkbox" value="{0}" {2} /></span><span class="checkbox-label">{1}</span></label></div>';
 
 
-    $(window).on('resize', function () {
-        $sidebar.addNiceScroll();
-    });
+    //$(window).on('resize', function () {
+    //    $sidebar.addNiceScroll();
+    //});
 });

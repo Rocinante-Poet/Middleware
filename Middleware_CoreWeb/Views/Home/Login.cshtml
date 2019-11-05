@@ -27,7 +27,7 @@
                             </label>
                         </div>
                     </div>
-                    <a id="Btnlogin" class="btn btn-primary btn-block">登录</a>
+                    <a id="Btnlogin" class="btn btn-primary btn-block" style="color:white">登录</a>
                 </form>
                 <div class="text-center">
                     <a class="d-block small mt-3" href="/Home/Register">注册新账号</a>
@@ -52,7 +52,7 @@
                 success: function (res) {
                     if (res.success) {
                         setTimeout(function () {
-                            window.location.href = "/Home/Main";
+                            window.location.href = "/Power/Menu";
                         });
                     }
                     else {

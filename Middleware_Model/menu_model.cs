@@ -1,6 +1,6 @@
 using Dapper;
 
-namespace Middleware_Model
+namespace Middleware_DatabaseAccess
 {
     /*代码自动生成工具自动生成,不要在这里写代码，否则会被自动覆盖哦 */
 

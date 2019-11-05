@@ -34,7 +34,7 @@ namespace Dapper
             SetDialect(_dialect);
         }
 
-        private static string _connstring = "server = 127.0.0.1; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
+        private static string _connstring = "server = 118.31.71.216; User Id = root; password = password; database = wcs; ";
         //public static IDbConnection connection { get; private set; }
         //private static string _connstring = "server = 127.0.0.1; User Id = root; password = 123456; database = wcs; Persist Security Info = True; charset='gbk';";
 
@@ -304,7 +304,7 @@ namespace Dapper
                     _getPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {Offset},{RowsPerPage}";
                     break;
             }
-            return ConnStr;
+            return connection;
         }
 
         /// <summary>

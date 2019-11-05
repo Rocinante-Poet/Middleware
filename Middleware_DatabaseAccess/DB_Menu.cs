@@ -1,15 +1,23 @@
 ﻿using Dapper;
-using Middleware_Model;
+using Middleware_DatabaseAccess;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Middleware_Model
+namespace Middleware_DatabaseAccess
 {
     public class DB_Menu
     {
+        public IEnumerable<menu_model> GetList()
+        {
+            return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
+            {
+                return connection.GetList<menu_model>();
+            });
+        }
+
         public IEnumerable<menu_model> GetFatherList()
         {
             return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
@@ -18,7 +26,7 @@ namespace Middleware_Model
             });
         }
 
-        public  IEnumerable<menu_model> sonItemMenu(int Id)
+        public IEnumerable<menu_model> sonItemMenu(int Id)
         {
             return CRUD.ExcuteSql<IEnumerable<menu_model>>(connection =>
             {

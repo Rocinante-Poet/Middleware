@@ -10,29 +10,12 @@ namespace Middleware_CoreWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
-        public IActionResult ForgotPWD()
-        {
-            return View();
-        }
-
-        public IActionResult Main()
-        {
-            return View(new NavigatorBarModel());
-        }
+        public IActionResult ForgotPWD() => View();
     }
 }

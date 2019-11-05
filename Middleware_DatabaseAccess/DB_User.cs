@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Middleware_Model;
+using Middleware_DatabaseAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +40,6 @@ namespace Middleware_DatabaseAccess
                     return true;
                 }
             });
-
         }
     }
 }

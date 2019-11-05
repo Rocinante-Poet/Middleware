@@ -33,6 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap-select-1.13.2\.github\ISSUE_TEMPLATE.md" />
+    <None Include="wwwroot\lib\bootstrap-select-1.13.2\.github\move.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Middleware_DatabaseAccess\Middleware_DatabaseAccess.csproj" />
     <ProjectReference Include="..\Middleware_Model\Middleware_Model.csproj" />
     <ProjectReference Include="..\Middleware_Tool\Middleware_Tool.csproj" />
