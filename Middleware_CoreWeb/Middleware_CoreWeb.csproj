@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -29,13 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="wwwroot\js\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\lib\overlayscrollbars\jquery.overlayScrollbars.js" />
-    <None Include="wwwroot\lib\overlayscrollbars\jquery.overlayScrollbars.min.js" />
   </ItemGroup>
 
   <ItemGroup>

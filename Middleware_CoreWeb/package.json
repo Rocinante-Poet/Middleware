@@ -7,6 +7,9 @@
     "bootstrap": "4.3.1",
     "jquery": "3.4.1",
     "toastr": "2.1.4",
-    "startbootstrap-sb-admin": "5.1.1"
+    "startbootstrap-sb-admin": "5.1.1",
+    "font-awesome": "4.7.0",
+    "overlayscrollbars": "1.10.0"
+    
   }
 }

@@ -36,6 +36,7 @@ namespace Dapper
 
         private static string _connstring = "server = 127.0.0.1; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
         //public static IDbConnection connection { get; private set; }
+        //private static string _connstring = "server = 127.0.0.1; User Id = root; password = 123456; database = wcs; Persist Security Info = True; charset='gbk';";
 
         private static Dialect _dialect = Dialect.MySQL;
         private static string _encapsulation;
@@ -50,6 +51,149 @@ namespace Dapper
 
         private static ITableNameResolver _tableNameResolver = new TableNameResolver();
         private static IColumnNameResolver _columnNameResolver = new ColumnNameResolver();
+
+        /// <summary>
+        /// 从连接池获取SQL连接
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public static IDbConnection CreateConnection()
+        {
+            return SetDialect(_dialect);
+        }
+
+        /// <summary>
+        /// 执行SQL语句
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static void ExcuteSql(Action<IDbConnection> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                try
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+                    action.Invoke(connection);
+                }
+                catch (Exception ex) { }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        //
+
+        /// <summary>
+        /// 执行SQL语句(事务)
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static void ExcuteSql(Action<IDbConnection, IDbTransaction> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+                    action.Invoke(connection, transaction);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    transaction.Dispose();
+                    //Log4NetHelper.WriteErrorLog(ex.Message, ex);
+                }
+                finally { connection.Close(); }
+            }
+        }
+
+        /// <summary>
+        /// 执行SQL语句返回受影响行数
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static int ExcuteSql(Func<IDbConnection, int> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                try
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+                    return action.Invoke(connection);
+                }
+                catch (Exception ex) { return 0; }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 执行SQL语句返回受影响行数(事务)
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static int ExcuteSql(Func<IDbConnection, IDbTransaction, int> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+                    var count = action.Invoke(connection, transaction);
+                    transaction.Commit();
+                    return count;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    transaction.Dispose();
+                    return 0;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 执行SQL语句返回 T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static T ExcuteSql<T>(Func<IDbConnection, T> action)
+        {
+            T obj = default(T);
+            using (IDbConnection connection = CreateConnection())
+            {
+                try
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
+                    obj = action.Invoke(connection);
+                }
+                catch (Exception ex) { }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return obj;
+        }
 
         /// <summary>
         /// Append a Cached version of a strinbBuilderAction result based on a cacheKey
@@ -85,8 +229,9 @@ namespace Dapper
         /// Sets the database dialect
         /// </summary>
         /// <param name="dialect"></param>
-        public static void SetDialect(Dialect dialect)
+        public static IDbConnection SetDialect(Dialect dialect)
         {
+            IDbConnection connection = null;
             switch (dialect)
             {
                 case Dialect.PostgreSQL:
@@ -111,7 +256,7 @@ namespace Dapper
                     break;
 
                 case Dialect.MySQL:
-                    //connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
+                    connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
                     _dialect = Dialect.MySQL;
                     _encapsulation = "`{0}`";
                     _getIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
@@ -119,13 +264,14 @@ namespace Dapper
                     break;
 
                 default:
-                    //connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
+                    connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
                     _dialect = Dialect.MySQL;
                     _encapsulation = "`{0}`";
                     _getIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
                     _getPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {Offset},{RowsPerPage}";
                     break;
             }
+            return ConnStr;
         }
 
         /// <summary>
