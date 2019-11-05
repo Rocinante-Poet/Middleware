@@ -16,24 +16,31 @@ namespace Middleware_DatabaseAccess
         /// <returns></returns>
         public bool DBLogin(Userinfo _user)
         {
-            var data = CRUD.GetList<Userinfo>(new { _user.Name, _user.Pwd }).ToList();
+            return CRUD.ExcuteSql<bool>(connection =>
+            {
+                var data = connection.GetList<Userinfo>(new { _user.Name, _user.Pwd }).ToList();
 
-            if (data.Count != 0)
-                return true;
-            return false;
+                if (data.Count != 0)
+                    return true;
+                return false;
+            });
         }
 
         public bool DBRegister(Userinfo _user)
         {
-            var data = CRUD.GetList<Userinfo>(new { _user.Name }).ToList();
-
-            if (data.Count != 0)
-                return false;
-            else
+            return CRUD.ExcuteSql<bool>(connection =>
             {
-                var d = CRUD.Insert<int, Userinfo>(new Userinfo { Name = _user.Name, Pwd = _user.Pwd, Remark = _user.Remark });
-                return true;
-            }
+                var data = connection.GetList<Userinfo>(new { _user.Name }).ToList();
+
+                if (data.Count != 0)
+                    return false;
+                else
+                {
+                    var d = connection.Insert<int, Userinfo>(new Userinfo { Name = _user.Name, Pwd = _user.Pwd, Remark = _user.Remark });
+                    return true;
+                }
+            });
+
         }
     }
 }
