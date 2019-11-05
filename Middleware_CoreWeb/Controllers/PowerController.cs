@@ -20,13 +20,7 @@ namespace Middleware_CoreWeb.Controllers
         /// <returns></returns>
         public IActionResult Menu() => View(new NavigatorBarModel());
 
-
-
-
-        public class PowerController : Controller
-        {
-            public IActionResult Admin() => View();
-        }
+        public IActionResult Admin() => View();
 
 
 
