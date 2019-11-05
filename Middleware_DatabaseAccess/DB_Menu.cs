@@ -12,7 +12,7 @@ namespace Middleware_Model
     {
         public IEnumerable<menu_model> GetFatherList()
         {
-            return CRUD.ExcuteSql<IEnumerable<menu_model>>(connection =>
+            return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
             {
                 return connection.GetList<menu_model>(new { menuid = 0 });
             });

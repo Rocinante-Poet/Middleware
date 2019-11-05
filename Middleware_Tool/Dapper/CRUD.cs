@@ -64,7 +64,7 @@ namespace Dapper
                         connection.Open();
                     action.Invoke(connection);
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) { throw new Exception(ex.Message); }
                 finally
                 {
                     connection.Close();
@@ -96,6 +96,7 @@ namespace Dapper
                     transaction.Rollback();
                     transaction.Dispose();
                     //Log4NetHelper.WriteErrorLog(ex.Message, ex);
+                    throw new Exception(ex.Message);
                 }
                 finally { connection.Close(); }
             }
@@ -156,6 +157,38 @@ namespace Dapper
             }
         }
 
+
+        /// <summary>
+        /// 执行SQL语句返回受影响行数(事务)
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static T ExcuteSql<T>(Func<IDbConnection, IDbTransaction, T> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+                    var obj = action.Invoke(connection, transaction);
+                    transaction.Commit();
+                    return obj;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    transaction.Dispose();
+                    return default(T);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
         /// <summary>
         /// 执行SQL语句返回 T
         /// </summary>
@@ -174,7 +207,7 @@ namespace Dapper
                         connection.Open();
                     obj = action.Invoke(connection);
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) { throw new Exception(ex.Message); }
                 finally
                 {
                     connection.Close();
