@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CZGL.Auth.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -14,10 +15,10 @@ namespace Middleware_CoreWeb
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
             RoleService roleService = new RoleService();
             roleService.UpdateRole();
             roleService.UpdateUser();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

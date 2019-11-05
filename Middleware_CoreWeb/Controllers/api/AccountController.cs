@@ -7,6 +7,8 @@ using CZGL.Auth.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Middleware_CoreWeb.Models;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
@@ -15,7 +17,7 @@ namespace Middleware_CoreWeb.Controllers.api
     public class AccountController : ControllerBase
     {
         [HttpPost("/Login")]
-        public async Task<JsonResult> Login([FromQuery]string username, string password, string rolename)
+        public JsonResult Login([FromQuery]string username, string password, string rolename)
         {
             // 用户名密码是否正确
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(rolename))
@@ -27,7 +29,7 @@ namespace Middleware_CoreWeb.Controllers.api
                 });
             }
 
-            if (!((username == "aa" || username == "bb" || username == "cc") && password == "123456"))
+            if (!((username == "aa" || username == "1" || username == "cc") && password == "1"))
             {
                 return new JsonResult(new
                 {
@@ -50,14 +52,14 @@ namespace Middleware_CoreWeb.Controllers.api
 
             //// 自定义构建配置用户标识
             //// 自定义的话，至少包含如下标识
-            // var userClaims = new Claim[]
-            //{
-            //new Claim(ClaimTypes.Name, userName),
-            //    new Claim(ClaimTypes.Role, roleName),
-            //    new Claim(JwtRegisteredClaimNames.Aud, Audience),
-            //    new Claim(ClaimTypes.Expiration, TimeSpan.TotalSeconds.ToString()),
-            //    new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString())
-            //};
+            //var userClaims = new Claim[]
+            // {
+            //      new Claim(ClaimTypes.Name,username),
+            //      new Claim(ClaimTypes.Role,rolename),
+            //      new Claim(JwtRegisteredClaimNames.Aud,AuthConfig.model.Audience),
+            //      new Claim(ClaimTypes.Expiration,AuthConfig.model.TimeSpan.TotalSeconds.ToString()),
+            //      new Claim(JwtRegisteredClaimNames.Iat,new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString())
+            // };
             /*
             iss (issuer)：签发人
             exp (expiration time)：过期时间

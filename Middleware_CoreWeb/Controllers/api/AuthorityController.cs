@@ -13,6 +13,19 @@ namespace Middleware_CoreWeb.Controllers.api
     [ApiController]
     public class AuthorityController : ControllerBase
     {
+        [HttpGet("/2")]
+        public string Strtext()
+        {
+            return "22222";
+        }
+
+        [HttpGet]
+        public string Strtext1()
+        {
+            return "wwwwwww";
+        }
+
+        [Authorize]
         [HttpGet("/A")]
         public JsonResult A()
         {
@@ -59,13 +72,13 @@ namespace Middleware_CoreWeb.Controllers.api
         /// 任何人都不能访问
         /// </summary>
         /// <returns></returns>
-        [HttpGet("D")]
+        [HttpGet("/D")]
         public JsonResult D()
         {
             return new JsonResult(new { Code = 200, Message = "Success!" });
         }
 
-        [HttpGet("error")]
+        [HttpGet("/error")]
         public JsonResult Denied()
         {
             return new JsonResult(
