@@ -10,6 +10,10 @@ namespace Middleware_Model
 {
     public class DB_Menu
     {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<menu_model> GetFatherList()
         {
             return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
@@ -18,7 +22,7 @@ namespace Middleware_Model
             });
         }
 
-        public  IEnumerable<menu_model> sonItemMenu(int Id)
+        public IEnumerable<menu_model> sonItemMenu(int Id)
         {
             return CRUD.ExcuteSql<IEnumerable<menu_model>>(connection =>
             {

@@ -1,7 +1,14 @@
 ﻿@{
     ViewData["Title"] = "ForgotPWD";
+    Layout = "_User";
 }
+@section css{
+    <!-- Custom fonts for this template-->
+    <link href="~/node_modules/startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+    <!-- Custom styles for this template-->
+    <link href="~/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
+}
 <body class="bg-dark">
     <div class="container">
         <div class="card card-login mx-auto mt-5">
@@ -28,3 +35,12 @@
         </div>
     </div>
 </body>
+@section javascript{
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+}

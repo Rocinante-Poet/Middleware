@@ -1,6 +1,16 @@
 ﻿@{
-    Layout = "_layout";
+    Layout = "_User";
     ViewData["Title"] = "Admin - Login";
+}
+
+@section css {
+
+    <!-- Custom fonts for this template-->
+    <link href="~/node_modules/startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template-->
+    <link href="~/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
+
 }
 <body class="bg-dark">
     <div class="container">
@@ -36,33 +46,46 @@
         </div>
     </div>
 </body>
-<script>
-    $(function () {
-        $('#Btnlogin').click(function () {
-            if ($('#inputName').val() == "" || $('#inputPassword').val() == "") {
-                alert("账号密码不能为空!");
-                return;
-            }
-            $.ajax({
-                type: 'post',
-                url: '/api/Login',
-                contentType: 'application/json',
-                data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val() }),
-                datatype: 'json',
-                success: function (res) {
-                    if (res.success) {
-                        setTimeout(function () {
-                            window.location.href = "/Home/Main";
-                        });
-                    }
-                    else {
-                        alert(res.message);
-                    }
-                },
-                error: function (e) {
-                    alert(e.responseText);
+@section javascript {
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- toastr JavaScript-->
+    <link href="~/node_modules/toastr/build/toastr.css" rel="stylesheet" />
+    <script src="~/node_modules/toastr/toastr.js"></script>
+    <script>
+        $(function () {
+            $('#Btnlogin').click(function () {
+                if ($('#inputName').val() == "" || $('#inputPassword').val() == "") {
+                    toastr.warning("账号密码不能为空!");
+                    return;
                 }
+                $.ajax({
+                    type: 'post',
+                    url: '/api/Login',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val() }),
+                    datatype: 'json',
+                    success: function (res) {
+                        if (res.success) {
+                            setTimeout(function () {
+                                window.location.href = "/Home/Main";
+                            });
+                        }
+                        else {
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+}

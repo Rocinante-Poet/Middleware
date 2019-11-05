@@ -1,3 +1,6 @@
+using CZGL.Auth.Interface;
+using CZGL.Auth.Services;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Middleware_CoreWeb.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
@@ -41,6 +45,20 @@ namespace Middleware_CoreWeb
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            // 认证授权
+            var authOptions = new AuthBuilder()
+               .Security("aaaafsfsfdrhdhrejtrjrt", "ASPNETCORE", "ASPNETCORE")
+               .Jump("accoun/login", "account/error", false, false)
+               .Time(TimeSpan.FromMinutes(20))
+               .InfoScheme(new CZGL.Auth.Models.AuthenticateScheme
+               {
+                   TokenEbnormal = "登录验证失败!",
+                   TokenIssued = "登录验证失败!",
+                   NoPermissions = "登录验证失败!"
+               }).Build();
+            services.AddRoleService(authOptions);
+            services.AddSingleton<IRoleEventsHadner, RoleEvents>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +90,11 @@ namespace Middleware_CoreWeb
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;//设置根节点访问
             });
+
+            // 认证授权
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseMiddleware<RoleMiddleware>();
         }
     }
 }

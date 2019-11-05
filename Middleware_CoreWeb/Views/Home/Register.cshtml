@@ -1,8 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Register";
-    Layout = "_layout";
+    Layout = "_User";
 }
+@section css {
 
+    <!-- Custom fonts for this template-->
+    <link href="~/node_modules/startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template-->
+    <link href="~/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
+
+}
 <body class="bg-dark">
     <div class="container">
         <div class="card card-login mx-auto mt-5">
@@ -42,39 +50,54 @@
         </div>
     </div>
 </body>
-<script>
-    $(function () {
-        $('#BtnRegister').click(function () {
-            if ($('#inputName').val() == "" || $('#inputPassword').val() == "" || $('#inputRemark').val() == "") {
-                alert("字段不能为空!");
-                return;
-            } else if ($('#inputPassword').val() != $('#confirmPassword').val()) {
-                alert("密码不一致！请重新输入。");
-                $('#inputPassword').val("");
-                $('#confirmPassword').val("");
-                return;
-            }
-            $.ajax({
-                type: 'Put',
-                url: '/api/Login',
-                contentType: 'application/json',
-                data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val(), "Remark": $('#inputRemark').val() }),
-                datatype: 'json',
-                success: function (res) {
-                    if (res.success) {
-                        toastr.success('注册成功，3秒后自动跳转。')
-                        setTimeout(function () {
-                            window.location.href = "/Home/Login";
-                        }, 2500);
-                    }
-                    else {
-                        toastr.error(res.message);
-                    }
-                },
-                error: function (e) {
-                    toastr.error(e.responseText);
+@section javascript {
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- toastr JavaScript-->
+    <link href="~/node_modules/toastr/build/toastr.css" rel="stylesheet" />
+    <script src="~/node_modules/toastr/toastr.js"></script>
+
+    <script>
+        $(function () {
+            $('#BtnRegister').click(function () {
+                if ($('#inputName').val() == "" || $('#inputPassword').val() == "" || $('#inputRemark').val() == "") {
+                    toastr.warning("字段不能为空!");
+                    return;
+                } else if ($('#inputPassword').val() != $('#confirmPassword').val()) {
+                    toastr.warning("密码不一致！请重新输入。");
+                    $('#inputPassword').val("");
+                    $('#confirmPassword').val("");
+                    return;
                 }
+                $.ajax({
+                    type: 'Put',
+                    url: '/api/Login',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val(), "Remark": $('#inputRemark').val() }),
+                    datatype: 'json',
+                    success: function (res) {
+                        if (res.success) {
+                            toastr.success('注册成功，3秒后自动跳转。')
+                            setTimeout(function () {
+                                window.location.href = "/Home/Login";
+                            }, 2500);
+                        }
+                        else {
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+
+}
