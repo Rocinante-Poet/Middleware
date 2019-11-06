@@ -77,7 +77,7 @@
                 }
                 $.ajax({
                     type: 'Put',
-                    url: '/Login',
+                    url: 'api/Login',
                     contentType: 'application/json',
                     data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val(), "Remark": $('#inputRemark').val() }),
                     datatype: 'json',

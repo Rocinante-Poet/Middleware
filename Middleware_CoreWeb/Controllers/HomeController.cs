@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Middleware_CoreWeb.Controllers
 {
-    [AllowAnonymous]
     public class HomeController : Controller
     {
         public IActionResult Index() => View();

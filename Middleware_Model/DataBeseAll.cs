@@ -60,6 +60,7 @@ namespace Middleware_DatabaseAccess
         public string Remark { get; set; }
         public int Power_ID { get; set; }
         public string UserState { get; set; }
+        public bool HasAdminRights { get; set; }
     }
 
     [Table("menu")]

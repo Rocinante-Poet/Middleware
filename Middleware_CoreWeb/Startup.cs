@@ -1,3 +1,5 @@
+using JwtAuthenticationHelper.Extensions;
+using JwtAuthenticationHelper.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +41,20 @@ namespace Middleware_CoreWeb
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            var tokenOptions = new TokenOptions(
+               Configuration["Token:Audience"],
+               Configuration["Token:Issuer"],
+               Configuration["Token:SigningKey"]);
+
+            services.AddJwtAuthenticationWithProtectedCookie(
+                tokenOptions);
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequiresAdmin",
+                    policy =>
+                    policy.RequireClaim("HasAdminRights"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,13 +80,7 @@ namespace Middleware_CoreWeb
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Login}");
-            });
+            app.UseAuthentication();
 
             //// 启用中间件服务生成Swagger
             app.UseSwagger();
@@ -79,6 +89,13 @@ namespace Middleware_CoreWeb
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyAPI");
                 c.RoutePrefix = string.Empty;//设置根节点访问
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Login}");
             });
         }
     }

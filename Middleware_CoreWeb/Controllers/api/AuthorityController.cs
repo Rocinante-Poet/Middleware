@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using JwtAuthenticationHelper.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Middleware_DatabaseAccess;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
@@ -12,6 +15,58 @@ namespace Middleware_CoreWeb.Controllers.api
     [ApiController]
     public class AuthorityController : ControllerBase
     {
+        private readonly IJwtTokenGenerator jwtTokenGenerator;
+
+        public AuthorityController(IJwtTokenGenerator jwtTokenGenerator)
+        {
+            this.jwtTokenGenerator = jwtTokenGenerator;
+        }
+
+        [HttpPost("/login")]
+        public async Task<IActionResult> Login([FromBody]Userinfo userCredentials)
+        {
+            // Replace this with your custom authentication logic which will
+            // securely return the authenticated user's details including
+            // any role specific info
+            if (userCredentials.Name == "1" && userCredentials.Pwd == "1")
+            {
+                var userInfo = new Userinfo
+                {
+                    Name = "UserFName",
+                    Remark = "UserLName",
+                    HasAdminRights = true
+                };
+
+                var accessTokenResult = jwtTokenGenerator.GenerateAccessTokenWithClaimsPrincipal(
+                    userCredentials.Name,
+                    AddMyClaims(userInfo));
+
+                return Ok(accessTokenResult.AccessToken);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        private static IEnumerable<Claim> AddMyClaims(Userinfo authenticatedUser)
+        {
+            var myClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.GivenName, authenticatedUser.Name),
+                new Claim(ClaimTypes.Surname, authenticatedUser.Remark),
+                new Claim("HasAdminRights", authenticatedUser.HasAdminRights ? "Y" : "N")
+            };
+
+            return myClaims;
+        }
+
+        [HttpGet]
+        public JsonResult Get()
+        {
+            return new JsonResult(new { Code = 200, Message = "Success!" });
+        }
+
         [Authorize]
         [HttpGet("/A")]
         public JsonResult A()
@@ -19,51 +74,8 @@ namespace Middleware_CoreWeb.Controllers.api
             return new JsonResult(new { Code = 200, Message = "Success!" });
         }
 
-        [AllowAnonymous]
         [HttpGet("/B")]
         public JsonResult B()
-        {
-            return new JsonResult(new { Code = 200, Message = "Success!" });
-        }
-
-        [Authorize]
-        [HttpGet("/C")]
-        public JsonResult C()
-        {
-            return new JsonResult(new { Code = 200, Message = "Success!" });
-        }
-
-        [AllowAnonymous]
-        [HttpGet("/AB")]
-        public JsonResult AB()
-        {
-            return new JsonResult(new { Code = 200, Message = "Success!" });
-        }
-
-        [HttpGet("/BC")]
-        public JsonResult BC()
-        {
-            return new JsonResult(new { Code = 200, Message = "Success!" });
-        }
-
-        [HttpGet("/AC")]
-        public JsonResult AC()
-        {
-            return new JsonResult(new { Code = 200, Message = "Success!" });
-        }
-
-        [HttpGet("/ABC")]
-        public JsonResult ABC()
-        {
-            return new JsonResult(new { claims = User.Claims });
-        }
-
-        /// <summary>
-        /// 任何人都不能访问
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("/D")]
-        public JsonResult D()
         {
             return new JsonResult(new { Code = 200, Message = "Success!" });
         }

@@ -67,14 +67,14 @@
                 }
                 $.ajax({
                     type: 'post',
-                    url: '/Login',
+                    url: 'api/Login',
                     contentType: 'application/json',
                     data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val() }),
                     datatype: 'json',
                     success: function (res) {
                         if (res.success) {
                             setTimeout(function () {
-                                window.location.href = "/power/menu";
+                                window.location.href = "power/menu";
                             });
                         }
                         else {
