@@ -8,23 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorityController : ControllerBase
     {
-        [HttpGet("/2")]
-        public string Strtext()
-        {
-            return "22222";
-        }
-
-        [HttpGet]
-        public string Strtext1()
-        {
-            return "wwwwwww";
-        }
-
         [Authorize]
         [HttpGet("/A")]
         public JsonResult A()
@@ -32,18 +19,21 @@ namespace Middleware_CoreWeb.Controllers.api
             return new JsonResult(new { Code = 200, Message = "Success!" });
         }
 
+        [AllowAnonymous]
         [HttpGet("/B")]
         public JsonResult B()
         {
             return new JsonResult(new { Code = 200, Message = "Success!" });
         }
 
+        [Authorize]
         [HttpGet("/C")]
         public JsonResult C()
         {
             return new JsonResult(new { Code = 200, Message = "Success!" });
         }
 
+        [AllowAnonymous]
         [HttpGet("/AB")]
         public JsonResult AB()
         {
