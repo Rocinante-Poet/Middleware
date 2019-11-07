@@ -8,6 +8,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -32,14 +33,27 @@ namespace Middleware_CoreWeb
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "My API",
+                    Title = "CoreWebApi",
                     Version = "v1",
-                    Description = "RESTful API"
+                    Description = "ASP.NET Core WebApi"
                 });
-                // 为 Swagger 设置xml文档注释路径
+
+                // 读取xml信息 使用反射获取xml文件。并构造出文件的路径
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                // 启用xml注释. 该方法第二个参数启用控制器的注释，默认为false.
+                c.IncludeXmlComments(xmlPath, true);
+
+                // 启用swagger验证功能
+                //var security = new Dictionary<string, IEnumerable<string>> { { "CoreAPI", new string[] { } }, };
+                //c.AddSecurityRequirement(security);
+                //c.AddSecurityDefinition("CoreAPI", new ApiKeyScheme
+                //{
+                //    Description = "JWT授权(数据将在请求头中进行传输) 在下方输入Bearer {token} 即可，注意两者之间有空格",
+                //    Name = "Authorization",//jwt默认的参数名称
+                //    In = "header",//jwt默认存放Authorization信息的位置(请求头中)
+                //    Type = "apiKey"
+                //});
             });
 
             var tokenOptions = new TokenOptions(
@@ -83,8 +97,8 @@ namespace Middleware_CoreWeb
             app.UseAuthentication();
 
             //// 启用中间件服务生成Swagger
-            app.UseSwagger();
             //// 启用中间件服务生成SwaggerUI，指定Swagger JSON终结点
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyAPI");
