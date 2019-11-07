@@ -34,7 +34,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0-rc4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,7 +48,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Middleware_DatabaseAccess\Middleware_DatabaseAccess.csproj" />
     <ProjectReference Include="..\Middleware_Model\Middleware_Model.csproj" />
-    <ProjectReference Include="..\Middleware_Tool\Middleware_Tool.csproj" />
   </ItemGroup>
 
   <ItemGroup>
