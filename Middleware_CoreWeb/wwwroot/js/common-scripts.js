@@ -174,6 +174,11 @@ $(function () {
     // enable animoation effect
     $('body').removeClass('trans-mute');
 
+
+    $('button[data-method="clear"]').on('click', function () {
+        $(this).parent('.input-group-append').prev('input').val('');
+    });
+
     //// 自动锁屏功能
     //var mousePosition = { screenX: 0, screenY: 0 };
     //var count = 1;

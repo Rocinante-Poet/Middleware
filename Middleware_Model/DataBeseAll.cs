@@ -105,5 +105,10 @@ namespace Middleware_DatabaseAccess
         /// 是否为子菜单
         /// </summary>
         public int type { get; set; }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int no { get; set; }
     }
 }

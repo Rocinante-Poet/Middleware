@@ -34,7 +34,7 @@ namespace Dapper
             SetDialect(_dialect);
         }
 
-        private static string _connstring = "server = 118.31.71.216; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
+        private static string _connstring = "server = 127.0.0.1; User Id = root; password = 123456; database = wcs; Persist Security Info = True; charset='gbk';";
         //public static IDbConnection connection { get; private set; }
         //private static string _connstring = "server = 127.0.0.1; User Id = root; password = 123456; database = wcs; Persist Security Info = True; charset='gbk';";
 
@@ -477,7 +477,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>Gets a paged list of entities with optional exact match where conditions</returns>
-        public static IEnumerable<T> GetListPaged<T>(this IDbConnection connection, int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static IEnumerable<T> GetListPaged<T>(this IDbConnection connection, int pageNumber, int rowsPerPage, string conditions = "", string orderby = "", object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             if (string.IsNullOrEmpty(_getPagedListSql))
                 throw new Exception("GetListPage is not supported with the current SQL Dialect");

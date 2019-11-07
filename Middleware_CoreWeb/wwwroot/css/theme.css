@@ -628,7 +628,7 @@ input.pending {
 
     .bootstrap-table .fixed-table-body .table td > a {
         display: inline-block;
-        color:white;
+        color: white;
     }
 
     .bootstrap-table .fixed-table-toolbar .columns-right .btn-group .dropdown-menu {
@@ -950,3 +950,159 @@ label[for] {
     .custom-control-label:before, .custom-control-label::after {
         top: 3px;
     }
+
+.selectc {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.btn-light:hover {
+    color: #212529;
+    background-color: #fff;
+    border-color: #dae0e5;
+}
+
+.btn-light:not(:disabled):not(.disabled):active, .btn-light:not(:disabled):not(.disabled).active, .show > .btn-light.dropdown-toggle {
+    color: #212529;
+    background-color: #fff;
+    border-color: #d3d9df;
+}
+/*去除选择框的outline*/
+.bootstrap-select .dropdown-toggle:focus {
+    outline: none !important;
+}
+/*去除选项的outline*/
+a:focus {
+    outline: none !important;
+}
+
+.btn-light:focus, .btn-light.focus {
+    box-shadow: none;
+}
+
+.btn:focus, .btn.focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%;
+    display: inline-block;
+}
+
+@media (min-width: 576px) {
+    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+        width: 194px;
+        display: inline-block;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+/*外层轨道。可以用display:none让其不显示，也可以添加背景图片，颜色改变显示效果*/
+
+::-webkit-scrollbar-track {
+    width: 6px;
+    background-color: white;
+    -webkit-border-radius: 1.1em;
+    -moz-border-radius: 1.1em;
+    border-radius: 1.1em;
+    display: none;
+}
+
+/*滚动条的设置*/
+
+::-webkit-scrollbar-thumb {
+    background-color: #B3B3B3;
+    background-clip: padding-box;
+    min-height: 28px;
+    -webkit-border-radius: 1.1em;
+    -moz-border-radius: 1.1em;
+    border-radius: 1.1em;
+}
+    /*滚动条移上去的背景*/
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-moz-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+/*外层轨道。可以用display:none让其不显示，也可以添加背景图片，颜色改变显示效果*/
+
+-moz-scrollbar-track {
+    width: 6px;
+    background-color: white;
+    -webkit-border-radius: 1.1em;
+    -moz-border-radius: 1.1em;
+    border-radius: 1.1em;
+    display: none;
+}
+
+/*滚动条的设置*/
+
+-moz-scrollbar-thumb {
+    background-color: #B3B3B3;
+    background-clip: padding-box;
+    min-height: 28px;
+    -webkit-border-radius: 1.1em;
+    -moz-border-radius: 1.1em;
+    border-radius: 1.1em;
+}
+    /*滚动条移上去的背景*/
+
+-moz-scrollbar-thumb:hover {
+    background-color: #fff;
+}
+
+
+
+.label-success {
+    background-color: #5cb85c;
+}
+
+.label-errer {
+    background-color: red;
+}
+
+.label-lock {
+    background-color: #6b460c;
+}
+
+.label-move {
+    background-color: #337ab7;
+}
+
+.label {
+    display: inline-block;
+    font-size: 75%;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    width: 60px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 0.25em;
+}

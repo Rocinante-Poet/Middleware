@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Middleware_CoreWeb.Models;
 using Middleware_DatabaseAccess;
+using Middleware_Model;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
@@ -14,9 +15,7 @@ namespace Middleware_CoreWeb.Controllers.api
     public class menuController : ControllerBase
     {
         [HttpGet]
-        public JsonData<menu_model> Get([FromQuery]int limit, int offset)
-        {
-            return new JsonData<menu_model>() { rows = new DB_Menu().GetList(), total = 500 };
-        }
+        public JsonData<menu_model> Get([FromQuery]int limit, int offset, string meunName) => new DB_Menu().GetList(limit, offset,meunName);
+
     }
 }

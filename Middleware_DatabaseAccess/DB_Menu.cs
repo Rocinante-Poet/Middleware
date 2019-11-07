@@ -5,16 +5,31 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
+using Middleware_Model;
 
 namespace Middleware_DatabaseAccess
 {
     public class DB_Menu
     {
-        public IEnumerable<menu_model> GetList()
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="Pagelimit"></param>
+        /// <param name="Pageoffset"></param>
+        /// <param name="meunName"></param>
+        /// <returns></returns>
+        public JsonData<menu_model> GetList(int Pagelimit, int Pageoffset, string meunName)
         {
-            return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
+            return CRUD.ExcuteSql((connection) =>
             {
-                return connection.GetList<menu_model>();
+                StringBuilder strQuery = new StringBuilder();
+                if (!string.IsNullOrWhiteSpace(meunName))
+                {
+                    strQuery.Append("where name like CONCAT('%',@Name,'%')"); 
+                }
+                var List = connection.GetListPaged<menu_model>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "", new { Name = meunName });
+                var CountPage = connection.RecordCount<menu_model>(strQuery.ToString(),new { Name = meunName });
+                return new JsonData<menu_model>() { rows = List, total = CountPage };
             });
         }
 
@@ -22,7 +37,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
             {
-                return connection.GetList<menu_model>(new { menuid = 0 });
+                return connection.GetList<menu_model>(new { menuid = 0 }).OrderBy(p => p.no);
             });
         }
 
@@ -30,7 +45,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql<IEnumerable<menu_model>>(connection =>
             {
-                return connection.GetList<menu_model>(new { menuid = Id });
+                return connection.GetList<menu_model>(new { menuid = Id }).OrderBy(p => p.no);
             });
         }
     }

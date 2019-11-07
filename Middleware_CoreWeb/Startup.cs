@@ -1,19 +1,10 @@
-using CZGL.Auth.Interface;
-using CZGL.Auth.Services;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Middleware_CoreWeb.Models;
-using Swashbuckle.AspNetCore.Swagger;
-using System;
 using System.IO;
-using System.Reflection;
 
 namespace Middleware_CoreWeb
 {
@@ -30,35 +21,23 @@ namespace Middleware_CoreWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //配置Swagger
-            //注册Swagger生成器，定义一个Swagger 文档
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "My API",
-                    Version = "v1",
-                    Description = "RESTful API"
-                });
-                // 为 Swagger 设置xml文档注释路径
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
+            ////配置Swagger
+            ////注册Swagger生成器，定义一个Swagger 文档
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo
+            //    {
+            //        Title = "My API",
+            //        Version = "v1",
+            //        Description = "RESTful API"
+            //    });
+            //    // 为 Swagger 设置xml文档注释路径
+            //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //    c.IncludeXmlComments(xmlPath);
+            //});
 
-            // 认证授权
-            var authOptions = new AuthBuilder()
-               .Security("aaaafsfsfdrhdhrejtrjrt", "ASPNETCORE", "ASPNETCORE")
-               .Jump("login", "error", false, false)
-               .Time(TimeSpan.FromMinutes(20))
-               .InfoScheme(new CZGL.Auth.Models.AuthenticateScheme
-               {
-                   TokenEbnormal = "登录验证失败!",
-                   TokenIssued = "登录验证失败!",
-                   NoPermissions = "登录验证失败!"
-               }).Build();
-            services.AddSingleton<IRoleEventsHadner, RoleEvents>();
-            services.AddRoleService(authOptions);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,30 +55,17 @@ namespace Middleware_CoreWeb
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
             });
 
-            // 启用中间件服务生成Swagger
-            app.UseSwagger();
-            // 启用中间件服务生成SwaggerUI，指定Swagger JSON终结点
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;//设置根节点访问
-            });
 
-            // 认证授权
-            app.UseAuthorization();
-            app.UseAuthentication();
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
-            app.UseMiddleware<RoleMiddleware>();
+
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>
-                      {
-                          endpoints.MapControllerRoute(
-                              name: "default",
-                              pattern: "{controller=Home}/{action=Login}/{id?}");
-                      });
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Login}/{id?}");
+            });
         }
     }
 }

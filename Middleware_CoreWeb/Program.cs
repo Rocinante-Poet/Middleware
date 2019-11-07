@@ -15,9 +15,9 @@ namespace Middleware_CoreWeb
     {
         public static void Main(string[] args)
         {
-            RoleService roleService = new RoleService();
-            roleService.UpdateRole();
-            roleService.UpdateUser();
+            //RoleService roleService = new RoleService();
+            //roleService.UpdateRole();
+            //roleService.UpdateUser();
             CreateHostBuilder(args).Build().Run();
         }
 

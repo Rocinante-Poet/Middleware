@@ -193,12 +193,15 @@
 <section id="main-content" class="main-content ">
     @RenderBody()
 </section>
+@section modal {
+    @RenderSection("modal", false)
+}
 @section javascript {
     <script src="~/node_modules/jquery/dist/jquery.js"></script>
-    <script src="~/node_modules/popper.js/dist/umd/popper.js"></script>
+    <script src="~/js/popper.min.js"></script>
     <script src="~/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    @*<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>*@
+    @*<script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>*@
     @RenderSection("javascript", false)
     <script src="~/js/common-scripts.js"></script>
 }
