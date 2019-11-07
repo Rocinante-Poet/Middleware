@@ -13,6 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Authority\**" />
+    <Content Remove="Models\Authority\**" />
+    <EmbeddedResource Remove="Models\Authority\**" />
+    <None Remove="Models\Authority\**" />
+    <TypeScriptCompile Remove="Models\Authority\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
@@ -30,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Authority\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 

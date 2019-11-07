@@ -42,18 +42,15 @@ namespace Middleware_CoreWeb
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 // 启用xml注释. 该方法第二个参数启用控制器的注释，默认为false.
-                c.IncludeXmlComments(xmlPath, true);
-
-                // 启用swagger验证功能
-                //var security = new Dictionary<string, IEnumerable<string>> { { "CoreAPI", new string[] { } }, };
-                //c.AddSecurityRequirement(security);
-                //c.AddSecurityDefinition("CoreAPI", new ApiKeyScheme
+                c.IncludeXmlComments(xmlPath, false);
+                ////启用swagger验证功能
+                //c.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 //{
-                //    Description = "JWT授权(数据将在请求头中进行传输) 在下方输入Bearer {token} 即可，注意两者之间有空格",
+                //    Description = "权限认证(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
                 //    Name = "Authorization",//jwt默认的参数名称
                 //    In = "header",//jwt默认存放Authorization信息的位置(请求头中)
                 //    Type = "apiKey"
-                //});
+                //});//Authorization的设置
             });
 
             var tokenOptions = new TokenOptions(
