@@ -35,7 +35,7 @@ namespace Middleware_Tool
         public long ExpireSeconds { get; set; }
 
         /// <summary>
-        /// 签名Microsoft.AspNetCore.Authentication.JwtBearer
+        /// 签名 Microsoft.AspNetCore.Authentication.JwtBearer
         /// </summary>
         public SigningCredentials Credentials
         {
@@ -55,6 +55,8 @@ namespace Middleware_Tool
 
         public string Password { get; set; }
 
-        public bool IsAdmin { get; set; }
+        //public bool IsAdmin { get; set; }
+
+        public int RoleNumber { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace Middleware_CoreWeb
     {
         public static void Main(string[] args)
         {
+            _ = new JWTUpload().UpdateRole();
             CreateHostBuilder(args).Build().Run();
         }
 

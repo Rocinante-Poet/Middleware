@@ -37,7 +37,8 @@ namespace Middleware_DatabaseAccess
         public int ID { get; set; }
 
         public int PowerGroupID { get; set; }
-        public string Function { get; set; }
+        public string FunctionName { get; set; }
+        public string FunctionUrl { get; set; }
     }
 
     public class Powerinfo

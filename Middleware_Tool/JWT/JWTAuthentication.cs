@@ -15,11 +15,18 @@ namespace Middleware_Tool
         private readonly static JWTUserModel User = new JWTUserModel
         {
             Id = 1,
-            Name = "1",
-            Password = "1",
-            IsAdmin = true
+            Name = "3",
+            Password = "3",
+            //IsAdmin = true,
+            RoleNumber = 2
         };
 
+        /// <summary>
+        /// 登录认证
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<JWTUserModel> LoginAsync(string name, string password)
         {
             await Task.CompletedTask;

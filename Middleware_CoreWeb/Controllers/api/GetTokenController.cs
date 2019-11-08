@@ -15,36 +15,35 @@ namespace Middleware_CoreWeb.Controllers.api
     public class GetTokenController : ControllerBase
     {
         private readonly IJWTAuthentication _jWTAuthentication;
-        private readonly ITokenService _tokenServic;
+        private readonly IJWTTokenService _tokenServic;
 
-        //private readonly IIdentityService _identityService;
-
-        public GetTokenController(IJWTAuthentication auth,
-            ITokenService token)//, IIdentityService identity
+        public GetTokenController(IJWTAuthentication auth, IJWTTokenService token)
         {
-            _jWTAuthentication = auth; _tokenServic = token; //_identityService = identity;
+            _jWTAuthentication = auth;
+            _tokenServic = token;
         }
+
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<string> Get()
+        //{
+        //    await Task.CompletedTask;
+        //    return "Authorize";
+
+        //    //return $"{_identityService.GetUserId()}:{_identityService.GetUserName()}";
+        //}
+
+        //[HttpGet]
+        //public async Task<string> GetString()
+        //{
+        //    await Task.CompletedTask;
+        //    return "Welcome";
+        //}
 
         [HttpGet]
-        [Authorize]
-        public async Task<string> Get()
-        {
-            await Task.CompletedTask;
-            return "Authorize";
-
-            //return $"{_identityService.GetUserId()}:{_identityService.GetUserName()}";
-        }
-
-        [HttpGet]
-        public async Task<string> GetString()
-        {
-            await Task.CompletedTask;
-            return "Welcome";
-        }
-
-        [HttpGet("getToken")]
         public async Task<string> GetTokenAsync(string name, string password)
         {
+            // 认证用户
             var user = await _jWTAuthentication.LoginAsync(name, password);
             if (user == null)
                 return "Login Failed";

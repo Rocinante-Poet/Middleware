@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
-    public interface IIdentityService
+    public interface IJWTIdentityService
     {
         int GetUserId();
 
         string GetUserName();
     }
 
-    public class IdentityService : IIdentityService
+    public class JWTIdentityService : IJWTIdentityService
     {
         private readonly IHttpContextAccessor _context;
 
-        public IdentityService(IHttpContextAccessor context)
+        public JWTIdentityService(IHttpContextAccessor context)
         {
             _context = context;
         }

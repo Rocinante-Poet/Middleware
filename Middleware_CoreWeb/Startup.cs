@@ -8,6 +8,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Middleware_Tool;
 using System;
 using System.IO;
 using System.Reflection;
@@ -55,8 +56,9 @@ namespace Middleware_CoreWeb
             //});
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IJWTAuthentication, JWTAuthentication>();
+            services.AddScoped<IJWTTokenService, JWTTokenService>();
+            services.AddScoped<IJWTIdentityService, JWTIdentityService>();
 
             var jwtSetting = new Middleware_Tool.JwtSetting();
             Configuration.Bind("JwtSetting", jwtSetting);
@@ -98,8 +100,9 @@ namespace Middleware_CoreWeb
             app.UseRouting();
 
             //// JWT
-            app.UseMiddleware<JWTAuthentication>();
+            app.UseMiddleware<JWTAuth>();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             //// 启用中间件服务生成Swagger
             //// 启用中间件服务生成SwaggerUI，指定Swagger JSON终结点

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Microsoft.AspNetCore.Http.HttpContext
+@{
     ViewData["Title"] = "Admin - Dashboard";
     Layout = "_User";
 }
@@ -15,6 +16,40 @@
 
 }
 <body id="page-top">
+
+    <table>
+        <tr>
+            <td>RequestBody流</td>
+            <td> @Model.Request.Body</td>
+        </tr>
+        <tr>
+            <td>Content-Length头</td>
+            <td>@Model.Request.ContentLength</td>
+        </tr>
+        <tr>
+            <td>Content-Type头</td>
+            <td> @Model.Request.ContentType</td>
+        <tr>
+            <td>Cookies </td>
+            <td>@Model.Request.Cookies</td>
+        </tr>
+        <tr>
+            <td>IsHttps</td>
+            <td>@Model.Request.IsHttps</td>
+        </tr>
+        <tr>
+            <td>Host </td>
+            <td>@Model.Request.Host</td>
+        </tr>
+        <tr>
+            <td>StatusCode</td>
+            <td>@Model.Response.StatusCode</td>
+        </tr>
+        <tr>
+            <td>Redirect</td>
+            <td>@Model.Response</td>
+        </tr>
+    </table>
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
         <a class="navbar-brand mr-1" href="index.html">Start Bootstrap</a>
