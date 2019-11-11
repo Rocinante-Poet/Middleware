@@ -1,5 +1,6 @@
 ﻿
-@{
+@{ 
+    Layout = "_Default";
     ViewData["Title"] = "_Default";
 }
 @section css {
@@ -16,10 +17,10 @@
             oTable.Init();
 
             $('#btn_query').on('click', function () {
-                 $("#TableMenu").bootstrapTable('refresh');
+                $("#TableMenu").bootstrapTable('refresh');
             });
             $('#btn_repeat').on('click', function () {
-                 $("#txt_menus_name").val("");
+                $("#txt_menus_name").val("");
                 $("#TableMenu").bootstrapTable('refresh');
             });
 
@@ -164,14 +165,14 @@
             <div class="gear btn-group">
                 <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
                 <div class="dropdown-menu">
-                    <a  href="#" class="btn_add-min" title="新增"><i class="fa fa-plus"></i></a>
+                    <a href="#" class="btn_add-min" title="新增"><i class="fa fa-plus"></i></a>
                     <a id="tb_delete" href="#" title="删除"><i class="fa fa-remove"></i></a>
                     <a id="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
                     <a id="tb_assignRole" href="#" title="分配角色"><i class="fa fa-sitemap"></i></a>
                 </div>
             </div>
             <div class="toolbar btn-group">
-                <button  type="button" class="btn btn-success btn_add-max"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
+                <button type="button" class="btn btn-success btn_add-max"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
                 <button id="btn_edit" type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
                 <button id="btn_delete" type="button" class="btn btn-danger"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
                 <button id="btn_assignRole" type="button" class="btn btn-info">
