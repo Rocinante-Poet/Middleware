@@ -13,13 +13,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Authority\**" />
+    <Content Remove="Models\Authority\**" />
+    <EmbeddedResource Remove="Models\Authority\**" />
+    <None Remove="Models\Authority\**" />
+    <TypeScriptCompile Remove="Models\Authority\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Middleware_DatabaseAccess\Middleware_DatabaseAccess.csproj" />
     <ProjectReference Include="..\Middleware_Model\Middleware_Model.csproj" />
-    <ProjectReference Include="..\Middleware_Tool\Middleware_Tool.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

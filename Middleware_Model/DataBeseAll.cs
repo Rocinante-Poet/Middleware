@@ -1,7 +1,4 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Middleware_DatabaseAccess
 {
@@ -37,7 +34,8 @@ namespace Middleware_DatabaseAccess
         public int ID { get; set; }
 
         public int PowerGroupID { get; set; }
-        public string Function { get; set; }
+        public string FunctionName { get; set; }
+        public string FunctionUrl { get; set; }
     }
 
     public class Powerinfo
@@ -60,6 +58,7 @@ namespace Middleware_DatabaseAccess
         public string Remark { get; set; }
         public int Power_ID { get; set; }
         public string UserState { get; set; }
+        public bool HasAdminRights { get; set; }
     }
 
     [Table("menu")]
