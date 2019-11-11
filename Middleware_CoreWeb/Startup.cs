@@ -60,6 +60,9 @@ namespace Middleware_CoreWeb
 
 
             app.UseRouting();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

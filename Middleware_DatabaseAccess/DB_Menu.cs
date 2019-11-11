@@ -25,17 +25,17 @@ namespace Middleware_DatabaseAccess
                 StringBuilder strQuery = new StringBuilder();
                 if (!string.IsNullOrWhiteSpace(meunName))
                 {
-                    strQuery.Append("where name like CONCAT('%',@Name,'%')"); 
+                    strQuery.Append("where name like @Name");
                 }
-                var List = connection.GetListPaged<menu_model>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "", new { Name = meunName });
-                var CountPage = connection.RecordCount<menu_model>(strQuery.ToString(),new { Name = meunName });
+                var List = connection.GetListPaged<menu_model>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "", new { Name = $"%{meunName}%" });
+                var CountPage = connection.RecordCount<menu_model>(strQuery.ToString(), new { Name = $"%{meunName}%" });
                 return new JsonData<menu_model>() { rows = List, total = CountPage };
             });
         }
 
         public IEnumerable<menu_model> GetFatherList()
         {
-            return CRUD.ExcuteSql<IEnumerable<menu_model>>((connection) =>
+            return CRUD.ExcuteSql((connection) =>
             {
                 return connection.GetList<menu_model>(new { menuid = 0 }).OrderBy(p => p.no);
             });
@@ -43,7 +43,7 @@ namespace Middleware_DatabaseAccess
 
         public IEnumerable<menu_model> sonItemMenu(int Id)
         {
-            return CRUD.ExcuteSql<IEnumerable<menu_model>>(connection =>
+            return CRUD.ExcuteSql(connection =>
             {
                 return connection.GetList<menu_model>(new { menuid = Id }).OrderBy(p => p.no);
             });

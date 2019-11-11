@@ -15,7 +15,7 @@ namespace Middleware_DatabaseAccess
         /// <returns></returns>
         public bool DBLogin(Userinfo _user)
         {
-            return CRUD.ExcuteSql<bool>(connection =>
+            return CRUD.ExcuteSql(connection =>
             {
                 var data = connection.GetList<Userinfo>(new { _user.Name, _user.Pwd }).ToList();
 
@@ -31,7 +31,7 @@ namespace Middleware_DatabaseAccess
         /// <returns></returns>
         public bool DBRegister(Userinfo _user)
         {
-            return CRUD.ExcuteSql<bool>(connection =>
+            return CRUD.ExcuteSql(connection =>
             {
                 var data = connection.GetList<Userinfo>(new { _user.Name }).ToList();
 
