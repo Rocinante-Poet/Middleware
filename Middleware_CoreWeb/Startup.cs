@@ -111,7 +111,7 @@ namespace Middleware_CoreWeb
 
             //app.UseAuthentication();
             //app.UseAuthorization();
-            app.UseMiddleware<RoleMiddleware>();
+            app.UseMiddleware<JWTAuth>();
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>
