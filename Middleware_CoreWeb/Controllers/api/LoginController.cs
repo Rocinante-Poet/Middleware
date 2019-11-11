@@ -19,21 +19,21 @@ namespace Middleware_CoreWeb.Controllers.api
         /// 登录
         /// </summary>
         /// <returns> Json </returns>
-        [HttpPost]//("/Login")
+        [HttpPost]
         public JsonResult LoginUser([FromBody] Userinfo _user)
         {
-            var _return = db.DBLogin(_user);
+            //var _return = db.DBLogin(_user);
 
-            if (_return)
-                return new JsonResult(new { Success = true, Message = "登录成功" });
-            return new JsonResult(new { Success = false, Message = "登录失败" });
+            //if (_return)
+            return new JsonResult(new { Success = true, Message = "登录成功" });
+            //return new JsonResult(new { Success = false, Message = "登录失败" });
         }
 
         /// <summary>
         /// 注册
         /// </summary>
         /// <returns> Json </returns>
-        [HttpPut]//("/Reg")
+        [HttpPut]
         public JsonResult Register([FromBody] Userinfo _user)
         {
             var _return = db.DBRegister(_user);

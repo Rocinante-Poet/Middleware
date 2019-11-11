@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CZGL.Auth.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Middleware_CoreWeb.Models;
 
 namespace Middleware_CoreWeb
 {
@@ -15,9 +7,7 @@ namespace Middleware_CoreWeb
     {
         public static void Main(string[] args)
         {
-            //RoleService roleService = new RoleService();
-            //roleService.UpdateRole();
-            //roleService.UpdateUser();
+            _ = new JWTUpload().UpdateRole();
             CreateHostBuilder(args).Build().Run();
         }
 
