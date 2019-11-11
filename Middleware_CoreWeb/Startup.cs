@@ -1,19 +1,16 @@
-using CZGL.Auth.Interface;
-using CZGL.Auth.Services;
-using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Middleware_CoreWeb.Models;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.IdentityModel.Tokens;
+using Middleware_Tool;
 using System;
 using System.IO;
-using System.Reflection;
+using System.Text;
 
 namespace Middleware_CoreWeb
 {
