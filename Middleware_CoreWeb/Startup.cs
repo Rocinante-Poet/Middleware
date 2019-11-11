@@ -56,9 +56,6 @@ namespace Middleware_CoreWeb
             });
 
 
-
-
-
             app.UseRouting();
 
             app.UseAuthorization();

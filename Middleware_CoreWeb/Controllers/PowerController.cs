@@ -20,6 +20,10 @@ namespace Middleware_CoreWeb.Controllers
         /// <returns></returns>
         public IActionResult Menu() => View(new NavigatorBarModel());
 
+        /// <summary>
+        /// 管理员
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Admin() => View();
 
 
