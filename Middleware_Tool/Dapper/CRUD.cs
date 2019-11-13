@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dapper
 {
@@ -86,6 +87,7 @@ namespace Dapper
         }
 
         //
+
         /// <summary>
         /// 执行SQL语句(事务)
         /// </summary>
@@ -114,28 +116,28 @@ namespace Dapper
             }
         }
 
-        /// <summary>
-        /// 执行SQL语句返回受影响行数
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        public static int ExcuteSql(Func<IDbConnection, int> action)
-        {
-            using (IDbConnection connection = CreateConnection())
-            {
-                try
-                {
-                    if (connection.State == ConnectionState.Closed)
-                        connection.Open();
-                    return action.Invoke(connection);
-                }
-                catch (Exception ex) { return 0; }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
+        ///// <summary>
+        ///// 执行SQL语句返回受影响行数
+        ///// </summary>
+        ///// <param name="connectionString"></param>
+        ///// <param name="action"></param>
+        //public static int ExcuteSql(Func<IDbConnection, int> action)
+        //{
+        //    using (IDbConnection connection = CreateConnection())
+        //    {
+        //        try
+        //        {
+        //            if (connection.State == ConnectionState.Closed)
+        //                connection.Open();
+        //            return action.Invoke(connection);
+        //        }
+        //        catch (Exception ex) { return 0; }
+        //        finally
+        //        {
+        //            connection.Close();
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 执行SQL语句返回受影响行数(事务)
@@ -225,6 +227,99 @@ namespace Dapper
             }
             return obj;
         }
+
+
+
+
+        ///// <summary>
+        ///// 执行SQL语句返回 Task<T> 异步
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="connectionString"></param>
+        ///// <param name="action"></param>
+        ///// <returns></returns>
+        //public static Task<T> ExcuteSqlAsync<T>(Func<IDbConnection, Task<T>> action)
+        //{
+        //    return Task.Run(async () =>
+        //    {
+        //        T obj = default(T);
+        //        using (IDbConnection connection = CreateConnection())
+        //        {
+        //            try
+        //            {
+        //                if (connection.State == ConnectionState.Closed)
+        //                    connection.Open();
+        //                obj = await action.Invoke(connection);
+        //            }
+        //            catch (Exception ex) { throw new Exception(ex.Message); }
+        //            finally
+        //            {
+        //                connection.Close();
+        //            }
+        //        }
+        //        return obj;
+
+        //    });
+        //}
+
+
+        public static Task<T> ExcuteSqlAsync<T>(Func<IDbConnection, Task<T>> action)
+        {
+            return Task.Run(async () =>
+            {
+                T obj = default(T);
+                using (IDbConnection connection = CreateConnection())
+                {
+                    try
+                    {
+                        if (connection.State == ConnectionState.Closed)
+                            connection.Open();
+                        obj = await action.Invoke(connection);
+                    }
+                    catch (Exception ex) { throw new Exception(ex.Message); }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+                return obj;
+
+            });
+        }
+
+        /// <summary>
+        /// 执行SQL语句返回 Task<T> (事务)
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="action"></param>
+        public static Task<T> ExcuteSqlAsync<T>(Func<IDbConnection, IDbTransaction, Task<T>> action)
+        {
+            using (IDbConnection connection = CreateConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+                    var obj = action.Invoke(connection, transaction);
+                    transaction.Commit();
+                    return obj;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    transaction.Dispose();
+                    return default(Task<T>);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
+
 
         /// <summary>
         /// Append a Cached version of a strinbBuilderAction result based on a cacheKey

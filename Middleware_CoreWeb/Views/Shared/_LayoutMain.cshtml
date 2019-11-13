@@ -5,7 +5,7 @@
 @section css {
     <link href="~/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/node_modules/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
+    @*<link href="~/node_modules/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />*@
     @RenderSection("css", false)
     <link href="~/css/theme.css" rel="stylesheet" />
     <link href="~/css/theme-responsive.css" rel="stylesheet" />
@@ -157,26 +157,26 @@
         <ul class="nav-sidebar nav nav-pills flex-column flex-nowrap">
             @foreach (var itemMenu in Model.NavigatorBarList)
             {
-                <li class="nav-item @(itemMenu.FatherItem.type == 0 ? "parent" : "")">
+                <li class="nav-item @(itemMenu.sonMenuItem.Count() > 0 ? "parent" : "")">
 
-                    @if (itemMenu.FatherItem.type == 0)
+                    @if (itemMenu.sonMenuItem.Count() >0)
                     {
-                        <a href="@(itemMenu.FatherItem.type == 1 ? itemMenu.FatherItem.url:$"#collapse_{itemMenu.FatherItem.id}")" role="button" data-toggle="collapse" class="nav-link collapsed">
+                        <a href="@(itemMenu.sonMenuItem.Count() == 0 ? itemMenu.FatherItem.url:$"#collapse_{itemMenu.FatherItem.id}")" role="button" data-toggle="collapse" class="nav-link collapsed">
                             <i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span><i class="fa fa-angle-left"></i>
                         </a>
                     }
-                    @if (itemMenu.FatherItem.type == 1)
+                    @if (itemMenu.sonMenuItem.Count() == 0)
                     {
-                        <a href="/Admin/Exceptions" class="nav-link " target="_self"><i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span></a>
+                        <a href="@itemMenu.FatherItem.url.Replace("~"," ")" class="nav-link " target="_self"><i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span></a>
                     }
-                    @if (itemMenu.FatherItem.type == 0)
+                    @if (itemMenu.sonMenuItem.Count() > 0)
                     {
                         <div class="collapse" id="@($"collapse_{itemMenu.FatherItem.id}")">
                             <ul class="sub nav flex-column">
                                 @foreach (var Sonitem in itemMenu.sonMenuItem)
                                 {
                                     <li class="nav-item">
-                                        <a href="@Sonitem.url" class="nav-link " target="_self">
+                                        <a href="@Sonitem.url.Replace("~"," ")" class="nav-link " target="_self">
                                             <i class="@Sonitem.icon"></i><span class="flex-fill">@Sonitem.name</span>
                                         </a>
                                     </li>
@@ -200,8 +200,8 @@
     <script src="~/node_modules/jquery/dist/jquery.js"></script>
     <script src="~/js/popper.min.js"></script>
     <script src="~/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    @*<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>*@
-    @*<script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>*@
+    @*<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>*@
     @RenderSection("javascript", false)
     <script src="~/js/common-scripts.js"></script>
 }

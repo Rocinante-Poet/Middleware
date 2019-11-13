@@ -1,9 +1,12 @@
 ﻿using Dapper;
 using Middleware_DatabaseAccess;
+using Middleware_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Middleware_DatabaseAccess
 {
@@ -13,14 +16,14 @@ namespace Middleware_DatabaseAccess
         /// 登录
         /// </summary>
         /// <returns></returns>
-        public bool DBLogin(Userinfo _user)
+        public async Task<bool> DBLogin(Userinfo _user)
         {
-            return CRUD.ExcuteSql(connection =>
+            return await CRUD.ExcuteSqlAsync(async connection =>
             {
-                var data = connection.GetList<Userinfo>(new { _user.Name, _user.Pwd }).ToList();
+                var data = await connection.GetListAsync<Userinfo>(new { _user.Name, _user.Pwd });
+                if (data.Count() != 0)
+                return true;
 
-                if (data.Count != 0)
-                    return true;
                 return false;
             });
         }
@@ -31,7 +34,7 @@ namespace Middleware_DatabaseAccess
         /// <returns></returns>
         public bool DBRegister(Userinfo _user)
         {
-            return CRUD.ExcuteSql(connection =>
+            return CRUD.ExcuteSql<bool>(connection =>
             {
                 var data = connection.GetList<Userinfo>(new { _user.Name }).ToList();
 
@@ -44,5 +47,75 @@ namespace Middleware_DatabaseAccess
                 }
             });
         }
+
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="Pagelimit"></param>
+        /// <param name="Pageoffset"></param>
+        /// <param name="meunName"></param>
+        /// <returns></returns>
+        public JsonData<Userinfo> GetList(int Pagelimit, int Pageoffset, string Name, int Group)
+        {
+            return CRUD.ExcuteSql((connection) =>
+            {
+                StringBuilder strQuery = new StringBuilder();
+                if (!string.IsNullOrWhiteSpace(Name)|| Group != 0)
+                {
+                    strQuery.Append("where ");
+                }
+                if (Group != 0)
+                {
+                    strQuery.Append(" Power_ID=@Power_ID  ");
+                }
+                if (!string.IsNullOrWhiteSpace(Name)&& Group == 0)
+                {
+                    strQuery.Append(" showName like @Name");
+                }
+                if (!string.IsNullOrWhiteSpace(Name) && Group != 0)
+                {
+                    strQuery.Append(" and  showName like @Name");
+                }
+                var List = connection.GetListPaged<Userinfo>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "", new { Name = $"%{Name}%", Power_ID = Group });
+                foreach (var ItemInfo in List)
+                {
+                    ItemInfo.group = new DB_Group().Get(ItemInfo.Power_ID);
+                }
+                var CountPage = connection.RecordCount<Userinfo>(strQuery.ToString(), new { Name = $"%{Name}%", Power_ID = Group });
+                return new JsonData<Userinfo>() { rows = List, total = CountPage };
+            });
+        }
+
+
+
+
+        public bool Add(Userinfo group)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.Insert(group) > 0;
+            });
+        }
+
+        public bool Delete(List<Userinfo> grouparray)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.DeleteList<Userinfo>("WHERE UserID=@UserID", grouparray) > 0;
+            });
+        }
+
+        public bool Update(Userinfo group)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.Update(group) > 0;
+            });
+        }
+
+
+
+
     }
 }

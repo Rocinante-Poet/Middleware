@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Middleware_DatabaseAccess;
-using Newtonsoft.Json;
+using Middleware_Model;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
@@ -19,21 +16,21 @@ namespace Middleware_CoreWeb.Controllers.api
         /// 登录
         /// </summary>
         /// <returns> Json </returns>
-        [HttpPost]
-        public JsonResult LoginUser([FromBody] Userinfo _user)
+        [HttpPost]//("/Login")
+        public async Task<JsonResult> LoginUser([FromBody] Userinfo _user)
         {
-            //var _return = db.DBLogin(_user);
+            var _return = await db.DBLogin(_user);
 
-            //if (_return)
-            return new JsonResult(new { Success = true, Message = "登录成功" });
-            //return new JsonResult(new { Success = false, Message = "登录失败" });
+            if (_return)
+                return new JsonResult(new { Success = true, Message = "登录成功" });
+            return new JsonResult(new { Success = false, Message = "登录失败" });
         }
 
         /// <summary>
         /// 注册
         /// </summary>
         /// <returns> Json </returns>
-        [HttpPut]
+        [HttpPut]//("/Reg")
         public JsonResult Register([FromBody] Userinfo _user)
         {
             var _return = db.DBRegister(_user);

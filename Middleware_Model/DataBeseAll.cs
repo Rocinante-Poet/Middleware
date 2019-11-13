@@ -1,6 +1,9 @@
 ﻿using Dapper;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Middleware_DatabaseAccess
+namespace Middleware_Model
 {
     public class DataBeseAll
     {
@@ -34,8 +37,7 @@ namespace Middleware_DatabaseAccess
         public int ID { get; set; }
 
         public int PowerGroupID { get; set; }
-        public string FunctionName { get; set; }
-        public string FunctionUrl { get; set; }
+        public string Function { get; set; }
     }
 
     public class Powerinfo
@@ -50,19 +52,53 @@ namespace Middleware_DatabaseAccess
 
     public class Userinfo
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [Key]
         public int UserID { get; set; }
 
+        /// <summary>
+        /// 登录名称
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 登录密码
+        /// </summary>
         public string Pwd { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 角色id
+        /// </summary>
         public int Power_ID { get; set; }
-        public string UserState { get; set; }
-        public bool HasAdminRights { get; set; }
+
+        [Editable(false)]
+        public group_model group { get; set; }
+
+        /// <summary>
+        /// 用户状态
+        /// </summary>
+        public int UserState { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public string CreateTime { get; set; }
+
+        /// <summary>
+        /// 显示名称
+        /// </summary>
+        public string showName { get; set; }
     }
 
     [Table("menu")]
-    public partial class menu_model
+    public  class menu_model
     {
         /// <summary>
         ///
@@ -88,7 +124,7 @@ namespace Middleware_DatabaseAccess
         /// <summary>
         /// 状态
         /// </summary>
-        public string state { get; set; }
+        public int state { get; set; }
 
         /// <summary>
         /// 子菜单ID
@@ -100,10 +136,6 @@ namespace Middleware_DatabaseAccess
         /// </summary>
         public string explain { get; set; }
 
-        /// <summary>
-        /// 是否为子菜单
-        /// </summary>
-        public int type { get; set; }
 
         /// <summary>
         /// 排序

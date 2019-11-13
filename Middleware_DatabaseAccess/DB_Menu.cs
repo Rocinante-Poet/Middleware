@@ -18,17 +18,17 @@ namespace Middleware_DatabaseAccess
         /// <param name="Pageoffset"></param>
         /// <param name="meunName"></param>
         /// <returns></returns>
-        public JsonData<menu_model> GetList(int Pagelimit, int Pageoffset, string meunName)
+        public async Task<JsonData<menu_model>> GetList(int Pagelimit, int Pageoffset, string meunName)
         {
-            return CRUD.ExcuteSql((connection) =>
+            return await CRUD.ExcuteSqlAsync(async (connection) =>
             {
                 StringBuilder strQuery = new StringBuilder();
                 if (!string.IsNullOrWhiteSpace(meunName))
                 {
                     strQuery.Append("where name like @Name");
                 }
-                var List = connection.GetListPaged<menu_model>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "", new { Name = $"%{meunName}%" });
-                var CountPage = connection.RecordCount<menu_model>(strQuery.ToString(), new { Name = $"%{meunName}%" });
+                var List = await connection.GetListPagedAsync<menu_model>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "", new { Name = $"%{meunName}%" });
+                var CountPage = await connection.RecordCountAsync<menu_model>(strQuery.ToString(), new { Name = $"%{meunName}%" });
                 return new JsonData<menu_model>() { rows = List, total = CountPage };
             });
         }
@@ -46,6 +46,30 @@ namespace Middleware_DatabaseAccess
             return CRUD.ExcuteSql(connection =>
             {
                 return connection.GetList<menu_model>(new { menuid = Id }).OrderBy(p => p.no);
+            });
+        }
+
+        public bool AddMenu(menu_model menu)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.Insert(menu) > 0;
+            });
+        }
+
+        public bool DeleteMenu(List<menu_model> menuarray)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.DeleteList<menu_model>("WHERE id=@id", menuarray) > 0;
+            });
+        }
+
+        public bool UpdateMenu(menu_model menu)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.Update(menu) > 0;
             });
         }
     }

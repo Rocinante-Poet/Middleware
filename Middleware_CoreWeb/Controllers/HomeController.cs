@@ -3,32 +3,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Middleware_DatabaseAccess;
+using Middleware_Model;
 
 namespace Middleware_CoreWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private IHttpContextAccessor _accessor;
-
-        public HomeController(IHttpContextAccessor accessor)
+        public IActionResult Index()
         {
-            _accessor = accessor;
+            return View();
         }
 
-        [HttpGet]
-        public IActionResult Index(int? id) => View(_accessor.HttpContext);
+        public  IActionResult Login()
+        {
+            return View();
+        }
 
-        [AllowAnonymous]
-        public IActionResult Login() => View();
-
-        [Authorize]
         public IActionResult Register() => View();
 
-        [AllowAnonymous]
         public IActionResult ForgotPWD() => View();
     }
 }

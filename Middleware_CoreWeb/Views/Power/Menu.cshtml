@@ -1,5 +1,5 @@
 ﻿
-@{ 
+@{
     Layout = "_Default";
     ViewData["Title"] = "_Default";
 }
@@ -24,17 +24,133 @@
                 $("#TableMenu").bootstrapTable('refresh');
             });
 
-            $('.btn_add-min,.btn_add-max').on('click', function () {
+            $('.btn_add').on('click', function () {
+                edittype = true;
+                $('#myModalLabel').html('菜单添加窗口');
+                $("#dialogNew").find(".form-control").val("");  //清空
+                $('#menuselect').selectpicker('val', 0);
+                $('#menutype').selectpicker('val', 0);
+                $('#menuID').val(0);
                 $('#dialogNew').modal();
             });
+
+            $('#btnMenuParent').click(function () {
+                $('#dialogNew').modal('hide');
+                $('#dialogMenu').modal();
+
+            });
+            $('#modal-close').click(function () {
+                $('#dialogMenu').modal('hide');
+                $('#dialogNew').modal();
+            });
+
+            $('.btn_delete').on('click', function () {
+                var data = $("#TableMenu").bootstrapTable('getSelections');
+                if (data.length > 0) {
+                    bootbox.confirm({
+                        message: "确认删除吗？",
+                        buttons: {
+                            confirm: {
+                                label: '确认',
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: '取消',
+                                className: 'btn-default'
+                            }
+                        },
+                        callback: function (result) {
+                            if (result) {
+                                DeleteSubmit(data);
+                            }
+                        }
+                    });
+                }
+                else {
+                    toastr.error("请选中一行后删除！");
+                }
+            });
+
+
+            $('#btnSubmit').click(function () {
+
+                if (parseInt($('#type').val()) == 1 && parseInt($('#menuselect').val()) == 0) {
+                    toastr.error("未选择父级菜单");
+
+                } else if (parseInt($('#type').val()) == 0 && parseInt($('#menuselect').val()) != 0) {
+                    toastr.error("菜单类型与所属父级菜单不匹配");
+                }
+                else {
+                    var requesturl = '/api/Navigator/add';
+                    if (!edittype)
+                        requesturl = '/api/Navigator/edit';
+                    $.ajax({
+                        type: 'put',
+                        url: requesturl,
+                        contentType: 'application/json',
+                        data: JSON.stringify({ "name": $('#name').val(), "icon": $('#icon').val(), "url": $('#url').val(), "no": parseInt($('#order').val()), "menuid": parseInt($('#menuselect').val()), "state": parseInt($('#menutype').val()), "explain": $('#explain').val(), "id": parseInt($('#menuID').val()) }),
+                        datatype: 'json',
+                        success: function (res) {
+                            $('#dialogNew').modal('hide');
+                            if (res.state == 200) {
+                                $("#TableMenu").bootstrapTable('refresh');
+                                toastr.success(res.message);
+                            }
+                            else {
+                                toastr.error(res.message);
+                            }
+                        },
+                        error: function (e) {
+                            toastr.error(e.responseText);
+                        }
+                    });
+                }
+            });
+
+            $('.tb_edit').click(function () {
+                var data = $("#TableMenu").bootstrapTable('getSelections');
+                if (data.length == 1) {
+                    if (data[0].id != 0)
+                        edit(data[0].id);
+                } else {
+                    toastr.error("请选中一行后编辑！");
+                }
+            });
+
+            SelectMenu();
         });
+
+        var edittype = true;
+
+        function SelectMenu() {
+            $.ajax({
+                method: "get",
+                async: true,
+                url: '/api/Navigator/Getparentmenus',
+                dataType: "json",
+                success: function (res) {
+                    if (null != res) {
+                        var html = '';
+                        html += '<option selected value="0">请选择，可为空</option>';
+                        Object.keys(res).forEach(function (key) {
+                            html += '<option value="' + res[key].id + '">' + res[key].name + '</option>';
+                        });
+                        $('#menuselect').html(html);
+                        $('#menuselect').selectpicker('refresh');
+                    }
+                },
+                error: function (e) {
+                    toastr.error(e.responseText);
+                }
+            });
+        }
 
         var TableInit = function () {
             var oTableInit = new Object();
             //初始化Table
             oTableInit.Init = function () {
                 $('#TableMenu').bootstrapTable({
-                    url: '/api/Menu/',                  //请求后台的URL（*）
+                    url: '/api/Navigator',                  //请求后台的URL（*）
                     method: 'get',                      //请求方式（*）
                     toolbar: '#toolbar',                //工具按钮用哪个容器
                     striped: true,                      //是否显示行间隔色
@@ -54,7 +170,7 @@
                     minimumCountColumns: 2,             //最少允许的列数
                     clickToSelect: true,                //是否启用点击选中行
                     /*    height: 500,            */            //行高，如果没有设置height属性，表格自动根据记录条数决定表格高度
-                    uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
                     showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
                     cardView: false,                    //是否显示详细视图
                     detailView: false,
@@ -99,8 +215,9 @@
                         },
                         {
                             field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
-                                var strHtml = '<a class="btn btn-xs btn-primary btn-update" onclick=""><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
-                                    '<a class="btn btn-xs btn-danger btn-remove"  onclick=""><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
+                                menuArrar[row.id] = row;
+                                var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
+                                    '<a class="btn btn-xs btn-danger btn-remove" onclick="deletemenu(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
                                 return strHtml;
                             }, edit: false
                         }]
@@ -117,6 +234,68 @@
             };
             return oTableInit;
         };
+        function DeleteSubmit(data) {
+            $.ajax({
+                url: '/api/Navigator',
+                type: "delete",
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state == 200) {
+                        $("#TableMenu").bootstrapTable('refresh');
+                        toastr.success(res.message);
+                    }
+                    else {
+                        $("#TableMenu").bootstrapTable('refresh');
+                        toastr.error(res.message);
+                    }
+                },
+                error: function (e) {
+                    toastr.error(e.responseText);
+                }
+            });
+        };
+
+        function deletemenu(id) {
+            bootbox.confirm({
+                message: "确认删除吗？",
+                buttons: {
+                    confirm: {
+                        label: '确认',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: '取消',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        DeleteSubmit([{ "id": id }]);
+                    }
+                }
+            });
+        }
+        var menuArrar = new Array();//AGV信息
+
+
+
+        function edit(index) {
+            edittype = false;
+            var menuInfo = menuArrar[index]
+            if (menuInfo != null) {
+                $('#myModalLabel').html('菜单编辑窗口');
+                $('#icon').val(menuInfo.icon);
+                $('#name').val(menuInfo.name);
+                $('#url').val(menuInfo.url);
+                $('#order').val(menuInfo.no);
+                $('#explain').val(menuInfo.explain);
+                $('#menuID').val(menuInfo.id);
+                $('#menuselect').selectpicker('val', menuInfo.menuid);
+                $('#menutype').selectpicker('val', menuInfo.state);
+                $('#dialogNew').modal();
+            }
+        }
     </script>
 }
 
@@ -161,23 +340,23 @@
             <span>非超级管理用户请谨慎修改</span>
         </div>
         @*<div class="bootstrap-table bootstrap4">*@
-        <div id="toolbar" class="">
+        <div id="toolbar" class="btn-group">
             <div class="gear btn-group">
                 <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
                 <div class="dropdown-menu">
-                    <a href="#" class="btn_add-min" title="新增"><i class="fa fa-plus"></i></a>
-                    <a id="tb_delete" href="#" title="删除"><i class="fa fa-remove"></i></a>
-                    <a id="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
-                    <a id="tb_assignRole" href="#" title="分配角色"><i class="fa fa-sitemap"></i></a>
+                    <a href="#" class="btn_add" title="新增"><i class="fa fa-plus"></i></a>
+                    <a class="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
+                    <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
+                    @*<a id="tb_assignRole" href="#" title="分配角色"><i class="fa fa-sitemap"></i></a>*@
                 </div>
             </div>
             <div class="toolbar btn-group">
-                <button type="button" class="btn btn-success btn_add-max"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
-                <button id="btn_edit" type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
-                <button id="btn_delete" type="button" class="btn btn-danger"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
-                <button id="btn_assignRole" type="button" class="btn btn-info">
-                    <i class="fa fa-sitemap" aria-hidden="true"></i><span>分配角色</span>
-                </button>
+                <button type="button" class="btn btn-success btn_add"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
+                <button type="button" class="btn btn-primary tb_edit"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
+                <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
+                @*<button id="btn_assignRole" type="button" class="btn btn-info">
+                        <i class="fa fa-sitemap" aria-hidden="true"></i><span>分配角色</span>
+                    </button>*@
             </div>
         </div>
         <table id="TableMenu"></table>
@@ -200,81 +379,175 @@
                     <label class="control-label" for="name">菜单名称</label>
                     <div class="input-group flex-sm-fill">
                         <input type="text" class="form-control" id="name" name="name" placeholder="不可为空，50字以内" maxlength="50" data-valid="true" />
-                        <div class="input-group-append">
-                            <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
-                            <button data-method="sel" class="btn" type="button"><i class="fa fa-edit"></i>全选</button>
-                        </div>
+                        @*<div class="input-group-append">
+                                <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
+                                <button data-method="sel" class="btn" type="button"><i class="fa fa-edit"></i>全选</button>
+                            </div>*@
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
-                    <input type="hidden" class="form-control" id="parentId" data-default-val="0" />
                     <label class="control-label" for="parentName">父级菜单</label>
                     <div class="input-group flex-sm-fill">
-                        <input type="text" class="form-control" readonly id="parentName" name="parentName" placeholder="请选择...(可为空)，50字以内" maxlength="50" />
-                        <div class="input-group-append">
-                            <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
-                            <button id="btnMenuParent" class="btn" type="button"><i class="fa fa-hand-o-up"></i>选择</button>
-                        </div>
+                        @*<input type="text" class="form-control" readonly id="parentName" name="parentName" placeholder="请选择...(可为空)，50字以内" maxlength="50" />
+                            <div class="input-group-append">
+                                <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
+                                <button id="btnMenuParent" class="btn" type="button"><i class="fa fa-hand-o-up"></i>选择</button>
+                            </div>*@
+                        <select class="selectpicker selectc" id="menuselect" data-dropup-auto="false"></select>
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="order">菜单序号</label>
                     <div class="input-group flex-sm-fill">
-                        <input type="text" class="form-control digits" id="order" name="order" data-default-val="10" placeholder="默认为10" maxlength="8" data-valid="true" />
-                        <div class="input-group-append">
-                            <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
-                            <button id="btnMenuOrder" class="btn" type="button"><i class="fa fa-list-ol"></i>调整</button>
-                        </div>
+                        <input type="text" class="form-control digits" id="order" name="order" data-default-val="10" placeholder="不为空" maxlength="8" data-valid="true" />
+                        @*<div class="input-group-append">
+                                <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
+                                <button id="btnMenuOrder" class="btn" type="button"><i class="fa fa-list-ol"></i>调整</button>
+                            </div>*@
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="icon">菜单图标</label>
                     <div class="input-group flex-sm-fill">
-                        <input type="text" class="form-control" readonly id="icon" data-default-val="fa fa-fa" placeholder="请选择...(可为空)，50字以内" maxlength="50" />
+                        <input type="text" class="form-control" id="icon" data-default-val="fa fa-fa" placeholder="请选择...(可为空)，50字以内" maxlength="50" />
                         <div class="input-group-append">
-                            <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
-                            <button id="btnIcon" class="btn" type="button"><i class="fa fa-dashboard"></i>选择</button>
+                            @*<button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>*@
+                            <button id="btnIcon" class="btn" type="button"><i class="fa fa-check-circle-o"></i>选择</button>
                         </div>
                     </div>
                 </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label" for="parentName">菜单路径</label>
+                    @*<div class="input-group flex-sm-fill">
+                                <input type="text" class="form-control" readonly id="parentName" name="parentName" placeholder="请选择...(可为空)，50字以内" maxlength="50" />
+                        <div class="input-group-append">
+                            <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
+                            <button id="btnMenuParent" class="btn" type="button"><i class="fa fa-hand-o-up"></i>选择</button>
+                        </div>
+                                <select class="selectpicker selectc" id="menuselect" data-dropup-auto="false">
+                                    @await Html.PartialAsync("menuItem")
+                                </select>
+                            </div>*@
+                    <input type="text" class="form-control flex-sm-fill" id="url" placeholder="不可为空，默认#" data-valid="true" />
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label" for="parentName">菜单状态</label>
+                    <div class="input-group flex-sm-fill">
+                        <select class="selectpicker selectc" id="menutype" data-dropup-auto="false">
+                            <option value="0">正常</option>
+                            <option value="-1">禁用</option>
+                        </select>
+                    </div>
+                </div>
+                @*<div class="form-group col-sm-6">
+                        <input type="hidden" class="form-control" id="parentId" data-default-val="0" />
+                        <label class="control-label" for="parentName">菜单类型</label>
+                        <div class="input-group flex-sm-fill">
+                            <select class="selectpicker selectc" id="type" data-dropup-auto="false">
+                                <option value="0">一级菜单</option>
+                                <option value="1">二级菜单</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <label class="control-label" for="order">说明</label>
+                        <div class="input-group flex-sm-fill">
+                            <input type="text" class="form-control digits"  id="explain"  placeholder="可为空"  />
+                            <div class="input-group-append">
+                        <button data-method="clear" class="btn" type="button"><i class="fa fa-remove"></i></button>
+                        <button id="btnMenuOrder" class="btn" type="button"><i class="fa fa-list-ol"></i>调整</button>
+                    </div>
+                        </div>
+                    </div>*@
                 <div class="form-group col-12">
-                    <label class="control-label" for="url">路径</label>
-                    <input type="text" class="form-control flex-sm-fill" id="url" placeholder="不可为空，4000字以内" maxlength="4000" data-valid="true" />
+                    <label class="control-label" for="url">说明</label>
+                    <input type="text" class="form-control flex-sm-fill"  id="explain" placeholder="可为空"  />
                 </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="category">菜单类别</label>
-                    <select class="selectpicker selectc">
-                        <option>Mustard</option>
-                        <option>Ketchup</option>
-                        <option>Barbecue</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="target">目标</label>
-                    <select class="selectpicker selectc">
-                        <option>Mustard</option>
-                        <option>Ketchup</option>
-                        <option>Barbecue</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="isRes">菜单类型</label>
-                    <select class="selectpicker selectc">
-                        <option>Mustard</option>
-                        <option>Ketchup</option>
-                        <option>Barbecue</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="app">所属应用</label>
-                    <select class="selectpicker selectc">
-                        <option>Mustard</option>
-                        <option>Ketchup</option>
-                        <option>Barbecue</option>
-                    </select>
-                </div>
+                @*<div class="form-group col-12">
+                        <label class="control-label" for="url">路径</label>
+                        <input type="text" class="form-control flex-sm-fill" id="url" placeholder="不可为空，4000字以内" maxlength="4000" data-valid="true" />
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label class="control-label" for="category">菜单类别</label>
+                        <select class="selectpicker selectc">
+                            <option>Mustard</option>
+                            <option>Ketchup</option>
+                            <option>Barbecue</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label class="control-label" for="target">目标</label>
+                        <select class="selectpicker selectc" data-dropup-auto="false">
+                            <optgroup label="filter1">
+                                <option>option1</option>
+                                <option selected>option2</option>
+                                <option>option3</option>
+                                <option>option4</option>
+                            </optgroup>
+                        </select>
+
+                    </div>
+                            @*<div class="form-group col-sm-6">
+                        <label class="control-label" for="isRes">菜单类型</label>
+                        <select class="selectpicker selectc">
+                            <option>Mustard</option>
+                            <option>Ketchup</option>
+                            <option>Barbecue</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label class="control-label" for="app">所属应用</label>
+                        <select class="selectpicker selectc">
+                            <option>Mustard</option>
+                            <option>Ketchup</option>
+                            <option>Barbecue</option>
+                        </select>
+                    </div>*@
             </div>
         </form>
+    </div>
+}
+
+@section customModal{
+    <div class="modal fade" id="dialogMenu" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myMenuModalLabel" aria-hidden="true">
+        <div id="dialogSubMenu" class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myMenuModalLabel">请选择菜单</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body modal-body-fixed">
+                    <div class="dd" id="nestable_menu">
+                        <ol class="dd-list"></ol>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @*<div class="flex-fill d-none">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline1" name="customRadioInline" checked class="custom-control-input" value="all">
+                                <label class="custom-control-label" for="customRadioInline1">全部</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline2" name="customRadioInline" class="custom-control-input" value="system">
+                                <label class="custom-control-label" for="customRadioInline2">系统菜单</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline3" name="customRadioInline" class="custom-control-input" value="custom">
+                                <label class="custom-control-label" for="customRadioInline3">外部菜单</label>
+                            </div>
+                        </div>*@
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modal-close">
+                        <i class="fa fa-times"></i>
+                        <span>关闭</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnSubmitMenu">
+                        <i class="fa fa-save"></i>
+                        <span>确认</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 }
 
