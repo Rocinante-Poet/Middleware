@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,50 +15,36 @@ namespace Middleware_CoreWeb.Controllers.api
     [ApiController]
     public class GetTokenController : ControllerBase
     {
-        private readonly IJWTAuthentication _jWTAuthentication;
-        private readonly IJWTTokenService _tokenServic;
+        ////private readonly IJWTAuthentication _jWTAuthentication;
+        //private readonly IJWTTokenService _tokenServic;
 
-        public GetTokenController(IJWTAuthentication auth, IJWTTokenService token)
-        {
-            _jWTAuthentication = auth;
-            _tokenServic = token;
-        }
-
-        //[HttpGet]
-        //[Authorize]
-        //public async Task<string> Get()
+        //public GetTokenController(IJWTTokenService token)
         //{
-        //    await Task.CompletedTask;
-        //    return "Authorize";
-
-        //    //return $"{_identityService.GetUserId()}:{_identityService.GetUserName()}";
+        //    _tokenServic = token;
         //}
 
         //[HttpGet]
-        //public async Task<string> GetString()
+        //public async Task<string> GetTokenAsync(string name, string password)
         //{
-        //    await Task.CompletedTask;
-        //    return "Welcome";
+        //    // 认证用户
+        //    //var user = await _jWTAuthentication.LoginAsync(name, password);
+        //    //if (user == null)
+        //    //    return "Login Failed";
+
+        //    //var token = _tokenServic.GetToken(user);
+
+        //    //var response = new
+        //    //{
+        //    //    token_type = JwtBearerDefaults.AuthenticationScheme,
+        //    //    access_token = token,
+        //    //    profile = new
+        //    //    {
+        //    //        sid = user.UserID,
+        //    //        name = user.Name,
+        //    //    }
+        //    //};
+
+        //    return JsonConvert.SerializeObject(response);
         //}
-
-        [HttpGet]
-        public async Task<string> GetTokenAsync(string name, string password)
-        {
-            // 认证用户
-            var user = await _jWTAuthentication.LoginAsync(name, password);
-            if (user == null)
-                return "Login Failed";
-
-            var token = _tokenServic.GetToken(user);
-
-            var response = new
-            {
-                Status = true,
-                Token = token,
-                Type = "Bearer"
-            };
-
-            return JsonConvert.SerializeObject(response);
-        }
     }
 }

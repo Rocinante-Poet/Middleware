@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -11,6 +12,7 @@ using Middleware_Tool;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Middleware_CoreWeb
 {
@@ -27,44 +29,53 @@ namespace Middleware_CoreWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //配置Swagger
-            //注册Swagger生成器，定义一个Swagger 文档
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo
-            //    {
-            //        Title = "CoreWebApi",
-            //        Version = "v1",
-            //        Description = "ASP.NET Core WebApi"
-            //    });
-
-            //    // 读取xml信息 使用反射获取xml文件。并构造出文件的路径
-            //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            //    // 启用xml注释. 该方法第二个参数启用控制器的注释，默认为false.
-            //    c.IncludeXmlComments(xmlPath, false);
-            //    ////启用swagger验证功能 ApiKeyScheme
-            //    //c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-            //    //{
-            //    //    Description = "权限认证(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
-            //    //    Name = "Authorization",//jwt默认的参数名称
-            //    //    In = "header",//jwt默认存放Authorization信息的位置(请求头中)
-            //    //    Type = "apiKey"
-            //    //});//Authorization的设置
-            //});
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IJWTAuthentication, JWTAuthentication>();
             services.AddScoped<IJWTTokenService, JWTTokenService>();
+            //services.AddScoped<IJWTAuthentication, JWTAuthentication>();
             services.AddScoped<IJWTIdentityService, JWTIdentityService>();
 
-            var jwtSetting = new Middleware_Tool.JwtSetting();
+            var jwtSetting = new JwtSetting();
             Configuration.Bind("JwtSetting", jwtSetting);
 
             services
                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>
                {
+                   options.Events = new JwtBearerEvents()
+                   {
+                       ////在第一次接收到协议消息时
+                       //OnMessageReceived = context =>
+                       //{
+                       //    context.Token = context.Request.Query["access_token"];
+                       //    return Task.CompletedTask;
+                       //},
+                       ////未授权时
+                       //OnChallenge = context =>
+                       //{
+                       //    context.Response.Redirect("https://cn.bing.com/");
+                       //    return Task.CompletedTask;
+                       //},
+                       ////如果授权失败并导致禁止响应时
+                       //OnForbidden = context =>
+                       //{
+                       //    context.Response.WriteAsync("如果授权失败并导致禁止响应");
+                       //    return Task.CompletedTask;
+                       //},
+                       ////认证失败
+                       //OnAuthenticationFailed = context =>
+                       //{
+                       //    context.Response.WriteAsync("在请求处理期间抛出异常");
+                       //    return Task.CompletedTask;
+                       //},
+                       ////在Token验证通过后调用
+                       //OnTokenValidated = context =>
+                       //{
+                       //    context.Response.WriteAsync("在验证通过后调用");
+                       //    return Task.CompletedTask;
+                       //}
+                   };
+
                    options.TokenValidationParameters = new TokenValidationParameters
                    {
                        ValidIssuer = jwtSetting.Issuer,
@@ -96,29 +107,18 @@ namespace Middleware_CoreWeb
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
             });
 
-            //// 启用中间件服务生成Swagger
-            //app.UseSwagger();
-            //// 启用中间件服务生成SwaggerUI，指定Swagger JSON终结点
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            //    c.RoutePrefix = string.Empty;//设置根节点访问
-            //});
+            app.UseRouting();
 
             // 认证授权
-            app.UseAuthorization();
-            app.UseAuthentication();
-
-            //app.UseAuthentication();
-            //app.UseAuthorization();
             app.UseMiddleware<JWTAuth>();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseRouting();
             app.UseEndpoints(endpoints =>
                       {
                           endpoints.MapControllerRoute(
-                              name: "default",
-                              pattern: "{controller=Home}/{action=Login}/{id?}");
+                                    name: "default",
+                                    pattern: "{controller=Home}/{action=Login}/{id?}");
                       });
         }
     }

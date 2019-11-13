@@ -9,7 +9,7 @@ namespace Middleware_CoreWeb
     public class NavigatorBarModel : ModelBase
     {
         public IEnumerable<NavigatorItem> NavigatorBarList =>
-            new DB_Menu().GetFatherList().Select(
+             new DB_Menu().GetFatherList().Select(
                 p => new NavigatorItem()
                 {
                     FatherItem = p,

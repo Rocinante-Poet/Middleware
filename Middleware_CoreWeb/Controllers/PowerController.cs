@@ -25,8 +25,5 @@ namespace Middleware_CoreWeb.Controllers
         /// </summary>
         /// <returns></returns>
         public IActionResult Admin() => View();
-
-
-
     }
 }

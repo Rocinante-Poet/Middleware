@@ -1,6 +1,6 @@
 ﻿using Dapper;
 
-namespace Middleware_DatabaseAccess
+namespace Middleware_Tool
 {
     public class DataBeseAll
     {
@@ -48,7 +48,8 @@ namespace Middleware_DatabaseAccess
         public string PowerDetails { get; set; }
     }
 
-    public class Userinfo
+    [Table("Userinfo")]
+    public class JWTUserModel
     {
         [Key]
         public int UserID { get; set; }
@@ -58,7 +59,6 @@ namespace Middleware_DatabaseAccess
         public string Remark { get; set; }
         public int Power_ID { get; set; }
         public string UserState { get; set; }
-        public bool HasAdminRights { get; set; }
     }
 
     [Table("menu")]

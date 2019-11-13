@@ -1,4 +1,5 @@
 ﻿using Middleware_DatabaseAccess;
+using Middleware_Tool;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,11 @@ namespace Middleware_CoreWeb
         {
             await Task.Run(() =>
             {
-                powerdetails = new DB_Power().GetListPowerdetails().ToList();
+                //powerdetails = new DB_Power().GetListPowerdetails().ToList();
                 //powerinfo = new DB_Power().GetListPowerinfo().ToList();
             });
         }
 
-        // 检查是否存在此角色
         public bool IsHasRole(int role, string url)
         {
             Powerdetails _p = powerdetails.Find(x => x.FunctionUrl.Trim().Replace("/", "").ToLower() == url.Trim().Replace("/", "").ToLower());

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dapper
 {
@@ -52,178 +53,20 @@ namespace Dapper
         private static ITableNameResolver _tableNameResolver = new TableNameResolver();
         private static IColumnNameResolver _columnNameResolver = new ColumnNameResolver();
 
-        /// <summary>
-        /// 从连接池获取SQL连接
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <returns></returns>
-        public static IDbConnection CreateConnection()
+        public static IDbConnection GetOpenConnection()
         {
-            return SetDialect(_dialect);
-        }
-
-        /// <summary>
-        /// 执行SQL语句
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        public static void ExcuteSql(Action<IDbConnection> action)
-        {
-            using (IDbConnection connection = CreateConnection())
-            {
-                try
-                {
-                    if (connection.State == ConnectionState.Closed)
-                        connection.Open();
-                    action.Invoke(connection);
-                }
-                catch (Exception ex) { throw new Exception(ex.Message); }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-        //
-        /// <summary>
-        /// 执行SQL语句(事务)
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        public static void ExcuteSql(Action<IDbConnection, IDbTransaction> action)
-        {
-            using (IDbConnection connection = CreateConnection())
+            using IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
+            try
             {
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
-                var transaction = connection.BeginTransaction();
-                try
-                {
-                    action.Invoke(connection, transaction);
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    transaction.Dispose();
-                    //Log4NetHelper.WriteErrorLog(ex.Message, ex);
-                    throw new Exception(ex.Message);
-                }
-                finally { connection.Close(); }
+                return connection;
             }
-        }
-
-        /// <summary>
-        /// 执行SQL语句返回受影响行数
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        public static int ExcuteSql(Func<IDbConnection, int> action)
-        {
-            using (IDbConnection connection = CreateConnection())
+            catch (Exception ex)
             {
-                try
-                {
-                    if (connection.State == ConnectionState.Closed)
-                        connection.Open();
-                    return action.Invoke(connection);
-                }
-                catch (Exception ex) { return 0; }
-                finally
-                {
-                    connection.Close();
-                }
+                connection.Close();
+                throw new Exception(ex.Message);
             }
-        }
-
-        /// <summary>
-        /// 执行SQL语句返回受影响行数(事务)
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        public static int ExcuteSql(Func<IDbConnection, IDbTransaction, int> action)
-        {
-            using (IDbConnection connection = CreateConnection())
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                var transaction = connection.BeginTransaction();
-                try
-                {
-                    var count = action.Invoke(connection, transaction);
-                    transaction.Commit();
-                    return count;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    transaction.Dispose();
-                    return 0;
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-        /// <summary>
-        /// 执行SQL语句返回受影响行数(事务)
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        public static T ExcuteSql<T>(Func<IDbConnection, IDbTransaction, T> action)
-        {
-            using (IDbConnection connection = CreateConnection())
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                var transaction = connection.BeginTransaction();
-                try
-                {
-                    var obj = action.Invoke(connection, transaction);
-                    transaction.Commit();
-                    return obj;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    transaction.Dispose();
-                    return default(T);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-        /// <summary>
-        /// 执行SQL语句返回 T
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="connectionString"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static T ExcuteSql<T>(Func<IDbConnection, T> action)
-        {
-            T obj = default(T);
-            using (IDbConnection connection = CreateConnection())
-            {
-                try
-                {
-                    if (connection.State == ConnectionState.Closed)
-                        connection.Open();
-                    obj = action.Invoke(connection);
-                }
-                catch (Exception ex) { throw new Exception(ex.Message); }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-            return obj;
         }
 
         /// <summary>
@@ -260,9 +103,8 @@ namespace Dapper
         /// Sets the database dialect
         /// </summary>
         /// <param name="dialect"></param>
-        public static IDbConnection SetDialect(Dialect dialect)
+        public static void SetDialect(Dialect dialect)
         {
-            IDbConnection connection = null;
             switch (dialect)
             {
                 case Dialect.PostgreSQL:
@@ -287,7 +129,6 @@ namespace Dapper
                     break;
 
                 case Dialect.MySQL:
-                    connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
                     _dialect = Dialect.MySQL;
                     _encapsulation = "`{0}`";
                     _getIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
@@ -295,14 +136,12 @@ namespace Dapper
                     break;
 
                 default:
-                    connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
                     _dialect = Dialect.MySQL;
                     _encapsulation = "`{0}`";
                     _getIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
                     _getPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {Offset},{RowsPerPage}";
                     break;
             }
-            return connection;
         }
 
         /// <summary>

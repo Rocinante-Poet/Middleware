@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Middleware_Tool;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,18 +10,14 @@ namespace Middleware_DatabaseAccess
     {
         public IEnumerable<Powerinfo> GetListPowerinfo()
         {
-            return CRUD.ExcuteSql((connection) =>
-            {
-                return connection.GetList<Powerinfo>();
-            });
+            var connection = CRUD.GetOpenConnection();
+            return connection.GetList<Powerinfo>();
         }
 
         public IEnumerable<Powerdetails> GetListPowerdetails()
         {
-            return CRUD.ExcuteSql((connection) =>
-            {
-                return connection.GetList<Powerdetails>();
-            });
+            var connection = CRUD.GetOpenConnection();
+            return connection.GetList<Powerdetails>();
         }
     }
 }
