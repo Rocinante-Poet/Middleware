@@ -76,13 +76,13 @@ namespace Middleware_CoreWeb
                        //}
                    };
 
-                   options.TokenValidationParameters = new TokenValidationParameters
-                   {
-                       ValidIssuer = jwtSetting.Issuer,
-                       ValidAudience = jwtSetting.Audience,
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.SecurityKey)),
-                       ClockSkew = TimeSpan.Zero
-                   };
+                   //options.TokenValidationParameters = new TokenValidationParameters
+                   //{
+                   //    ValidIssuer = jwtSetting.Issuer,
+                   //    ValidAudience = jwtSetting.Audience,
+                   //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.SecurityKey)),
+                   //    ClockSkew = TimeSpan.Zero
+                   //};
                });
         }
 
