@@ -421,10 +421,10 @@ footer {
     box-shadow: none;
 }
 
-.input-group .btn:not(.btn-secondary):not(.btn-primary):not(.btn-warning):not(.btn-info):not(.btn-danger) {
+/*.input-group .btn:not(.btn-secondary):not(.btn-primary):not(.btn-warning):not(.btn-info):not(.btn-danger) {
     background-color: #e9ecef;
     border-color: #ced4da;
-}
+}*/
 
 .nav-link {
     transition: color .25s linear;
@@ -991,10 +991,10 @@ a:focus {
 }
 
 @media (min-width: 576px) {
-    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    /*.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
         width: 194px;
         display: inline-block;
-    }
+    }*/
 }
 
 ::-webkit-scrollbar {

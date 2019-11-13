@@ -1,4 +1,5 @@
 ﻿using Middleware_DatabaseAccess;
+using Middleware_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,8 @@ namespace Middleware_CoreWeb
                     FatherItem = p,
                     sonMenuItem = new DB_Menu().sonItemMenu(p.id)
                 });
+
+
+        public IEnumerable<group_model> groupArray => new DB_Group().Get();
     }
 }

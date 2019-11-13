@@ -9,6 +9,8 @@
     <link href="~/node_modules/startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="~/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
+
+    <link href="~/node_modules/toastr/build/toastr.css" rel="stylesheet" />
 }
 <body class="bg-dark">
     <div class="container">
@@ -54,13 +56,29 @@
     <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- toastr JavaScript-->
-    <link href="~/node_modules/toastr/build/toastr.css" rel="stylesheet" />
+
     <script src="~/node_modules/toastr/toastr.js"></script>
     <script>
         $(function () {
+
+            toastr.options = {
+                closeButton: false,
+                debug: false,
+                progressBar: true,
+                positionClass: "toast-top-right ",
+                onclick: null,
+                showDuration: "300",
+                hideDuration: "1000",
+                timeOut: "2000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+            };
+
             $('#Btnlogin').click(function () {
                 if ($('#inputName').val() == "" || $('#inputPassword').val() == "") {
-                    toastr.warning("账号密码不能为空!");
+                    toastr.error("账号密码不能为空!");
                     return;
                 }
                 $.ajax({

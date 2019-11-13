@@ -1,6 +1,9 @@
 ﻿using Dapper;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Middleware_Tool
+namespace Middleware_DatabaseAccess
 {
     public class DataBeseAll
     {
@@ -34,8 +37,7 @@ namespace Middleware_Tool
         public int ID { get; set; }
 
         public int PowerGroupID { get; set; }
-        public string FunctionName { get; set; }
-        public string FunctionUrl { get; set; }
+        public string Function { get; set; }
     }
 
     public class Powerinfo
@@ -49,20 +51,39 @@ namespace Middleware_Tool
     }
 
     [Table("Userinfo")]
-    public class JWTUserModel
+    public class Userinfo
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [Key]
         public int UserID { get; set; }
 
+        /// <summary>
+        /// 登录名称
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 登录密码
+        /// </summary>
         public string Pwd { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 角色id
+        /// </summary>
         public int Power_ID { get; set; }
         public string UserState { get; set; }
+        public bool HasAdminRights { get; set; }
     }
 
     [Table("menu")]
-    public partial class menu_model
+    public  class menu_model
     {
         /// <summary>
         ///
@@ -88,7 +109,7 @@ namespace Middleware_Tool
         /// <summary>
         /// 状态
         /// </summary>
-        public string state { get; set; }
+        public int state { get; set; }
 
         /// <summary>
         /// 子菜单ID
@@ -100,10 +121,6 @@ namespace Middleware_Tool
         /// </summary>
         public string explain { get; set; }
 
-        /// <summary>
-        /// 是否为子菜单
-        /// </summary>
-        public int type { get; set; }
 
         /// <summary>
         /// 排序

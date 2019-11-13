@@ -5,15 +5,20 @@
 @section css {
     <link href="~/node_modules/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet" />
     <link href="~/node_modules/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/node_modules/toastr/build/toastr.css" rel="stylesheet" />
     @RenderSection("css", false)
 }
 @section javascript {
-    <script src="~/node_modules/bootstrap-table/dist/bootstrap-table.js"></script>
     <script src="~/node_modules/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="~/node_modules/bootstrap-table/dist/bootstrap-table.js"></script>
     <script src="~/node_modules/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
     <script src="~/lib/validate/jquery.validate.min.js"></script>
     <script src="~/lib/validate/localization/messages_zh.min.js"></script>
     <script src="~/js/longbow.validate.js" asp-append-version="true"></script>
+    <script src="~/node_modules/toastr/toastr.js"></script>
+    <script src="~/node_modules/bootbox/dist/bootbox.min.js"></script>
+
+    <script src="~/js/common.js"></script>
     @RenderSection("javascript", false)
 }
 @section modal {
@@ -34,5 +39,6 @@
             </div>
         </div>
     </div>
+    @RenderSection("customModal", false)
 }
 @RenderBody()

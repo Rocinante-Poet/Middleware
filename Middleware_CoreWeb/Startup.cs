@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Middleware_Tool;
 using System;
 using System.IO;
@@ -93,13 +91,7 @@ namespace Middleware_CoreWeb
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.UseHttpsRedirection();
+
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -107,18 +99,23 @@ namespace Middleware_CoreWeb
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
             });
 
-            app.UseRouting();
+            //// 启用中间件服务生成Swagger
+            //app.UseSwagger();
+            //// 启用中间件服务生成SwaggerUI，指定Swagger JSON终结点
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //    c.RoutePrefix = string.Empty;//设置根节点访问
+            //});
 
             // 认证授权
-            app.UseMiddleware<JWTAuth>();
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
                       {
                           endpoints.MapControllerRoute(
-                                    name: "default",
-                                    pattern: "{controller=Home}/{action=Login}/{id?}");
+                              name: "default",
+                              pattern: "{controller=Home}/{action=Login}/{id?}");
                       });
         }
     }
