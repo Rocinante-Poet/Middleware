@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Middleware_Model;
-using System;
+using Middleware_Tool;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Middleware_CoreWeb
 {
@@ -23,6 +20,7 @@ namespace Middleware_CoreWeb
         {
             return new Responsemessage() { message = message, state = 200, Data = list };
         }
+
         public Responsemessage succeed<T>(List<object> list)
         {
             return new Responsemessage() { message = "成功", state = 200, Data = list };

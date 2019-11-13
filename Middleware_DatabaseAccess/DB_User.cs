@@ -1,10 +1,9 @@
 ﻿using Dapper;
-using Middleware_DatabaseAccess;
-using System;
+using Middleware_Tool;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Middleware_DatabaseAccess
 {
@@ -40,7 +39,6 @@ namespace Middleware_DatabaseAccess
             }
         }
 
-
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -53,7 +51,7 @@ namespace Middleware_DatabaseAccess
             return CRUD.ExcuteSql((connection) =>
             {
                 StringBuilder strQuery = new StringBuilder();
-                if (!string.IsNullOrWhiteSpace(Name)|| Group != 0)
+                if (!string.IsNullOrWhiteSpace(Name) || Group != 0)
                 {
                     strQuery.Append("where ");
                 }
@@ -61,7 +59,7 @@ namespace Middleware_DatabaseAccess
                 {
                     strQuery.Append(" Power_ID=@Power_ID  ");
                 }
-                if (!string.IsNullOrWhiteSpace(Name)&& Group == 0)
+                if (!string.IsNullOrWhiteSpace(Name) && Group == 0)
                 {
                     strQuery.Append(" showName like @Name");
                 }
@@ -78,9 +76,6 @@ namespace Middleware_DatabaseAccess
                 return new JsonData<Userinfo>() { rows = List, total = CountPage };
             });
         }
-
-
-
 
         public bool Add(Userinfo group)
         {
@@ -105,9 +100,5 @@ namespace Middleware_DatabaseAccess
                 return connection.Update(group) > 0;
             });
         }
-
-
-
-
     }
 }

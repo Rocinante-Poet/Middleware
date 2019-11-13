@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Middleware_DatabaseAccess;
-using Middleware_Model;
+using Middleware_Tool;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
@@ -17,7 +14,6 @@ namespace Middleware_CoreWeb.Controllers.api
 
         [HttpGet]
         public async Task<JsonData<menu_model>> Get([FromQuery]int limit, int offset, string meunName) => await Get_MenuDb.GetList(limit, offset, meunName);
-
 
         [HttpGet("Getparentmenus")]
         public IEnumerable<menu_model> Getparentmenus() => Get_MenuDb.GetFatherList();

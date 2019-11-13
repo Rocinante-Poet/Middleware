@@ -1,6 +1,5 @@
 ﻿using Dapper;
-using Middleware_Model;
-using System;
+using Middleware_Tool;
 using System.Collections.Generic;
 using System.Text;
 
@@ -53,7 +52,6 @@ namespace Middleware_DatabaseAccess
                 return connection.Update(group) > 0;
             });
         }
-
 
         public group_model Get(int id)
         {

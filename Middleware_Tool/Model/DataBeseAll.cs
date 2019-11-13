@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_DatabaseAccess
+namespace Middleware_Tool
 {
     public class DataBeseAll
     {
@@ -38,6 +38,7 @@ namespace Middleware_DatabaseAccess
 
         public int PowerGroupID { get; set; }
         public string Function { get; set; }
+        public string FunctionUrl { get; set; }
     }
 
     public class Powerinfo
@@ -51,11 +52,11 @@ namespace Middleware_DatabaseAccess
     }
 
     [Table("Userinfo")]
+    public class JWTUserModel : Userinfo { }
+
+    [Table("Userinfo")]
     public class Userinfo
     {
-        /// <summary>
-        /// 
-        /// </summary>
         [Key]
         public int UserID { get; set; }
 
@@ -78,12 +79,15 @@ namespace Middleware_DatabaseAccess
         /// 角色id
         /// </summary>
         public int Power_ID { get; set; }
+
         public string UserState { get; set; }
-        public bool HasAdminRights { get; set; }
+
+        [Editable(false)]
+        public group_model group { get; set; }
     }
 
     [Table("menu")]
-    public  class menu_model
+    public class menu_model
     {
         /// <summary>
         ///
@@ -120,7 +124,6 @@ namespace Middleware_DatabaseAccess
         /// 说明
         /// </summary>
         public string explain { get; set; }
-
 
         /// <summary>
         /// 排序

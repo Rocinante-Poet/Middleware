@@ -12,18 +12,8 @@ namespace Middleware_CoreWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public  IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Index(int? id) => View(_accessor.HttpContext);
+        //[HttpGet]
+        //public IActionResult Index(int? id) => View(_accessor.HttpContext);
 
         [HttpGet]
         [AllowAnonymous]

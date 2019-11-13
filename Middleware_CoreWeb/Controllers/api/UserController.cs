@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Middleware_DatabaseAccess;
-using Middleware_Model;
+using Middleware_Tool;
+using System.Collections.Generic;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
@@ -16,7 +12,7 @@ namespace Middleware_CoreWeb.Controllers.api
         private DB_User Get_UserpDb = new DB_User();
 
         [HttpGet]
-        public JsonData<Userinfo> Get([FromQuery]int limit, int offset, string Name,int Group) => Get_UserpDb.GetList(limit, offset, Name, Group);
+        public JsonData<Userinfo> Get([FromQuery]int limit, int offset, string Name, int Group) => Get_UserpDb.GetList(limit, offset, Name, Group);
 
         [HttpPut("add")]
         public Responsemessage Put([FromBody]Userinfo item) => Get_UserpDb.Add(item) ? succeed() : Error();

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_Model
+namespace Middleware_Tool
 {
     public class Responsemessage
     {

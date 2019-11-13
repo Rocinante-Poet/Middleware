@@ -36,8 +36,6 @@ namespace Dapper
         }
 
         private static string _connstring = "server = 118.31.71.216; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
-        //public static IDbConnection connection { get; private set; }
-        //private static string _connstring = "server = 127.0.0.1; User Id = root; password = 123456; database = wcs; Persist Security Info = True; charset='gbk';";
 
         private static Dialect _dialect = Dialect.MySQL;
         private static string _encapsulation;
@@ -55,7 +53,18 @@ namespace Dapper
 
         public static IDbConnection GetOpenConnection()
         {
-            return SetDialect(_dialect);
+            using IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+                return connection;
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                throw new Exception(ex.Message);
+            }
         }
 
         /// <summary>
@@ -65,7 +74,7 @@ namespace Dapper
         /// <param name="action"></param>
         public static void ExcuteSql(Action<IDbConnection> action)
         {
-            using (IDbConnection connection = CreateConnection())
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring))
             {
                 try
                 {
@@ -89,7 +98,7 @@ namespace Dapper
         /// <param name="action"></param>
         public static void ExcuteSql(Action<IDbConnection, IDbTransaction> action)
         {
-            using (IDbConnection connection = CreateConnection())
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring))
             {
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
@@ -117,7 +126,7 @@ namespace Dapper
         /// <param name="action"></param>
         public static int ExcuteSql(Func<IDbConnection, int> action)
         {
-            using (IDbConnection connection = CreateConnection())
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring))
             {
                 try
                 {
@@ -140,7 +149,7 @@ namespace Dapper
         /// <param name="action"></param>
         public static int ExcuteSql(Func<IDbConnection, IDbTransaction, int> action)
         {
-            using (IDbConnection connection = CreateConnection())
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring))
             {
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
@@ -171,7 +180,7 @@ namespace Dapper
         /// <param name="action"></param>
         public static T ExcuteSql<T>(Func<IDbConnection, IDbTransaction, T> action)
         {
-            using (IDbConnection connection = CreateConnection())
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring))
             {
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
@@ -205,7 +214,7 @@ namespace Dapper
         public static T ExcuteSql<T>(Func<IDbConnection, T> action)
         {
             T obj = default(T);
-            using (IDbConnection connection = CreateConnection())
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring))
             {
                 try
                 {

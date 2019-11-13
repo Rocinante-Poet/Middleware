@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Middleware_DatabaseAccess;
-using Middleware_Model;
+using Middleware_Tool;
+using System.Collections.Generic;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
@@ -17,7 +13,6 @@ namespace Middleware_CoreWeb.Controllers.api
 
         [HttpGet]
         public JsonData<group_model> Get([FromQuery]int limit, int offset, string Name) => Get_GroupDb.GetList(limit, offset, Name);
-
 
         [HttpGet("select")]
         public IEnumerable<group_model> Getparentmenus() => Get_GroupDb.Get();
