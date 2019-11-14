@@ -41,7 +41,7 @@
                             <label for="inputRemark">用户姓名或工号</label>
                         </div>
                     </div>
-                    <a id="BtnRegister" class="btn btn-primary btn-block">注册</a>
+                    <a id="BtnRegister" class="btn btn-primary btn-block" href="#">注册</a>
                 </form>
                 <div class="text-center">
                     <a class="d-block small mt-3" href="/Home/Login">登录</a>
@@ -77,7 +77,8 @@
                 }
                 $.ajax({
                     type: 'Put',
-                    url: 'api/Login',
+                    url: '/api/Login',
+                    headers: { 'Authorization': 'Bearer ' + localStorage.token },
                     contentType: 'application/json',
                     data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val(), "Remark": $('#inputRemark').val() }),
                     datatype: 'json',
@@ -85,7 +86,7 @@
                         if (res.success) {
                             toastr.success('注册成功，3秒后自动跳转。')
                             setTimeout(function () {
-                                window.location.href = "/Login";
+                                window.location.href = "/home/Login";
                             }, 2500);
                         }
                         else {

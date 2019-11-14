@@ -54,6 +54,7 @@ namespace Middleware_CoreWeb
                        //OnChallenge = context =>
                        //{
                        //    context.Response.Redirect("https://cn.bing.com/");
+                       //    //return new JsonResult((Success: false, Message: "用户名或密码不正确！"));
                        //    return Task.CompletedTask;
                        //},
                        ////如果授权失败并导致禁止响应时
@@ -62,12 +63,12 @@ namespace Middleware_CoreWeb
                        //    context.Response.WriteAsync("如果授权失败并导致禁止响应");
                        //    return Task.CompletedTask;
                        //},
-                       ////认证失败
-                       //OnAuthenticationFailed = context =>
-                       //{
-                       //    context.Response.WriteAsync("在请求处理期间抛出异常");
-                       //    return Task.CompletedTask;
-                       //},
+                       //认证失败
+                       OnAuthenticationFailed = context =>
+                       {
+                           context.Response.WriteAsync("在请求处理期间抛出异常");
+                           return Task.CompletedTask;
+                       },
                        ////在Token验证通过后调用
                        //OnTokenValidated = context =>
                        //{
@@ -76,13 +77,13 @@ namespace Middleware_CoreWeb
                        //}
                    };
 
-                   //options.TokenValidationParameters = new TokenValidationParameters
-                   //{
-                   //    ValidIssuer = jwtSetting.Issuer,
-                   //    ValidAudience = jwtSetting.Audience,
-                   //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.SecurityKey)),
-                   //    ClockSkew = TimeSpan.Zero
-                   //};
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidIssuer = jwtSetting.Issuer,
+                       ValidAudience = jwtSetting.Audience,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.SecurityKey)),
+                       ClockSkew = TimeSpan.Zero
+                   };
                });
         }
 

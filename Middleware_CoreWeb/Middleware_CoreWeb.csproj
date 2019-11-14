@@ -21,6 +21,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\images\aliyun-default.svg" />
+    <None Include="wwwroot\images\dingding.svg" />
+    <None Include="wwwroot\images\downloadwindows_icon.svg" />
+    <None Include="wwwroot\images\git.svg" />
+    <None Include="wwwroot\images\gitee.svg" />
+    <None Include="wwwroot\images\qq-2.svg" />
+    <None Include="wwwroot\images\qq.svg" />
+    <None Include="wwwroot\images\user.svg" />
+    <None Include="wwwroot\images\weibo.svg" />
+    <None Include="wwwroot\images\weixin-2.svg" />
+    <None Include="wwwroot\images\weixin.svg" />
+    <None Include="wwwroot\images\zhifubao-2.svg" />
+    <None Include="wwwroot\images\zhifubao.svg" />
+    <None Include="wwwroot\js\common-scripts.js" />
+    <None Include="wwwroot\js\longbow.validate.js" />
+    <None Include="wwwroot\js\popper.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Middleware_DatabaseAccess\Middleware_DatabaseAccess.csproj" />
     <ProjectReference Include="..\Middleware_Tool\Middleware_Tool.csproj" />
   </ItemGroup>

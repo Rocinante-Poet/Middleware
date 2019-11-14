@@ -12,14 +12,11 @@ namespace Middleware_CoreWeb.Controllers
 {
     public class HomeController : Controller
     {
-        //[HttpGet]
-        //public IActionResult Index(int? id) => View(_accessor.HttpContext);
-
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Login() => View();
 
         [HttpGet]
+        [Authorize]
         public IActionResult Register() => View();
 
         [HttpGet]

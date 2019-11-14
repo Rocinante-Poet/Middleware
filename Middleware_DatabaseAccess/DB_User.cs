@@ -13,13 +13,21 @@ namespace Middleware_DatabaseAccess
         /// 登录
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> DBLoginAsync(JWTUserModel _user)
+        public async Task<JWTUserModel> DBLoginAsync(JWTUserModel _user)
         {
             var connection = CRUD.GetOpenConnection();
-            var data = await connection.GetListAsync<JWTUserModel>(new { _user.Name, _user.Pwd });
-            if (data.ToList().Count != 0)
-                return true;
-            return false;
+            var _d = await connection.GetListAsync<JWTUserModel>(new { _user.Name, _user.Pwd });
+            if (_d.ToList().Count > 0)
+            {
+                foreach (JWTUserModel u in _d)
+                {
+                    _user.UserID = u.UserID;
+                    _user.Power_ID = u.Power_ID;
+                    _user.Remark = u.Remark;
+                }
+                return _user;
+            }
+            else return new JWTUserModel();
         }
 
         /// <summary>
@@ -28,13 +36,16 @@ namespace Middleware_DatabaseAccess
         /// <returns></returns>
         public async Task<bool> DBRegisterAsync(JWTUserModel _user)
         {
+            _user.UserState = "0";
+            _user.Power_ID = 1;
+
             var connection = CRUD.GetOpenConnection();
             var data = await connection.GetListAsync<JWTUserModel>(new { _user.Name });
             if (data.ToList().Count != 0)
                 return false;
             else
             {
-                await connection.InsertAsync<int, JWTUserModel>(new JWTUserModel { Name = _user.Name, Pwd = _user.Pwd, Remark = _user.Remark });
+                await connection.InsertAsync<int, JWTUserModel>(_user);//new JWTUserModel { Name = _user.Name, Pwd = _user.Pwd, UserState = _user.UserState, Power_ID = _user.Power_ID, Remark = _user.Remark }
                 return true;
             }
         }

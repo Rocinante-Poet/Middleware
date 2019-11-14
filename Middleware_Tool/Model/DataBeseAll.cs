@@ -26,8 +26,17 @@ namespace Middleware_Tool
         public int Id { get; set; }
 
         public int UserID { get; set; }
+
+        /// <summary>
+        /// 操作记录
+        /// </summary>
         public string Operating { get; set; }
+
         public string Date { get; set; }
+
+        /// <summary>
+        /// 详情说明
+        /// </summary>
         public string Details { get; set; }
     }
 
@@ -37,7 +46,7 @@ namespace Middleware_Tool
         public int ID { get; set; }
 
         public int PowerGroupID { get; set; }
-        public string Function { get; set; }
+        public string FunctionName { get; set; }
         public string FunctionUrl { get; set; }
     }
 
@@ -52,7 +61,8 @@ namespace Middleware_Tool
     }
 
     [Table("Userinfo")]
-    public class JWTUserModel : Userinfo { }
+    public class JWTUserModel : Userinfo
+    { }
 
     [Table("Userinfo")]
     public class Userinfo

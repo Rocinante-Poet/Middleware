@@ -11,6 +11,7 @@
     <link href="~/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
 
     <link href="~/node_modules/toastr/build/toastr.css" rel="stylesheet" />
+
 }
 <body class="bg-dark">
     <div class="container">
@@ -31,16 +32,24 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="remember-me"> 记住密码
-                            </label>
+                        <div class="form-label-group">
+                            <div class="form-label-group">
+                                <div class="verify-wrap" id="verify-wrap"></div>
+                            </div>
                         </div>
                     </div>
-                    <a id="Btnlogin" class="btn btn-primary btn-block">登录</a>
+
+                    @*<div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="remember-me"> 记住密码
+                                </label>
+                            </div>
+                        </div>*@
+                    <a id="Btnlogin" class="btn btn-primary btn-block" href="#">登录</a>
                 </form>
                 <div class="text-center">
-                    <a id="Btnlogin" class="d-block small mt-3" href="/Home/Register">注册新账号</a>
+                    <a class="d-block small mt-3" href="/Home/Register">注册新账号</a>
                 </div>
             </div>
         </div>
@@ -56,11 +65,14 @@
     <script src="~/node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- toastr JavaScript-->
-
     <script src="~/node_modules/toastr/toastr.js"></script>
+
+    <script src="~/js/slideVerify.js"></script>
+
+    <script type="text/javascript">
+    </script>
     <script>
         $(function () {
-
             toastr.options = {
                 closeButton: false,
                 debug: false,
@@ -76,32 +88,50 @@
                 showMethod: "fadeIn",
             };
 
-            $('#Btnlogin').click(function () {
-                if ($('#inputName').val() == "" || $('#inputPassword').val() == "") {
-                    toastr.error("账号密码不能为空!");
-                    return;
-                }
-                $.ajax({
-                    type: 'post',
-                    url: '/api/Login',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val() }),
-                    datatype: 'json',
-                    success: function (res) {
-                        if (res.success) {
-                            setTimeout(function () {
-                                window.location.href = "/Power/Menu";
-                            });
-                        }
-                        else {
-                            toastr.error(res.message);
-                        }
-                    },
-                    error: function (e) {
-                        toastr.error(e.responseText);
+        });
+        var verify = false;
+
+        var SlideVerifyPlug = window.slideVerifyPlug;
+        var slideVerify = new SlideVerifyPlug('#verify-wrap', {
+            wrapWidth: '350',
+            initText: '请向右滑动滑块',
+            sucessText: '验证通过',
+            getSuccessState: function (res) {
+                verify = res;
+            }
+        });
+
+        $('#Btnlogin').click(function () {
+            if ($('#inputName').val() == "" || $('#inputPassword').val() == "") {
+                toastr.error("账号密码不能为空!"); return;
+            } else if (!verify) {
+                toastr.error("请滑动验证!"); return;
+            }
+            $.ajax({
+                type: 'post',
+                url: '/api/Login',
+                headers: { 'Authorization': 'Bearer ' + localStorage.token },
+                contentType: 'application/json',
+                data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val() }),
+                datatype: 'json',
+                success: function (res) {
+                    if (res.success) {
+                        setTimeout(function () {
+                            localStorage.token = res.jwttoken;
+                            location.href = "/Power/Menu";
+                        });
                     }
-                });
+                    else {
+                        toastr.error(res.message);
+                        verify = false;
+                        slideVerify.resetVerify();
+                    }
+                },
+                error: function (e) {
+                    toastr.error(e.responseText);
+                }
             });
         });
     </script>
+
 }

@@ -23,7 +23,7 @@ namespace Middleware_Tool
                 SecurityKey = "d0ecd23c-dvdb-5005-a2ka-0fea210c858a", // 密钥
                 Issuer = "jwtIssuertest", // 颁发者
                 Audience = "jwtAudiencetest", // 接收者
-                ExpireSeconds = 86400 // 1t 过期时间
+                ExpireSeconds = 60 * 60 * 24 * 7 // 7t 过期时间
             };
         }
 
@@ -35,7 +35,7 @@ namespace Middleware_Tool
                 new Claim(JwtClaimTypes.JwtId, Guid.NewGuid().ToString()),
                 new Claim(JwtClaimTypes.Id, user.UserID.ToString(), ClaimValueTypes.Integer32),
                 new Claim(JwtClaimTypes.Name, user.Name, ClaimValueTypes.String),
-                new Claim(JwtClaimTypes.Role, user.Power_ID.ToString(), ClaimValueTypes.Integer32)
+                new Claim(JwtClaimTypes.Scope, user.Power_ID.ToString(),ClaimValueTypes.Integer32)
             };
 
             // 创建令牌

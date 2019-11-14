@@ -19,7 +19,7 @@ namespace Middleware_CoreWeb
         {
             await Task.Run(() =>
             {
-                //powerdetails = new DB_Power().GetListPowerdetails().ToList();
+                powerdetails = new DB_Power().GetListPowerdetails().ToList();
                 //powerinfo = new DB_Power().GetListPowerinfo().ToList();
             });
         }
