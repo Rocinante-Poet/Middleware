@@ -1,12 +1,9 @@
 ﻿using Dapper;
-using Middleware_DatabaseAccess;
-using Middleware_Model;
-using System;
+using Middleware_Tool;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace Middleware_DatabaseAccess
 {
@@ -16,38 +13,42 @@ namespace Middleware_DatabaseAccess
         /// 登录
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> DBLogin(Userinfo _user)
+        public async Task<JWTUserModel> DBLoginAsync(JWTUserModel _user)
         {
-            return await CRUD.ExcuteSqlAsync(async connection =>
+            var connection = CRUD.GetOpenConnection();
+            var _d = await connection.GetListAsync<JWTUserModel>(new { _user.Name, _user.Pwd });
+            if (_d.ToList().Count > 0)
             {
-                var data = await connection.GetListAsync<Userinfo>(new { _user.Name, _user.Pwd });
-                if (data.Count() != 0)
-                return true;
-
-                return false;
-            });
+                foreach (JWTUserModel u in _d)
+                {
+                    _user.UserID = u.UserID;
+                    _user.Power_ID = u.Power_ID;
+                    _user.Remark = u.Remark;
+                }
+                return _user;
+            }
+            else return new JWTUserModel();
         }
 
         /// <summary>
         /// 注册
         /// </summary>
         /// <returns></returns>
-        public bool DBRegister(Userinfo _user)
+        public async Task<bool> DBRegisterAsync(JWTUserModel _user)
         {
-            return CRUD.ExcuteSql<bool>(connection =>
+            _user.UserState = "0";
+            _user.Power_ID = 1;
+
+            var connection = CRUD.GetOpenConnection();
+            var data = await connection.GetListAsync<JWTUserModel>(new { _user.Name });
+            if (data.ToList().Count != 0)
+                return false;
+            else
             {
-                var data = connection.GetList<Userinfo>(new { _user.Name }).ToList();
-
-                if (data.Count != 0)
-                    return false;
-                else
-                {
-                    var d = connection.Insert<int, Userinfo>(new Userinfo { Name = _user.Name, Pwd = _user.Pwd, Remark = _user.Remark });
-                    return true;
-                }
-            });
+                await connection.InsertAsync<int, JWTUserModel>(_user);//new JWTUserModel { Name = _user.Name, Pwd = _user.Pwd, UserState = _user.UserState, Power_ID = _user.Power_ID, Remark = _user.Remark }
+                return true;
+            }
         }
-
 
         /// <summary>
         /// 分页查询
@@ -61,7 +62,7 @@ namespace Middleware_DatabaseAccess
             return CRUD.ExcuteSql((connection) =>
             {
                 StringBuilder strQuery = new StringBuilder();
-                if (!string.IsNullOrWhiteSpace(Name)|| Group != 0)
+                if (!string.IsNullOrWhiteSpace(Name) || Group != 0)
                 {
                     strQuery.Append("where ");
                 }
@@ -69,7 +70,7 @@ namespace Middleware_DatabaseAccess
                 {
                     strQuery.Append(" Power_ID=@Power_ID  ");
                 }
-                if (!string.IsNullOrWhiteSpace(Name)&& Group == 0)
+                if (!string.IsNullOrWhiteSpace(Name) && Group == 0)
                 {
                     strQuery.Append(" showName like @Name");
                 }
@@ -86,9 +87,6 @@ namespace Middleware_DatabaseAccess
                 return new JsonData<Userinfo>() { rows = List, total = CountPage };
             });
         }
-
-
-
 
         public bool Add(Userinfo group)
         {
@@ -113,9 +111,5 @@ namespace Middleware_DatabaseAccess
                 return connection.Update(group) > 0;
             });
         }
-
-
-
-
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -7,14 +8,13 @@ namespace Middleware_CoreWeb
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            _ = new JWTUpload().UpdateRole();
+
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+          WebHost.CreateDefaultBuilder(args).UseUrls("http://localhost:5000;https://localhost:8000")
+              .UseStartup<Startup>();
     }
 }
