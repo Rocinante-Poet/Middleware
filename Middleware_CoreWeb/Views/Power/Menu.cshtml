@@ -84,6 +84,7 @@
                     var requesturl = '/api/Navigator/add';
                     if (!edittype)
                         requesturl = '/api/Navigator/edit';
+                    $('#dialogNew').modal('hide');
                     $.ajax({
                         type: 'put',
                         url: requesturl,
@@ -91,7 +92,7 @@
                         data: JSON.stringify({ "name": $('#name').val(), "icon": $('#icon').val(), "url": $('#url').val(), "no": parseInt($('#order').val()), "menuid": parseInt($('#menuselect').val()), "state": parseInt($('#menutype').val()), "explain": $('#explain').val(), "id": parseInt($('#menuID').val()) }),
                         datatype: 'json',
                         success: function (res) {
-                            $('#dialogNew').modal('hide');
+
                             if (res.state == 200) {
                                 $("#TableMenu").bootstrapTable('refresh');
                                 toastr.success(res.message);

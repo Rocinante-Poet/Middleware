@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Middleware_Tool;
+using Middleware_Tool.cache;
 using System;
 using System.IO;
 using System.Text;
@@ -25,6 +26,7 @@ namespace Middleware_CoreWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<ICache, CacheProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

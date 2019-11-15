@@ -134,32 +134,6 @@
             deleteRow([{ "id": id }]);
         }
      
-        //function SelectMenu() {
-        //    $.ajax({
-        //        method: "get",
-        //        async: true,
-        //        url: '/api/Group/select',
-        //        dataType: "json",
-        //        success: function (res) {
-        //            if (null != res) {
-        //                var html = '';
-        //                html += '<option selected value="0">请选择</option>';
-        //                Object.keys(res).forEach(function (key) {
-        //                    html += '<option value="' + res[key].id + '">' + res[key].name + '</option>';
-        //                });
-        //                $('#menuselect').html(html);
-        //                $('#menuselect').selectpicker('refresh');
-        //                $('#Groupselect').html(html);
-        //                $('#Groupselect').selectpicker('refresh');
-        //            }
-        //        },
-        //        error: function (e) {
-        //            toastr.error(e.responseText);
-        //        }
-        //    });
-        //}
-
-
         var TableInit = function () {
             var oTableInit = new Object();
             //初始化Table
@@ -218,7 +192,8 @@
                             field: 'group',
                             title: '所属角色',
                             align: 'center', formatter: function (value, row, index) {
-                                return value.name;
+                                if (value != null)
+                                    return value.name;
                             }
                         }, {
                             field: 'remark',

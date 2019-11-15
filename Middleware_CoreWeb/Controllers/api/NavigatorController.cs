@@ -23,12 +23,12 @@ namespace Middleware_CoreWeb.Controllers.api
         public IEnumerable<menu_model> Getparentmenus() => Get_MenuDb.GetFatherList();
 
         [HttpPut("add")]
-        public Responsemessage Put([FromBody]menu_model menu) => Get_MenuDb.AddMenu(menu) ? succeed() : Error();
+        public async Task<Responsemessage> Put([FromBody]menu_model menu) => await Get_MenuDb.AddMenu(menu) ? succeed() : Error();
 
         [HttpDelete]
-        public Responsemessage delete([FromBody]List<menu_model> menuArray) => Get_MenuDb.DeleteMenu(menuArray) ? succeed() : Error();
+        public async Task<Responsemessage> delete([FromBody]List<menu_model> menuArray) => await Get_MenuDb.DeleteMenu(menuArray) ? succeed() : Error();
 
         [HttpPut("edit")]
-        public Responsemessage Putedit([FromBody]menu_model menu) => Get_MenuDb.UpdateMenu(menu) ? succeed() : Error();
+        public async Task<Responsemessage> Putedit([FromBody]menu_model menu) => await Get_MenuDb.UpdateMenu(menu) ? succeed() : Error();
     }
 }

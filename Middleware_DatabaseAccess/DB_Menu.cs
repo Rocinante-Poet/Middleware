@@ -1,16 +1,17 @@
 ﻿using Dapper;
-using Middleware_DatabaseAccess;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Middleware_Model;
+using Middleware_Tool.cache;
 
 namespace Middleware_DatabaseAccess
 {
     public class DB_Menu
     {
+        private string menuCacheKey = "Middleware_Menu_Cache";
+
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -37,7 +38,13 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql((connection) =>
             {
-                return connection.GetList<menu_model>(new { menuid = 0 }).OrderBy(p => p.no);
+                var List = CacheFactory.GetCache.Get<IEnumerable<menu_model>>(menuCacheKey);
+                if (List == null)
+                {
+                    List = connection.GetList<menu_model>();
+                    CacheFactory.GetCache.Set(menuCacheKey, List);
+                }
+                return List.Where(p => p.menuid == 0).OrderBy(p => p.no);
             });
         }
 
@@ -45,31 +52,40 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.GetList<menu_model>(new { menuid = Id }).OrderBy(p => p.no);
+                var List = CacheFactory.GetCache.Get<IEnumerable<menu_model>>(menuCacheKey);
+                if (List == null)
+                {
+                    List = connection.GetList<menu_model>();
+                    CacheFactory.GetCache.Set(menuCacheKey, List);
+                }
+                return List.Where(p => p.menuid == Id).OrderBy(p => p.no);
             });
         }
 
-        public bool AddMenu(menu_model menu)
+        public async Task<bool> AddMenu(menu_model menu)
         {
-            return CRUD.ExcuteSql(connection =>
+            return await CRUD.ExcuteSqlAsync(async connection =>
             {
-                return connection.Insert(menu) > 0;
+                CacheFactory.GetCache.Remove(menuCacheKey);
+                return await connection.InsertAsync(menu) > 0;
             });
         }
 
-        public bool DeleteMenu(List<menu_model> menuarray)
+        public async Task<bool> DeleteMenu(List<menu_model> menuarray)
         {
-            return CRUD.ExcuteSql(connection =>
+            return await CRUD.ExcuteSqlAsync(async connection =>
             {
-                return connection.DeleteList<menu_model>("WHERE id=@id", menuarray) > 0;
+                CacheFactory.GetCache.Remove(menuCacheKey);
+                return await connection.DeleteListAsync<menu_model>("WHERE id=@id", menuarray) > 0;
             });
         }
 
-        public bool UpdateMenu(menu_model menu)
+        public async Task<bool> UpdateMenu(menu_model menu)
         {
-            return CRUD.ExcuteSql(connection =>
+            return await CRUD.ExcuteSqlAsync(async connection =>
             {
-                return connection.Update(menu) > 0;
+                CacheFactory.GetCache.Remove(menuCacheKey);
+                return await connection.UpdateAsync(menu) > 0;
             });
         }
     }
