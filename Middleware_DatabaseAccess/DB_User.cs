@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Middleware_Tool;
+using Middleware_CoreWeb;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,13 +21,13 @@ namespace Middleware_DatabaseAccess
             {
                 foreach (JWTUserModel u in _d)
                 {
-                    _user.UserID = u.UserID;
+                    _user.id = u.id;
                     _user.Power_ID = u.Power_ID;
                     _user.Remark = u.Remark;
                 }
                 return _user;
             }
-            else return new JWTUserModel();
+            else return null;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Middleware_DatabaseAccess
         /// <returns></returns>
         public async Task<bool> DBRegisterAsync(JWTUserModel _user)
         {
-            _user.UserState = "0";
+            _user.UserState = 0;
             _user.Power_ID = 1;
 
             var connection = CRUD.GetOpenConnection();
@@ -81,6 +81,7 @@ namespace Middleware_DatabaseAccess
                 var List = connection.GetListPaged<Userinfo>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "", new { Name = $"%{Name}%", Power_ID = Group });
                 foreach (var ItemInfo in List)
                 {
+                    ItemInfo.Pwd = string.Empty;
                     ItemInfo.group = new DB_Group().Get(ItemInfo.Power_ID);
                 }
                 var CountPage = connection.RecordCount<Userinfo>(strQuery.ToString(), new { Name = $"%{Name}%", Power_ID = Group });
@@ -92,7 +93,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.Insert(group) > 0;
+                return connection.ExecuteAsync(group) > 0;
             });
         }
 
@@ -100,7 +101,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.DeleteList<Userinfo>("WHERE UserID=@UserID", grouparray) > 0;
+                return connection.DeleteList<Userinfo>("WHERE UserID=@id", grouparray) > 0;
             });
         }
 
@@ -109,6 +110,22 @@ namespace Middleware_DatabaseAccess
             return CRUD.ExcuteSql(connection =>
             {
                 return connection.Update(group) > 0;
+            });
+        }
+
+        public IEnumerable<Userinfo> Get(Userinfo group)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.GetList<Userinfo>(new { Name = group.Name });
+            });
+        }
+
+        public Userinfo GetUser(int id)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.Get<Userinfo>(id);
             });
         }
     }

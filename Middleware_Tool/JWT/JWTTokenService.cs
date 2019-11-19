@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Middleware_Tool
+namespace Middleware_CoreWeb
 {
     public interface IJWTTokenService
     {
@@ -33,7 +33,7 @@ namespace Middleware_Tool
             var claims = new Claim[]
             {
                 new Claim(JwtClaimTypes.JwtId, Guid.NewGuid().ToString()),
-                new Claim(JwtClaimTypes.Id, user.UserID.ToString(), ClaimValueTypes.Integer32),
+                new Claim(JwtClaimTypes.Id, user.id.ToString(), ClaimValueTypes.Integer32),
                 new Claim(JwtClaimTypes.Name, user.Name, ClaimValueTypes.String),
                 new Claim(JwtClaimTypes.Scope, user.Power_ID.ToString(),ClaimValueTypes.Integer32)
             };

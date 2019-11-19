@@ -105,15 +105,15 @@
         <div class="dropdown userinfo">
             <a data-toggle="dropdown" class="dropdown-toggle shadow-default" href="#">
                 <img id="headerIcon" alt="" src="~/images/user.svg" asp-append-version="true" />
-                <span id="userDisplayName" data-userName="Admin" class="username text-truncate d-inline-block">Administrator</span>
+                <span id="userDisplayName" data-userName="Admin" class="username text-truncate d-inline-block">@Model.GetUserinfo.group.name</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
                     <div class="d-flex flex-fill align-items-center">
                         <img src="~/images/user.svg" asp-append-version="true">
                         <div class="flex-fill">
-                            <div class="username text-truncate">Administrator</div>
-                            <div>登录名：Admin</div>
+                            <div class="username text-truncate">@Model.GetUserinfo.group.name</div>
+                            <div>登录名：@Model.GetUserinfo.showName</div>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                     <a href="/Admin/Notifications"><i class="fa fa-bell"></i>通知<span id="logoutNoti" class="badge badge-pill badge-success"></span></a>
                 </div>
                 <div class="dropdown-item">
-                    <a href="/Account/Logout"><i class="fa fa-key"></i>注销</a>
+                    <a href="/Home/exit"><i class="fa fa-key"></i>注销</a>
                 </div>
             </div>
         </div>
@@ -139,14 +139,14 @@
     <div class="bg"></div>
     <div class="nav-brand justify-content-center">
         <a href="#">
-            <img src="~/images/favicon.png" asp-append-version="true" />
-            <span>后台管理系统</span>
+            @*<img src="~/images/favicon.svg" asp-append-version="true" />*@
+            <span>WCS后台管理系统</span>
         </a>
     </div>
     <div class="nav-header flex-fill align-items-center">
-        <a href="/Admin/Profiles">
+        <a href="javascript:">
             <img src="~/images/user.svg" asp-append-version="true" />
-            <span class="username d-inline-block text-truncate flex-fill">Administrator</span>
+            <span class="username d-inline-block text-truncate flex-fill">@Model.GetUserinfo.showName</span>
         </a>
     </div>
     <!-- sidebar menu start-->

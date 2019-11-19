@@ -39,16 +39,6 @@
     $.fn.extend({
         nestMenu: function (callback) {
             var $this = $(this);
-            //$.bc({
-            //    id: 0, url: Menu.url, query: { type: "user" }, method: "post",
-            //    callback: function (result) {
-            //        var html = "";
-            //        if ($.isArray(result)) html = cascadeMenu(result);
-            //        $this.find('ol:first').html(html);
-            //        $this.nestable();
-            //        callback();
-            //    }
-            //});
         },
         clearWidgetItems: function () {
             setBadge(false);
@@ -57,64 +47,6 @@
                     $(this).children('a').remove();
                 });
             });
-            return this;
-        },
-        reloadWidget: function () {
-            if (this.length === 0) return this;
-            var that = this;
-            //$.bc({
-            //    url: Notifications.url,
-            //    callback: function (result) {
-            //        that.clearWidgetItems();
-            //        if (!result) return;
-
-            //        setBadge(result);
-
-            //        // tasks
-            //        $('#msgHeaderTask').text(result.TasksCount);
-            //        var resultFormat = {
-            //            "Success": '<span class="badge badge-pill badge-success badge-task"><i class="fa fa-check-circle"></i><span>成功</span></span>',
-            //            "Timeout": '<span class="badge badge-pill badge-warning badge-task"><i class="fa fa-exclamation-circle"></i><span>超时</span></span>'
-            //        }
-            //        var htmlUserTemplate = '<a class="dropdown-item position-relative" href="{0}"><span class="label label-primary"><i class="fa fa-thumb-tack"></i></span><div class="content">{1}</div><div class="small italic content-task">{2}</div>{3}</a>';
-            //        var html = result.Tasks.map(function (u) {
-            //            return $.format(htmlUserTemplate, $.formatUrl('Admin/Tasks'), u.Name, u.LastRuntime, resultFormat[u.LastRunResult]);
-            //        }).join('');
-            //        $(html).insertAfter($('#msgHeaderTaskContent'));
-
-            //        // new users
-            //        $('#msgHeaderUser').text(result.NewUsersCount);
-            //        htmlUserTemplate = '<a class="dropdown-item" href="{4}"><span class="label label-success"><i class="fa fa-plus"></i></span><div title="{2}" class="content">{1}({0})</div><span class="small italic">{3}</span></a>';
-            //        html = result.Users.map(function (u) {
-            //            return $.format(htmlUserTemplate, $.safeHtml(u.UserName), $.safeHtml(u.DisplayName), $.safeHtml(u.Description), u.Period, $.formatUrl('Admin/Notifications'));
-            //        }).join('');
-            //        $(html).insertAfter($('#msgHeaderUserContent'));
-
-            //        // apps
-            //        $('#msgHeaderApp').text(result.AppExceptionsCount);
-            //        htmlUserTemplate = '<a class="dropdown-item" href="{3}"><span class="label label-warning"><i class="fa fa-bug"></i></span><div title="{1}" class="content">{0}</div><span class="small italic">{2}</span></a>';
-            //        html = result.Apps.map(function (u) {
-            //            return $.format(htmlUserTemplate, u.ExceptionType, u.Message, u.Period, $.formatUrl('Admin/Exceptions'));
-            //        }).join('');
-            //        $(html).insertAfter($('#msgHeaderAppContent'));
-
-            //        // dbs
-            //        $('#msgHeaderDb').text(result.DbExceptionsCount);
-            //        htmlUserTemplate = '<a class="dropdown-item" href="{3}"><span class="label label-danger"><i class="fa fa-bolt"></i></span><div title="{1}" class="content">{0}</div><span class="small italic">{2}</span></a>';
-            //        html = result.Dbs.map(function (u) {
-            //            return $.format(htmlUserTemplate, u.ErrorPage, u.Message, u.Period, $.formatUrl('Admin/Exceptions'));
-            //        }).join('');
-            //        $(html).insertAfter($('#msgHeaderDbContent'));
-
-            //        // messages
-            //        $('#msgHeaderMsg').text(result.MessagesCount);
-            //        htmlUserTemplate = '<a class="dropdown-item" href="{6}?id={0}"><span class="photo"><img alt="avatar" src="{1}"></span><span class="subject"><span class="from">{2}</span><span class="time">{4}</span></span><span class="message" title="{5}">{3}</span></a>';
-            //        html = result.Messages.map(function (u) {
-            //            return $.format(htmlUserTemplate, u.Id, u.FromIcon, $.safeHtml(u.FromDisplayName), $.safeHtml(u.Title), u.Period, $.safeHtml(u.Content), $.formatUrl('Admin/Messages'));
-            //        }).join('');
-            //        $(html).insertAfter($('#msgHeaderMsgContent'));
-            //    }
-            //});
             return this;
         }
     });
@@ -229,73 +161,6 @@ $(function () {
         $('body').toggleClass('sidebar-open');
     });
 
-    // Apps
-    window.App = {
-        url: 'api/Apps',
-        title: "分配应用"
-    };
-
-    // Roles
-    window.Role = {
-        url: 'api/Roles',
-        title: "分配角色"
-    };
-
-    // Users
-    window.User = {
-        url: 'api/Users',
-        title: "分配用户"
-    };
-
-    // Groups
-    window.Group = {
-        url: 'api/Groups',
-        title: "分配部门"
-    };
-
-    // Menus
-    window.Menu = {
-        url: 'api/Menus',
-        iconView: 'Admin/IconView',
-        title: "分配菜单"
-    };
-
-    // Exceptions
-    window.Exceptions = {
-        url: 'api/Exceptions',
-        title: "程序异常日志"
-    };
-
-    // Dicts
-    window.Dicts = {
-        url: 'api/Dicts'
-    };
-
-    // Profiles
-    window.Profiles = {
-        url: 'api/Profiles',
-        del: 'api/Profiles/Delete'
-    };
-
-    // Settings
-    window.Settings = {
-        url: 'api/Settings'
-    };
-
-    // Messages
-    window.Messages = {
-        url: 'api/Messages'
-    };
-
-    // Tasks
-    window.Tasks = {
-        url: 'api/Tasks'
-    };
-
-    // Notifications
-    window.Notifications = {
-        url: 'api/Notifications'
-    };
 
     window.CheckboxHtmlTemplate = '<div class="form-group col-md-3 col-sm-4 col-6"><label title="{3}" data-toggle="tooltip" role="checkbox" aria-checked="false" class="form-checkbox is-{2}"><span class="checkbox-input"><span class="checkbox-inner"></span><input type="checkbox" value="{0}" {2} /></span><span class="checkbox-label">{1}</span></label></div>';
 

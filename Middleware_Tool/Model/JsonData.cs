@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Middleware_Tool
+namespace Middleware_CoreWeb
 {
     /// <summary>
     /// bootstrap数据对象

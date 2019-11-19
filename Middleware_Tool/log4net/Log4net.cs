@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_Tool
+namespace Middleware_CoreWeb
 {
     public class Log4net
     {

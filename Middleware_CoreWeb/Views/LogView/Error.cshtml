@@ -1,0 +1,201 @@
+﻿
+@{
+    Layout = "_Default";
+}
+
+@model NavigatorBarModel
+@{
+    Layout = "_Default";
+    ViewData["Title"] = "Group";
+}
+@section css {
+
+}
+@section javascript {
+
+
+    <script>
+        $(function () {
+
+            //1.初始化Table
+            var oTable = new TableInit();
+            oTable.Init();
+
+            $('#btn_query').on('click', function () {
+                $("#TableGroup").bootstrapTable('refresh');
+            });
+            $('#btn_repeat').on('click', function () {
+                $("#txt_group_name").val("");
+                $("#TableGroup").bootstrapTable('refresh');
+            });
+
+            $(".btn_download").click(function () {
+                $.ajax({
+                    method: "get",
+                    async: true,
+                    url: '/api/Logapi/file',
+                    success: function (res) {
+                        if (null != res) {
+                            var html = '';
+                            Object.keys(res.data).forEach(function (key) {
+                                html += '<tr><td>' + res.data[key].fileName + '</td><td><a href="/LogView/DownloadLog?fileName=' + res.data[key].fileName + '">点击下载</a></td></tr>';
+                            });
+                            $('#log-body').html(html);
+                            $('#dialogNew').modal();
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
+                    }
+                });
+            });
+        });
+
+        var TableInit = function () {
+            var oTableInit = new Object();
+            //初始化Table
+            oTableInit.Init = function () {
+                $('#TableGroup').bootstrapTable({
+                    url: '/api/Logapi/error',           //请求后台的URL（*）
+                    method: 'get',                      //请求方式（*）
+                    toolbar: '#toolbar',                //工具按钮用哪个容器
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sortable: false,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
+                    queryParams: oTableInit.queryParams,//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                    search: false,                       //是否显示表格搜索，此搜索是客户端搜索，
+                    strictSearch: true,
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    /*    height: 500,            */            //行高，如果没有设置height属性，表格自动根据记录条数决定表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: false,
+                    columns: [
+                        {
+                            checkbox: true
+                        }, {
+                            field: 'time',
+                            title: '时间',
+                            align: 'center'
+                        }, {
+                            field: 'user',
+                            title: '账户',
+                            align: 'center'
+                        }, {
+                            field: 'url',
+                            title: '路径',
+                            align: 'center'
+                        }, {
+                            field: 'errormeg',
+                            title: '错误信息',
+                            align: 'center'
+                        }
+                    ]
+                });
+            };
+            //得到查询的参数
+            oTableInit.queryParams = function (params) {
+                var temp = {                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    limit: params.limit,   //页面大小
+                    offset: params.offset,  //页码
+                    Name: $("#txt_group_name").val()
+                };
+                return temp;
+            };
+            return oTableInit;
+        };
+    </script>
+}
+
+<div class="main-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
+        <li class="breadcrumb-item">错误日志</li>
+    </ol>
+</div>
+<div class="card">
+    <div class="card-header">查询条件</div>
+    <div class="card-body">
+        <form class="form-inline">
+            <div class="row">
+                <div class="form-group col-sm-6 col-lg-auto">
+                    <label class="control-label" for="txt_menus_name">账户</label>
+                    <input type="text" class="form-control" id="txt_group_name">
+                </div>
+                <div class="form-group col-sm-6 col-lg-auto flex-sm-fill justify-content-sm-end align-self-sm-end">
+                    <button style="margin:3px" type="button" id="btn_query" class="btn btn-primary btn-fill"><i class="fa fa-search" aria-hidden="true"></i><span>查询</span></button>
+                    <button style="margin:3px" type="button" id="btn_repeat" class="btn btn-primary btn-fill"><i class="fa fa-repeat" aria-hidden="true"></i><span>重置</span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        查询结果
+    </div>
+    <div class="card-body">
+        <div class="alert alert-danger" role="alert">
+            <span>非超级管理用户请谨慎修改</span>
+        </div>
+        <div id="toolbar" class="">
+            <div class="gear btn-group">
+                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
+                <div class="dropdown-menu">
+                    <a href="#" class="btn_download" title="导出服务器日志"><i class="fa fa-arrow-circle-down"></i></a>
+                    @*<a class="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
+                        <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
+                        <a href="#" title="权限" class="tb_assignRole"><i class="fa fa-sitemap"></i></a>*@
+                </div>
+            </div>
+            <div class="toolbar btn-group">
+                <button type="button" class="btn btn-info btn_download"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i><span>导出服务器日志</span></button>
+                @*<button type="button" class="btn btn-primary tb_edit"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
+                    <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
+                    <button type="button" class="btn btn-info tb_assignRole">
+                        <i class="fa fa-sitemap" aria-hidden="true"></i><span>权限</span>
+                    </button>*@
+            </div>
+        </div>
+        <table id="TableGroup"></table>
+        <div class="clearfix"></div>
+    </div>
+</div>
+@section modal {
+
+    <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">服务器日志导出</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div style="height:500px;overflow:scroll">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>文件名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="log-body">
+                    <tr><td>Error-11-18.log</td><td><a href="/LogView/DownloadLog?fileName=Error-11-18.log">点击下载</a></td></tr>
+                    <tr>
+                        <td>Error-11-18.log</td>
+                        <td><a href="/LogView/DownloadLog?fileName=Error-11-18.log">点击下载</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

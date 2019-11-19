@@ -22,43 +22,57 @@
 
             $('.btn_add').on('click', function () {
                 edittype = true;
-                $('#myModalLabel').html('角色添加窗口');
-                $('#ID').val(0);
-                $('#Geoupname').val('');
-                $('#explain').val('');
+                $('#myModalLabel').html('用户添加窗口');
+                $('#id').val(0);
+                $('#Name').val('');
+                //$('#Power_ID').val(0);
+                $('#UserState').selectpicker('val', 0);
+                $('#Power_ID').selectpicker('val', 0);
+                $('#showName').val('');
+                //$('#UserState').val(0);
+                $('#Remark').val('');
+                $('#Pwd').val('');
+                $('#password').val('');
                 $('#dialogNew').modal();
             });
 
             $('#btnSubmit').click(function () {
-                var requesturl = '/api/Group/add';
-                if (!edittype)
-                    requesturl = '/api/Group/edit';
-                $.ajax({
-                    type: 'put',
-                    url: requesturl,
-                    contentType: 'application/json',
-                    data: JSON.stringify({ "id": parseInt($('#ID').val()), "name": $('#Geoupname').val(), "explain": $('#explain').val() }),
-                    datatype: 'json',
-                    success: function (res) {
-                        $('#dialogNew').modal('hide');
-                        if (res.state == 200) {
-                            $("#TableGroup").bootstrapTable('refresh');
-                            toastr.success(res.message);
+
+                if (parseInt($('#Power_ID').val()) == 0) {
+                    toastr.error("请选择用户所属角色");
+                } else {
+                    var requesturl = '/api/User/add';
+                    if (!edittype)
+                        requesturl = '/api/User/edit';
+                    $.ajax({
+                        type: 'put',
+                        url: requesturl,
+                        contentType: 'application/json',
+                        data: JSON.stringify({ "id": parseInt($('#id').val()), "Name": $('#Name').val(), "Power_ID": parseInt($('#Power_ID').val()), "showName": $('#showName').val(), "UserState": parseInt($('#UserState').val()), "Remark": $('#Remark').val(), "Pwd": $('#Pwd').val() }),
+                        datatype: 'json',
+                        success: function (res) {
+                            $('#dialogNew').modal('hide');
+                            if (res.state == 200) {
+                                $("#TableGroup").bootstrapTable('refresh');
+                                toastr.success(res.message);
+                            }
+                            else {
+                                toastr.error(res.message);
+                            }
+                        },
+                        error: function (e) {
+                            toastr.error(e.responseText);
                         }
-                        else {
-                            toastr.error(res.message);
-                        }
-                    },
-                    error: function (e) {
-                        toastr.error(e.responseText);
-                    }
-                });
+                    });
+                }
             });
 
             $('.btn_delete').on('click', function () {
                 var data = $("#TableGroup").bootstrapTable('getSelections');
                 if (data.length > 0) {
                     deleteRow(data);
+                } else {
+                    toastr.error("请选中后操作！");
                 }
             });
 
@@ -72,8 +86,6 @@
                     toastr.error("请选中一行后编辑！");
                 }
             });
-
-
         });
 
         var edittype = true;
@@ -83,10 +95,15 @@
             edittype = false;
             var Info = TableArrar[index]
             if (Info != null) {
-                $('#myModalLabel').html('角色编辑窗口');
-                $('#Geoupname').val(Info.name);
-                $('#explain').val(Info.explain);
-                $('#ID').val(Info.id);
+                $('#myModalLabel').html('用户编辑窗口');
+                $('#id').val(Info.id);
+                $('#Name').val(Info.name);
+                $('#showName').val(Info.showName);
+                $('#UserState').selectpicker('val', Info.userState);
+                $('#Power_ID').selectpicker('val', Info.power_ID);
+                $('#Remark').val(Info.remark);
+                $('#Pwd').val(Info.pwd);
+                $('#password').val(Info.password);
                 $('#dialogNew').modal();
             }
         }
@@ -107,7 +124,7 @@
                 callback: function (result) {
                     if (result) {
                         $.ajax({
-                            url: '/api/Group',
+                            url: '/api/User',
                             type: "delete",
                             data: JSON.stringify(data),
                             contentType: 'application/json',
@@ -207,6 +224,7 @@
                         {
                             field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
                                 TableArrar[row.id] = row;
+                                console.log(row);
                                 var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
                                     '<a class="btn btn-xs btn-danger btn-remove" onclick="deleteTool(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
                                 return strHtml;
@@ -302,31 +320,31 @@
     <div class="modal-body">
         <form class="form-inline" id="dataForm">
             <div class="form-row">
-                <input type="hidden" id="ID" />
+                <input type="hidden" id="id" value="0" />
                 <div class="form-group col-sm-6">
-                    <label class="control-label" for="parentName">用户名称</label>
-                    <input type="text" class="form-control flex-sm-fill" id="url" placeholder="不可为空，默认#" data-valid="true" />
+                    <label class="control-label" for="parentName">用户账户</label>
+                    <input type="text" class="form-control flex-sm-fill" id="Name" placeholder="不可为空" data-valid="true" />
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="parentName">所属角色</label>
                     <div class="input-group flex-sm-fill">
-                        <select class="selectpicker selectc" id="Groupselect" data-dropup-auto="false">
+                        <select class="selectpicker selectc" id="Power_ID" data-dropup-auto="false">
                             <option value="0">请选择</option>
                             @foreach (var item in Model.groupArray)
                             {
-                                <option value='@item.id'>@item.name</option>
+                            <option value='@item.id'>@item.name</option>
                             }
                         </select>
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="parentName">显示名称</label>
-                    <input type="text" class="form-control flex-sm-fill" id="url" placeholder="不可为空，默认#" data-valid="true" />
+                    <input type="text" class="form-control flex-sm-fill" id="showName" placeholder="不可为空" data-valid="true" />
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="parentName">用户状态</label>
                     <div class="input-group flex-sm-fill">
-                        <select class="selectpicker selectc" id="menutype" data-dropup-auto="false">
+                        <select class="selectpicker selectc" id="UserState" data-dropup-auto="false">
                             <option value="0">正常</option>
                             <option value="-1">禁用</option>
                         </select>
@@ -334,7 +352,7 @@
                 </div>
                 <div class="form-group col-12">
                     <label class="control-label" for="url">描述</label>
-                    <input type="text" class="form-control flex-sm-fill" id="explain" placeholder="可为空" />
+                    <input type="text" class="form-control flex-sm-fill" id="Remark" placeholder="可为空" />
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="parentName">登陆密码</label>
@@ -342,7 +360,7 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="parentName">确认密码</label>
-                    <input type="password" class="form-control flex-sm-fill" id="confirm" placeholder="与登录密码一致" maxlength="16" equalto="#password" data-valid="true" data-original-title="你的输入不相同">
+                    <input type="password" class="form-control flex-sm-fill" id="Pwd" placeholder="与登录密码一致" maxlength="16" equalto="#password" data-valid="true" data-original-title="你的输入不相同">
                 </div>
             </div>
         </form>

@@ -1,15 +1,20 @@
-﻿
+﻿@model NavigatorBarModel
 @{
     Layout = "_Default";
     ViewData["Title"] = "Group";
 }
+@section css {
+    <link href="~/node_modules/nestable2/dist/jquery.nestable.min.css" rel="stylesheet" />
+}
 @section javascript {
+    <script src="~/node_modules/nestable2/dist/jquery.nestable.min.js"></script>
+
     <script>
         $(function () {
             //1.初始化Table
             var oTable = new TableInit();
             oTable.Init();
-
+            $('.dd').nestable('serialize');
             $('#btn_query').on('click', function () {
                 $("#TableGroup").bootstrapTable('refresh');
             });
@@ -54,22 +59,120 @@
                 });
             });
 
-             $('.btn_delete').on('click', function () {
+            $('.btn_delete').on('click', function () {
                 var data = $("#TableGroup").bootstrapTable('getSelections');
-                 if (data.length > 0) {
-                     deleteRow(data);
-                 }
-             });
+                if (data.length > 0) {
+                    deleteRow(data);
+                } else {
+                    toastr.error("请选中后操作！");
+                }
+            });
 
-           $('.tb_edit').click(function () {
-               var data = $("#TableGroup").bootstrapTable('getSelections');
+            $('.tb_edit').click(function () {
+                var data = $("#TableGroup").bootstrapTable('getSelections');
                 if (data.length == 1) {
-                    if (data[0].id != 0)
+                    if (data[0] != null && data[0].id != 0)
                         edit(data[0].id);
-                    else  console.log(data[0].id);
+                    else console.log(data[0].id);
                 } else {
                     toastr.error("请选中一行后编辑！");
                 }
+            });
+
+            $('.tb_assignRole').click(function () {
+                var data = $("#TableGroup").bootstrapTable('getSelections');
+                if (data.length == 1) {
+                    if (data[0] != null && data[0].id != 0) {
+                        $.ajax({
+                            url: '/api/Navigator/detail',
+                            type: "get",
+                            data: data[0],
+                            contentType: 'application/json',
+                            success: function (res) {
+                                if (res.state == 200) {
+                                    var menus = $nestMenu.find('input:checkbox');
+                                    menus.prop('checked', false);
+                                    var Itemlist = res.data;
+                                    //console.error(Itemlist);
+                                    $.each(Itemlist, function (index, item) {
+                                        //console.log(item.menuid);
+                                        // var selector = $.format('[value={0}]', item.menuid);
+                                        //console.log(item.menuid);
+                                        //console.log(menus.filter('[value=' + item.menuid + ']'));
+                                        //menus.filter('[value=' + item.menuid + ']').prop('checked', true);
+                                        //console.log($('input[value=' + item.menuid + ']'));
+                                        $('input[value=' + item.menuid + ']').prop('checked', true);
+                                    });
+                                    $('#dialogMenu').modal();
+                                }
+                                else {
+                                    toastr.error(res.message);
+                                }
+                            },
+                            error: function (e) {
+                                toastr.error(e.responseText);
+                            }
+                        });
+                    }
+                    else console.log(data[0].id);
+                } else {
+                    toastr.error("请选中一行后编辑！");
+                }
+            });
+
+            var $nestMenu = $('#nestable_menu');
+            var $nestMenuInput = $nestMenu.find('div.dd3-content');
+            $nestMenuInput = $nestMenu.find('div.dd3-content');
+            $nestMenuInput.on('click', ':checkbox', function () {
+                var val = $(this).prop('checked');
+                var child = $(this).parents('.dd3-content').next();
+                if (child.hasClass('dd-list')) {
+                    child.find(':checkbox').prop('checked', val);
+                }
+                // 子节点全部取消时父级菜单也取消
+                $(this).parents('ol.dd-list').each(function (index, p) {
+                    if (val === false) {
+                        val = $(p).prev().next().find(':checked').length > 0;
+                    }
+                    $(p).prev().find(':checkbox').prop('checked', val);
+                });
+            }).children('.radio').hide();
+
+            //权限
+            $('#btnMenuParent').click(function () {
+                var data = $("#TableGroup").bootstrapTable('getSelections');
+                var menus = $nestMenu.find('input:checkbox');
+                var menuObj = [];
+                var i = 0;
+                $.each(menus, function (index, item) {
+                    if ($(item).is(':checked')) {
+                        var id = parseInt($(item).attr("value"));
+                        var gropu = parseInt($(item).attr("group"));
+                        if (id != 0 ) {/*&& gropu != 1*/
+                            menuObj[i] = { "id": id };
+                            i++;
+                        }
+                    }
+                });
+                $.ajax({
+                    url: '/api/Navigator/add?id=' + data[0].id,
+                    type: "post",
+                    data: JSON.stringify(menuObj),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        if (res.state == 200) {
+                            toastr.success(res.message);
+                            $("#TableGroup").bootstrapTable('refresh');
+                        }
+                        else {
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
+                    }
+                });
+                console.log(menuObj);
             });
         });
 
@@ -119,7 +222,7 @@
                                 }
                             },
                             error: function (e) {
-                              toastr.error(e.responseText);
+                                toastr.error(e.responseText);
                             }
                         });
                     }
@@ -174,7 +277,7 @@
                         },
                         {
                             field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
-                               TableArrar[row.id] = row;
+                                TableArrar[row.id] = row;
                                 var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
                                     '<a class="btn btn-xs btn-danger btn-remove" onclick="deleteTool(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
                                 return strHtml;
@@ -235,15 +338,15 @@
                     <a href="#" class="btn_add" title="新增"><i class="fa fa-plus"></i></a>
                     <a class="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
                     <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
-                    <a id="tb_assignRole" href="#" title="分配角色"><i class="fa fa-sitemap"></i></a>
+                    <a href="#" title="权限" class="tb_assignRole"><i class="fa fa-sitemap"></i></a>
                 </div>
             </div>
             <div class="toolbar btn-group">
                 <button type="button" class="btn btn-success btn_add"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
                 <button type="button" class="btn btn-primary tb_edit"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
                 <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
-                <button id="btn_assignRole" type="button" class="btn btn-info">
-                    <i class="fa fa-sitemap" aria-hidden="true"></i><span>分配权限</span>
+                <button type="button" class="btn btn-info tb_assignRole">
+                    <i class="fa fa-sitemap" aria-hidden="true"></i><span>权限</span>
                 </button>
             </div>
         </div>
@@ -272,5 +375,67 @@
                 </div>
             </div>
         </form>
+    </div>
+}
+@section customModal{
+    <div class="modal" id="dialogMenu" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myMenuModalLabel" aria-hidden="true">
+        <div id="dialogSubMenu" class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myMenuModalLabel">请选择菜单</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body modal-body-fixed">
+                    <div class="dd" id="nestable_menu">
+                        <ol class="dd-list">
+                            @foreach (var itemMenu in Model.NavigatorMenuList)
+                            {
+                                <li class="dd-item dd3-item" data-id="53" data-order="150" data-category="0">
+                                    @*<button class="dd-collapse" data-action="collapse" type="button">Collapse</button>
+                                        <button class="dd-expand" data-action="expand" type="button">Expand</button>*@
+                                    <div class="dd-handle dd3-handle"></div>
+                                    <div class="dd3-content">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="@itemMenu.FatherItem.id" group="@(itemMenu.sonMenuItem.Count()>0 ? 1:0)"><span><i class="@itemMenu.FatherItem.icon"></i>@itemMenu.FatherItem.name</span></label>
+                                        </div>
+                                        <span class="menuType">系统菜单</span><span class="menuOrder">@itemMenu.FatherItem.id</span>
+                                    </div>
+                                    @if (itemMenu.sonMenuItem.Count() > 0)
+                                    {
+                                        <ol class="dd-list">
+                                            @foreach (var Sonitem in itemMenu.sonMenuItem)
+                                            {
+                                                <li class="dd-item dd3-item" data-id="54" data-order="10" data-category="0">
+                                                    <div class="dd-handle dd3-handle"></div>
+                                                    <div class="dd3-content">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="@Sonitem.id" group="0"><span><i class="@Sonitem.icon"></i>@Sonitem.name</span>
+                                                            </label>
+                                                        </div>
+                                                        <span class="menuType">系统菜单</span><span class="menuOrder">@Sonitem.id</span>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ol>
+                                    }
+                                </li>
+                            }
+ 
+                        </ol>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modal-close">
+                        <i class="fa fa-times"></i>
+                        <span>关闭</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnMenuParent">
+                        <i class="fa fa-save"></i>
+                        <span>确认</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 }

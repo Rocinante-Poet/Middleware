@@ -528,7 +528,7 @@ namespace Dapper
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
         /// <returns>如果是identity的int?类型，返回新插入的记录的ID（主键）,否则返回null</returns>
-        public static int? Insert<TEntity>(this IDbConnection connection, TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static int? ExecuteAsync<TEntity>(this IDbConnection connection, TEntity entityToInsert, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             return Insert<int?, TEntity>(connection, entityToInsert, transaction, commandTimeout);
         }

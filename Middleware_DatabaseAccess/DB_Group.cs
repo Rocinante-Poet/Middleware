@@ -1,12 +1,17 @@
 ﻿using Dapper;
-using Middleware_Tool;
+using Middleware_CoreWeb;
+using Middleware_CoreWeb.cache;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Middleware_DatabaseAccess
 {
     public class DB_Group
     {
+        private string CacheKey = "Middleware_Group_Cache";
+
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -33,7 +38,8 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.Insert(group) > 0;
+                CacheFactory.GetCache.Remove(CacheKey);
+                return connection.ExecuteAsync(group) > 0;
             });
         }
 
@@ -41,6 +47,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
+                CacheFactory.GetCache.Remove(CacheKey);
                 return connection.DeleteList<group_model>("WHERE id=@id", grouparray) > 0;
             });
         }
@@ -49,6 +56,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
+                CacheFactory.GetCache.Remove(CacheKey);
                 return connection.Update(group) > 0;
             });
         }
@@ -57,7 +65,13 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.Get<group_model>(id);
+                var List = CacheFactory.GetCache.Get<IEnumerable<group_model>>(CacheKey);
+                if (List == null)
+                {
+                    List = connection.GetList<group_model>();
+                    CacheFactory.GetCache.Set(CacheKey, List);
+                }
+                return List.FirstOrDefault(p => p.id == id);
             });
         }
 
@@ -65,7 +79,13 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.GetList<group_model>();
+                var List = CacheFactory.GetCache.Get<IEnumerable<group_model>>(CacheKey);
+                if (List == null)
+                {
+                    List = connection.GetList<group_model>();
+                    CacheFactory.GetCache.Set(CacheKey, List);
+                }
+                return List;
             });
         }
     }

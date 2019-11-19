@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_Tool
+namespace Middleware_CoreWeb
 {
     public class DataBeseAll
     {
@@ -38,6 +38,17 @@ namespace Middleware_Tool
         /// 详情说明
         /// </summary>
         public string Details { get; set; }
+
+        public string UserName { get; set; }
+
+        public string ip { get; set; }
+
+        public string Browser { get; set; }
+
+        public string OS { get; set; }
+
+        public int state { get; set; }
+
     }
 
     public class Powerdetails
@@ -68,7 +79,8 @@ namespace Middleware_Tool
     public class Userinfo
     {
         [Key]
-        public int UserID { get; set; }
+        [Column("UserID")]
+        public int id { get; set; }
 
         /// <summary>
         /// 登录名称
@@ -90,10 +102,28 @@ namespace Middleware_Tool
         /// </summary>
         public int Power_ID { get; set; }
 
-        public string UserState { get; set; }
+        /// <summary>
+        /// 用户状态
+        /// </summary>
+        public int UserState { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [IgnoreUpdate]
+        public string CreateTime { get; set; }
+
+        /// <summary>
+        /// 显示名称
+        /// </summary>
+        public string showName { get; set; }
+
 
         [Editable(false)]
         public group_model group { get; set; }
+
+
+
     }
 
     [Table("menu")]

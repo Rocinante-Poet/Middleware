@@ -10,6 +10,6 @@ namespace Middleware_Tool
 
         public string message { get; set; }
 
-        public List<object> Data { get; set; }
+        public IEnumerable<object> Data { get; set; }
     }
 }

@@ -1,10 +1,9 @@
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+using Dapper;
 
-namespace Middleware_Tool
+namespace Middleware_CoreWeb
 {
     /*代码自动生成工具自动生成,不要在这里写代码，否则会被自动覆盖哦 */
 
