@@ -68,7 +68,7 @@ namespace Middleware_CoreWeb
             }
             if (!IsAjaxCall && !IsapiRequest)
             {
-                var detailList = new DB_detail().NavigatorBarList(appInfo.GetUser(httpContext).Power_ID);
+                var detailList = new DB_detail().NavigatorBarList((await appInfo.GetUserAsync(httpContext)).Power_ID);
 
                 bool IsPower = false;
                 if (detailList != null && !requestUrl.Contains("Download"))

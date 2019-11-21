@@ -11,7 +11,7 @@ namespace Middleware_DatabaseAccess
 {
     public class DB_Log
     {
-        public async Task SetOperatingLogAsync(operatinginfo log)
+        public async Task SetOperatingLogAsync(Operatinginfo log)
         {
             var connection = CRUD.GetOpenConnection();
             _ = await connection.InsertAsync(log);
@@ -24,7 +24,7 @@ namespace Middleware_DatabaseAccess
         /// <param name="Pageoffset"></param>
         /// <param name="meunName"></param>
         /// <returns></returns>
-        public async Task<JsonData<operatinginfo>> GetList(int Pagelimit, int Pageoffset, string Name)
+        public async Task<JsonData<Operatinginfo>> GetList(int Pagelimit, int Pageoffset, string Name)
         {
             var connection = CRUD.GetOpenConnection();
 
@@ -33,9 +33,9 @@ namespace Middleware_DatabaseAccess
             {
                 strQuery.Append("where UserName like @UserName");
             }
-            var List = await connection.GetListPagedAsync<operatinginfo>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "ID desc ", new { UserName = $"%{Name}%" });
-            var CountPage = await connection.RecordCountAsync<operatinginfo>(strQuery.ToString(), new { UserName = $"%{Name}%" });
-            return new JsonData<operatinginfo>() { rows = List, total = CountPage };
+            var List = await connection.GetListPagedAsync<Operatinginfo>((Pageoffset / Pagelimit) + 1, Pagelimit, strQuery.ToString(), "ID desc ", new { UserName = $"%{Name}%" });
+            var CountPage = await connection.RecordCountAsync<Operatinginfo>(strQuery.ToString(), new { UserName = $"%{Name}%" });
+            return new JsonData<Operatinginfo>() { rows = List, total = CountPage };
         }
 
 

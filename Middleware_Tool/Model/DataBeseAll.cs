@@ -20,7 +20,7 @@ namespace Middleware_CoreWeb
         public string logMessage { get; set; }
     }
 
-    public class operatinginfo
+    public class Operatinginfo
     {
         [Key]
         public int Id { get; set; }
