@@ -48,17 +48,16 @@ namespace Middleware_CoreWeb.Controllers.api
                 state = _return != null ? 200 : 500,
                 Details = _return != null ? "通过登录授权" : "未通过登录授权"
             });
-            if (_return != null && !string.IsNullOrWhiteSpace(_return.Name) && !string.IsNullOrWhiteSpace(_return.Pwd))
+            var _token = "";
+            if (_return != null && !string.IsNullOrEmpty(_return.id.ToString()))
             {
-                var token = _tokenServic.GetToken(_user);
+                _token = _tokenServic.GetToken(_user).AESEncrypt();
                 HttpContext.AddCookie(CoreConfiguration.CookiesUserKey, _return.id.ToString().AESEncrypt());
-                HttpContext.AddCookie(CoreConfiguration.JwtCookiesTokenKey, token.AESEncrypt());
-                return new JsonResult(new { Success = true, Message = "登录成功" });
+                HttpContext.AddCookie(CoreConfiguration.JwtCookiesTokenKey, _token);
+                return new JsonResult(new { Success = true, Message = "登录成功", access_token = _token });
             }
             return new JsonResult(new { Success = false, Message = "用户名或密码不正确！" });
         }
-
-
 
         /// <summary>
         /// 注册
@@ -73,7 +72,5 @@ namespace Middleware_CoreWeb.Controllers.api
                 return new JsonResult(new { Success = true, Message = "注册成功" });
             return new JsonResult(new { Success = false, Message = "注册失败" });
         }
-
-
     }
 }

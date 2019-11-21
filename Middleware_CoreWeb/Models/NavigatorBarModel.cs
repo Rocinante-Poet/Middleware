@@ -18,12 +18,9 @@ namespace Middleware_CoreWeb
 
         public IEnumerable<NavigatorItem> NavigatorBarList { get; protected set; }
 
-
         public IEnumerable<NavigatorItem> NavigatorMenuList { get; protected set; }
 
-
         public IEnumerable<group_model> groupArray => new DB_Group().Get();
-
 
         public Userinfo GetUserinfo { get; protected set; }
     }

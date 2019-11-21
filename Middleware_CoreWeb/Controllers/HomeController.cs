@@ -41,6 +41,5 @@ namespace Middleware_CoreWeb.Controllers
             }
             return View(model);
         }
-        
     }
 }

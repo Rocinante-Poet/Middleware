@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Middleware_DatabaseAccess;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Http;
 using Middleware_CoreWeb;
+using Middleware_DatabaseAccess;
+using Middleware_Tool;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Middleware_Tool;
 
 namespace Middleware_CoreWeb
 {
@@ -14,6 +14,7 @@ namespace Middleware_CoreWeb
         public static Userinfo GetUser(this HttpContext context)
         {
             int userId = context.GetCookie(CoreConfiguration.CookiesUserKey).AESDecrypt().ToInt();
+
             var userInfo = new DB_User().GetUser(userId);
             if (userId == 0 || userInfo == null)
             {
