@@ -20,7 +20,7 @@ namespace Middleware_CoreWeb
         public string logMessage { get; set; }
     }
 
-    public class Operatinginfo
+    public class operatinginfo
     {
         [Key]
         public int Id { get; set; }
@@ -164,6 +164,12 @@ namespace Middleware_CoreWeb
         /// 说明
         /// </summary>
         public string explain { get; set; }
+
+        /// <summary>
+        /// 是否选中
+        /// </summary>
+        [Editable(false)]
+        public bool Active { get; set; }
 
         /// <summary>
         /// 排序

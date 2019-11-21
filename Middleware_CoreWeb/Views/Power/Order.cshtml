@@ -1,19 +1,16 @@
-﻿
+﻿@model NavigatorBarModel
 @{
     Layout = "_Default";
 }
 
-@model NavigatorBarModel
 @{
     Layout = "_Default";
-    ViewData["Title"] = "Group";
+    ViewData["Title"] = "Order";
 }
 @section css {
- 
+
 }
 @section javascript {
-    
-
     <script>
         $(function () {
 
@@ -25,9 +22,10 @@
                 $("#TableGroup").bootstrapTable('refresh');
             });
             $('#btn_repeat').on('click', function () {
-                $("#txt_group_name").val("");
+                $("#txt_boxId").val("");
                 $("#TableGroup").bootstrapTable('refresh');
             });
+
         });
 
         var TableInit = function () {
@@ -35,7 +33,7 @@
             //初始化Table
             oTableInit.Init = function () {
                 $('#TableGroup').bootstrapTable({
-                    url: '/api/Logapi/login',           //请求后台的URL（*）
+                    url: '/api/order/',           //请求后台的URL（*）
                     method: 'get',                      //请求方式（*）
                     toolbar: '#toolbar',                //工具按钮用哪个容器
                     striped: true,                      //是否显示行间隔色
@@ -63,48 +61,82 @@
                         {
                             checkbox: true
                         }, {
-                            field: 'date',
-                            title: '时间',
+                            field: 'mesid',
+                            title: '消息ID',
                             align: 'center'
                         }, {
-                            field: 'userName',
-                            title: '账户',
+                            field: 'messageName',
+                            title: '消息类型',
                             align: 'center'
                         }, {
-                            field: 'ip',
-                            title: 'IP地址',
+                            field: 'boxId',
+                            title: '箱号',
                             align: 'center'
                         }, {
-                            field: 'browser',
-                            title: '浏览器',
+                            field: 'wmsid',
+                            title: 'WMSID',
                             align: 'center'
                         }, {
-                            field: 'os',
-                            title: '系统',
+                            field: 'level',
+                            title: '层位',
                             align: 'center'
                         }, {
+                            field: 'weight',
+                            title: '重量',
+                            align: 'center'
+                        }, {
+                            field: 'areaCode',
+                            title: '库区',
+                            align: 'center'
+                        }, {
+                            field: 'sourceCode',
+                            title: '来源库区',
+                            align: 'center'
+                        }
+                        , {
+                            field: 's_station',
+                            title: '取货站台',
+                            align: 'center'
+                        }
+                        , {
+                            field: 'd_station',
+                            title: '放货站台',
+                            align: 'center'
+                        }, {
+                            field: 'location',
+                            title: '货位',
+                            align: 'center'
+                        },{
                             field: 'state',
                             title: '状态',
                             align: 'center', formatter: function (value, row, index) {
                                 if (value != null) {
-                                    if (value == 200) {
-                                        return "<span class='label label-success'>成功</span>";
+                                    if (value == -1) {
+                                        return "<span class='label label-wait'>待执行</span>";
                                     }
-                                    if (value == 500) {
-                                        return "<span class='label label-errer'>失败</span>";
+                                    if (value == -1) {
+                                        return "<span class='label label-errer'>未知</span>";
                                     }
                                 }
                             }
                         }, {
-                            field: 'operating',
-                            title: '操作',
+                            field: 'createTime',
+                            title: '创建时间',
                             align: 'center'
                         }, {
-                            field: 'details',
-                            title: '说明',
+                            field: 'endTime',
+                            title: '完成时间',
                             align: 'center'
+                        },
+                        {
+                            field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
+                                //menuArrar[row.id] = row;
+                                var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
+                                    '<a class="btn btn-xs btn-danger btn-remove" onclick="deletemenu(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
+                                return strHtml;
+                            }, edit: false
                         }
-                        ]
+                    ]
                 });
             };
             //得到查询的参数
@@ -112,7 +144,7 @@
                 var temp = {                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                     limit: params.limit,   //页面大小
                     offset: params.offset,  //页码
-                    Name: $("#txt_group_name").val()
+                    boxId: $("#txt_boxId").val()
                 };
                 return temp;
             };
@@ -120,10 +152,11 @@
         };
     </script>
 }
+
 <div class="main-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
-        <li class="breadcrumb-item">登录日志</li>
+        <li class="breadcrumb-item">订单管理</li>
     </ol>
 </div>
 <div class="card">
@@ -132,8 +165,8 @@
         <form class="form-inline">
             <div class="row">
                 <div class="form-group col-sm-6 col-lg-auto">
-                    <label class="control-label" for="txt_menus_name">账户</label>
-                    <input type="text" class="form-control" id="txt_group_name">
+                    <label class="control-label" for="txt_menus_name">箱号</label>
+                    <input type="text" class="form-control" id="txt_boxId">
                 </div>
                 <div class="form-group col-sm-6 col-lg-auto flex-sm-fill justify-content-sm-end align-self-sm-end">
                     <button style="margin:3px" type="button" id="btn_query" class="btn btn-primary btn-fill"><i class="fa fa-search" aria-hidden="true"></i><span>查询</span></button>
@@ -151,7 +184,50 @@
         <div class="alert alert-danger" role="alert">
             <span>非超级管理用户请谨慎修改</span>
         </div>
+        <div id="toolbar" class="">
+            <div class="gear btn-group">
+                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
+                <div class="dropdown-menu">
+                    <a href="#" class="btn_download" title="新增"><i class="fa fa-plus"></i></a>
+                    <a class="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
+                        <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
+                </div>
+            </div>
+            <div class="toolbar btn-group">
+                <button type="button" class="btn btn-info btn_download"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
+                <button type="button" class="btn btn-primary tb_edit"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
+                <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
+            </div>
+        </div>
         <table id="TableGroup"></table>
         <div class="clearfix"></div>
     </div>
 </div>
+@section modal {
+
+    <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">服务器日志导出</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div style="height:500px;overflow:scroll">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>文件名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="log-body">
+                    <tr><td>Error-11-18.log</td><td><a href="/LogView/DownloadLog?fileName=Error-11-18.log">点击下载</a></td></tr>
+                    <tr>
+                        <td>Error-11-18.log</td>
+                        <td><a href="/LogView/DownloadLog?fileName=Error-11-18.log">点击下载</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

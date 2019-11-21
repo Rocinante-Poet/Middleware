@@ -26,10 +26,12 @@ namespace Middleware_CoreWeb.Controllers
         public IActionResult Group()
         {
             return View(new NavigatorBarModel(this));
-
         }
 
         public IActionResult UserManage() => View(new NavigatorBarModel(this));
+
+
+        public IActionResult Order() => View(new NavigatorBarModel(this));
 
 
         public IActionResult IconView() => View();

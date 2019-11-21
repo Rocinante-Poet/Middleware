@@ -36,7 +36,7 @@ namespace Middleware_CoreWeb.Controllers.api
             var agent = new UserAgent(userAgent);
             var Browser = $"{agent.Browser?.Name} {agent.Browser?.Version}";
             var OS = $"{agent.OS?.Name} {agent.OS?.Version}";
-            await new DB_Log().SetOperatingLogAsync(new Operatinginfo
+            await new DB_Log().SetOperatingLogAsync(new operatinginfo
             {
                 UserID = _user.id,
                 Operating = "登录",
@@ -51,13 +51,11 @@ namespace Middleware_CoreWeb.Controllers.api
             if (_return != null && !string.IsNullOrWhiteSpace(_return.Name) && !string.IsNullOrWhiteSpace(_return.Pwd))
             {
                 var token = _tokenServic.GetToken(_user);
-                HttpContext.AddCookie(CoreConfiguration.CookiesUserKey, _return.id.ToString().AESEncrypt());
                 HttpContext.AddCookie(CoreConfiguration.JwtCookiesTokenKey, token.AESEncrypt());
                 return new JsonResult(new { Success = true, Message = "登录成功" });
             }
             return new JsonResult(new { Success = false, Message = "用户名或密码不正确！" });
         }
-
 
 
         /// <summary>

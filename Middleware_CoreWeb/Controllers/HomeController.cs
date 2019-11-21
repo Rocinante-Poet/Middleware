@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Middleware_Tool;
 
 namespace Middleware_CoreWeb.Controllers
 {
@@ -26,7 +27,7 @@ namespace Middleware_CoreWeb.Controllers
 
         public async Task<IActionResult> exit()
         {
-            await Task.Run(() => { HttpContext.Response.Cookies.Delete("access_token"); });
+            await Task.Run(() => { HttpContext.RemoveCookie("access_token"); });
             return Redirect(CoreConfiguration.DefaultLogin);
         }
 

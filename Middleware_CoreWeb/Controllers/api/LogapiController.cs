@@ -18,7 +18,7 @@ namespace Middleware_CoreWeb.Controllers.api
         private DB_Log Get_LogDb = new DB_Log();
 
         [HttpGet("login")]
-        public async Task<JsonData<Operatinginfo>> Get([FromQuery]int limit, int offset, string Name) => await Get_LogDb.GetList(limit, offset, Name);
+        public async Task<JsonData<operatinginfo>> Get([FromQuery]int limit, int offset, string Name) => await Get_LogDb.GetList(limit, offset, Name);
 
 
         [HttpGet("error")]

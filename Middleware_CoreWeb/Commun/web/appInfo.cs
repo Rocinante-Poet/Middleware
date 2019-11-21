@@ -6,20 +6,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Middleware_Tool;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using IdentityModel;
 
 namespace Middleware_CoreWeb
 {
     public static class appInfo
     {
-        public static Userinfo GetUser(this HttpContext context)
+        public static async Task<Userinfo> GetUserAsync(this HttpContext context)
         {
-            int userId = context.GetCookie(CoreConfiguration.CookiesUserKey).AESDecrypt().ToInt();
+            var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+            var userId = result.Principal.Claims.ToList().FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value.ToInt();
             var userInfo = new DB_User().GetUser(userId);
             if (userId == 0 || userInfo == null)
             {
                 context.RemoveCookie(CoreConfiguration.JwtCookiesTokenKey);
-                context.RemoveCookie(CoreConfiguration.CookiesUserKey);
-                throw new Exception("获取用户信息失败");
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(new Responsemessage() { state = 500, message = "未找到该用户信息" }.ToJson());
+                return new Userinfo();
             }
             userInfo.group = new DB_Group().Get(userInfo.Power_ID);
             return userInfo;

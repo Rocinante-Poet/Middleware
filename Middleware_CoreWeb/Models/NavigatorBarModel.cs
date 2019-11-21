@@ -4,27 +4,27 @@ using Middleware_CoreWeb;
 using System.Collections.Generic;
 using System.Linq;
 using Middleware_Tool;
+using System.Threading.Tasks;
 
 namespace Middleware_CoreWeb
 {
     public class NavigatorBarModel : ModelBase
     {
+        ControllerBase controllerBase;
         public NavigatorBarModel(ControllerBase controller)
         {
-            GetUserinfo = controller.HttpContext.GetUser();
-            NavigatorMenuList = new DB_Menu().GetFatherList();
-            NavigatorBarList = new DB_detail().NavigatorBarList(appInfo.GetUser(controller.HttpContext).Power_ID);
+            controllerBase = controller;
         }
 
-        public IEnumerable<NavigatorItem> NavigatorBarList { get; protected set; }
+        public async Task<IEnumerable<NavigatorItem>> NavigatorBarList() => new DB_detail().NavigatorBarList((await appInfo.GetUserAsync(controllerBase.HttpContext)).Power_ID, controllerBase.Request.Path);
 
 
-        public IEnumerable<NavigatorItem> NavigatorMenuList { get; protected set; }
+        public IEnumerable<NavigatorItem> NavigatorMenuList => new DB_Menu().GetFatherList();
 
 
         public IEnumerable<group_model> groupArray => new DB_Group().Get();
 
 
-        public Userinfo GetUserinfo { get; protected set; }
+        public async Task<Userinfo> GetUserinfo() => await controllerBase.HttpContext.GetUserAsync();
     }
 }

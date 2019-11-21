@@ -39,7 +39,7 @@ namespace Middleware_CoreWeb
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 }
-                await new DB_Log().InsertError(appInfo.GetUser(context), ex, context);
+                await new DB_Log().InsertError(await appInfo.GetUserAsync(context), ex, context);
             }
         }
     }

@@ -46,7 +46,7 @@ namespace Middleware_DatabaseAccess
         }
 
 
-        public List<NavigatorItem> NavigatorBarList(int GroupID)
+        public List<NavigatorItem> NavigatorBarList(int GroupID, string Active = "")
         {
             List<NavigatorItem> navigatorItems = new List<NavigatorItem>();
             IEnumerable<menu_model> detailList = this.Get(GroupID).Select(p => new DB_Menu().Get(p.menuid)).Where(p => p != null).OrderBy(p => p.no);
@@ -56,6 +56,34 @@ namespace Middleware_DatabaseAccess
                 {
                     navigatorItems.Add(new NavigatorItem() { FatherItem = item, sonMenuItem = detailList.Where(p => p.menuid == item.id).Where(p => p != null) });
                 }
+            }
+            if (!string.IsNullOrEmpty(Active))
+            {
+                navigatorItems.ForEach(p =>
+                {
+                    if (p.sonMenuItem.Any())
+                    {
+                        p.FatherItem.Active = false;
+                        p.sonMenuItem.ToList().ForEach(s =>
+                        {
+                            s.Active = false;
+                            if (s.url == Active)
+                            {
+                                s.Active = true;
+                                p.FatherItem.Active = true;
+                            }
+                        }
+                         );
+                    }
+                    else
+                    {
+                        p.FatherItem.Active = false;
+                        if (p.FatherItem.url == Active)
+                        {
+                            p.FatherItem.Active = true;
+                        }
+                    }
+                });
             }
             return navigatorItems;
         }

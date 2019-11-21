@@ -70,7 +70,7 @@ namespace Middleware_CoreWeb
             }
             if (!IsAjaxCall && !IsapiRequest)
             {
-                var detailList = new DB_detail().NavigatorBarList(appInfo.GetUser(httpContext).Power_ID);
+                var detailList = new DB_detail().NavigatorBarList((await appInfo.GetUserAsync(httpContext)).Power_ID);
                 bool IsPower = false;
                 if (detailList != null && !requestUrl.Contains("Download"))
                 {
@@ -102,11 +102,11 @@ namespace Middleware_CoreWeb
             string jwt = context.Request.Headers["Authorization"];
             if (jwt == null || jwt == "")
             {
+             
                 context.Request.Cookies.TryGetValue(CoreConfiguration.JwtCookiesTokenKey, out string cookies_token);
                 context.Request.Headers.Add("Authorization", $"Bearer {cookies_token.AESDecrypt()}");
             }
             var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
-
             return result.Succeeded;
         }
     }

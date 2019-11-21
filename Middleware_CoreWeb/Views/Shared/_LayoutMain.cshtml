@@ -105,15 +105,15 @@
         <div class="dropdown userinfo">
             <a data-toggle="dropdown" class="dropdown-toggle shadow-default" href="#">
                 <img id="headerIcon" alt="" src="~/images/user.svg" asp-append-version="true" />
-                <span id="userDisplayName" data-userName="Admin" class="username text-truncate d-inline-block">@Model.GetUserinfo.group.name</span>
+                <span id="userDisplayName" data-userName="Admin" class="username text-truncate d-inline-block">@((await Model.GetUserinfo()).group.name)</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
                     <div class="d-flex flex-fill align-items-center">
                         <img src="~/images/user.svg" asp-append-version="true">
                         <div class="flex-fill">
-                            <div class="username text-truncate">@Model.GetUserinfo.group.name</div>
-                            <div>登录名：@Model.GetUserinfo.showName</div>
+                            <div class="username text-truncate">@((await Model.GetUserinfo()).group.name)</div>
+                            <div>登录名：@((await Model.GetUserinfo()).showName)</div>
                         </div>
                     </div>
                 </div>
@@ -146,34 +146,33 @@
     <div class="nav-header flex-fill align-items-center">
         <a href="javascript:">
             <img src="~/images/user.svg" asp-append-version="true" />
-            <span class="username d-inline-block text-truncate flex-fill">@Model.GetUserinfo.showName</span>
+            <span class="username d-inline-block text-truncate flex-fill">@((await Model.GetUserinfo()).showName)</span>
         </a>
     </div>
     <!-- sidebar menu start-->
     <div class="sidebar">
         <ul class="nav-sidebar nav nav-pills flex-column flex-nowrap">
-            @foreach (var itemMenu in Model.NavigatorBarList)
+            @foreach (var itemMenu in await Model.NavigatorBarList())
             {
                 <li class="nav-item @(itemMenu.sonMenuItem.Count() > 0 ? "parent" : "")">
-
                     @if (itemMenu.sonMenuItem.Count() >0)
                     {
-                        <a href="@(itemMenu.sonMenuItem.Count() == 0 ? itemMenu.FatherItem.url:$"#collapse_{itemMenu.FatherItem.id}")" role="button" data-toggle="collapse" class="nav-link collapsed">
+                        <a href="@(itemMenu.sonMenuItem.Count() == 0 ? itemMenu.FatherItem.url:$"#collapse_{itemMenu.FatherItem.id}")" role="button" data-toggle="collapse" class="nav-link @(itemMenu.FatherItem.Active?"active":"collapse")">
                             <i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span><i class="fa fa-angle-left"></i>
                         </a>
                     }
                     @if (itemMenu.sonMenuItem.Count() == 0)
                     {
-                        <a href="@itemMenu.FatherItem.url.Replace("~"," ")" class="nav-link " target="_self"><i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span></a>
+                        <a href="@itemMenu.FatherItem.url.Replace("~"," ")" class="nav-link @(itemMenu.FatherItem.Active?"active":"collapse")" target="_self"><i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span></a>
                     }
                     @if (itemMenu.sonMenuItem.Count() > 0)
                     {
-                        <div class="collapse" id="@($"collapse_{itemMenu.FatherItem.id}")">
+                        <div class="collapse @(itemMenu.FatherItem.Active?"show":"")" id="@($"collapse_{itemMenu.FatherItem.id}")">
                             <ul class="sub nav flex-column">
                                 @foreach (var Sonitem in itemMenu.sonMenuItem)
                                 {
                                     <li class="nav-item">
-                                        <a href="@Sonitem.url.Replace("~"," ")" class="nav-link " target="_self">
+                                        <a href="@Sonitem.url.Replace("~"," ")" class="nav-link @(Sonitem.Active?"active":"collapse")" target="_self">
                                             <i class="@Sonitem.icon"></i><span class="flex-fill">@Sonitem.name</span>
                                         </a>
                                     </li>
