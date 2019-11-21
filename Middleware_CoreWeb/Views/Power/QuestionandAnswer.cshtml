@@ -1,0 +1,20 @@
+﻿@{
+    Layout = null;
+}
+@model MarkDownText
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>QuestionandAnswer</title>
+</head>
+<body>
+    <div>
+        @Model.title
+    </div>
+    <div>
+        @Html.Raw(Model.content)
+    </div>
+</body>
+</html>

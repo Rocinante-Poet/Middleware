@@ -12,4 +12,10 @@ namespace Middleware_CoreWeb
         /// </summary>
         public string WebSiteIcon { get; protected set; } = "~/favicon.ico";
     }
+
+    public class MarkDownText
+    {
+        public string title { get; set; }
+        public string content { get; set; }
+    }
 }

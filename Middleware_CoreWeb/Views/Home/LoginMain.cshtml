@@ -124,12 +124,13 @@
             $.ajax({
                 type: 'post',
                 url: '/api/Login/',
-                //headers: { 'Authorization': 'Bearer ' + localStorage.token },
+                headers: { 'Authorization': 'Bearer ' + localStorage.token },
                 contentType: 'application/json',
                 data: JSON.stringify({ "Name": $('#inputName').val(), "Pwd": $('#inputPassword').val() }),
                 datatype: 'json',
                 success: function (res) {
                     if (res.success) {
+                        localStorage.setItem("token", res.access_token);
                         location.href = "/Power/Menu/";
                     }
                     else {

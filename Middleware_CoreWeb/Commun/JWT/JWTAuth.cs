@@ -13,7 +13,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Middleware_CoreWeb
 {
     public class JWTAuth
@@ -34,7 +33,6 @@ namespace Middleware_CoreWeb
                 throw new ArgumentNullException(nameof(httpContext));
             }
 
-
             var endpoint = httpContext.GetEndpoint();
             var authorizeData = endpoint?.Metadata.GetOrderedMetadata<IAuthorizeData>() ?? Array.Empty<IAuthorizeData>();
 
@@ -52,7 +50,7 @@ namespace Middleware_CoreWeb
             var result = await AuthorizationService(httpContext);
             bool IsAjaxCall = httpContext.Request.Headers["x-requested-with"] == "XMLHttpRequest";
             bool IsapiRequest = httpContext.Request.Path.StartsWithSegments("/api");
-            if (result == false)
+            if (result.Succeeded == false)
             {
                 if (IsAjaxCall || IsapiRequest)
                 {
@@ -70,7 +68,8 @@ namespace Middleware_CoreWeb
             }
             if (!IsAjaxCall && !IsapiRequest)
             {
-                var detailList = new DB_detail().NavigatorBarList((await appInfo.GetUserAsync(httpContext)).Power_ID);
+                var detailList = new DB_detail().NavigatorBarList(appInfo.GetUser(httpContext).Power_ID);
+
                 bool IsPower = false;
                 if (detailList != null && !requestUrl.Contains("Download"))
                 {
@@ -97,17 +96,17 @@ namespace Middleware_CoreWeb
             return;
         }
 
-        private async Task<bool> AuthorizationService(HttpContext context)
+        public static async Task<AuthenticateResult> AuthorizationService(HttpContext context)
         {
             string jwt = context.Request.Headers["Authorization"];
-            if (jwt == null || jwt == "")
+            if (string.IsNullOrEmpty(jwt))
             {
-             
                 context.Request.Cookies.TryGetValue(CoreConfiguration.JwtCookiesTokenKey, out string cookies_token);
                 context.Request.Headers.Add("Authorization", $"Bearer {cookies_token.AESDecrypt()}");
             }
             var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
-            return result.Succeeded;
+
+            return result;
         }
     }
 }
