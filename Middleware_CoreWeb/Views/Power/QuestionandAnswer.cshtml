@@ -1,20 +1,116 @@
-﻿@{
-    Layout = null;
+﻿@model MarkDownList
+@{
+    Layout = "_Default";
+    ViewData["Title"] = "Q&A";
 }
-@model MarkDownText
-<!DOCTYPE html>
+<div class="main-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
+        <li class="breadcrumb-item">Q&A</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        激光 导航
+                    </button>
+                </h2>
+            </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>QuestionandAnswer</title>
-</head>
-<body>
-    <div>
-        @Model.title
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    @foreach (var md in Model.Listmd)
+                    {
+                        if (md.MdTitle == "ndc")
+                        {
+                            @Html.Raw(md.MdContent);
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        磁条 导航
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+                    @foreach (var md in Model.Listmd)
+                    {
+                        if (md.MdTitle == "agv")
+                        {
+                            @Html.Raw(md.MdContent);
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#a" aria-expanded="false" aria-controls="a">
+                        Collapsible Group Item #3
+                    </button>
+                </h2>
+            </div>
+            <div id="a" class="collapse" aria-labelledby="headingA" data-parent="#accordionExample">
+                <div class="card-body">
+                    @foreach (var md in Model.Listmd)
+                    {
+                        if (md.MdTitle == "a")
+                        {
+                            @Html.Raw(md.MdContent);
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#b" aria-expanded="false" aria-controls="b">
+                        Collapsible Group Item #4
+                    </button>
+                </h2>
+            </div>
+            <div id="b" class="collapse" aria-labelledby="headingB" data-parent="#accordionExample">
+                <div class="card-body">
+                    @foreach (var md in Model.Listmd)
+                    {
+                        if (md.MdTitle == "b")
+                        {
+                            @Html.Raw(md.MdContent);
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#c" aria-expanded="false" aria-controls="c">
+                        Collapsible Group Item #5
+                    </button>
+                </h2>
+            </div>
+            <div id="c" class="collapse" aria-labelledby="headingC" data-parent="#accordionExample">
+                <div class="card-body">
+                    @foreach (var md in Model.Listmd)
+                    {
+                        if (md.MdTitle == "c")
+                        {
+                            @Html.Raw(md.MdContent);
+                        }
+                    }
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        @Html.Raw(Model.content)
-    </div>
-</body>
-</html>
+</div>

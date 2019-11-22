@@ -16,7 +16,7 @@ namespace Middleware_CoreWeb
     {
         public static async Task<Userinfo> GetUserAsync(this HttpContext context)
         {
-            var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+            AuthenticateResult result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
             var userId = result.Principal.Claims.ToList().FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value.ToInt();
             var userInfo = new DB_User().GetUser(userId);
             if (userId == 0 || userInfo == null)

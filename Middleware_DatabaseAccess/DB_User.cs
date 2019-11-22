@@ -46,6 +46,7 @@ namespace Middleware_DatabaseAccess
             else
             {
                 await connection.InsertAsync<int, JWTUserModel>(_user);//new JWTUserModel { Name = _user.Name, Pwd = _user.Pwd, UserState = _user.UserState, Power_ID = _user.Power_ID, Remark = _user.Remark }
+
                 return true;
             }
         }

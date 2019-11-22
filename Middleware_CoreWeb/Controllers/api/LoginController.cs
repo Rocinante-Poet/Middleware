@@ -52,7 +52,6 @@ namespace Middleware_CoreWeb.Controllers.api
             if (_return != null && !string.IsNullOrEmpty(_return.id.ToString()))
             {
                 _token = _tokenServic.GetToken(_user).AESEncrypt();
-                HttpContext.AddCookie(CoreConfiguration.CookiesUserKey, _return.id.ToString().AESEncrypt());
                 HttpContext.AddCookie(CoreConfiguration.JwtCookiesTokenKey, _token);
                 return new JsonResult(new { Success = true, Message = "登录成功", access_token = _token });
             }

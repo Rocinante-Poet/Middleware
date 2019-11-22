@@ -1,11 +1,21 @@
 ﻿@model NavigatorBarModel
 @{
     Layout = "_Default";
-    ViewData["Title"] = "User";
+    ViewData["Title"] = "Transport";
 }
+
 @section javascript {
     <script>
+
+        var $dialogNew = $("#dialogNew");
+        var $btnSubmit = $('#btnSubmit');
+        var $dialogNew = $("#dialogNew");
+        var $dataForm = $('#dataForm');
+        var $TableGroup = $("#TableGroup");
+        var $editState = true;
+        var TableArrar = new Array();
         $(function () {
+
             //1.初始化Table
             var oTable = new TableInit();
             oTable.Init();
@@ -14,58 +24,44 @@
                 $("#TableGroup").bootstrapTable('refresh');
             });
 
-            $('#btn_repeat').on('click', function () {
-                $("#txt_group_name").val("");
-                $('#menuselect').selectpicker('val', 0);
-                $("#TableGroup").bootstrapTable('refresh');
-            });
-
             $('.btn_add').on('click', function () {
-                edittype = true;
-                $('#myModalLabel').html('用户添加窗口');
-                $('#id').val(0);
-                $('#Name').val('');
-                //$('#Power_ID').val(0);
-                $('#UserState').selectpicker('val', 0);
-                $('#Power_ID').selectpicker('val', 0);
-                $('#showName').val('');
-                //$('#UserState').val(0);
-                $('#Remark').val('');
-                $('#Pwd').val('');
-                $('#password').val('');
+                $editState = false;
+                $('#myModalLabel').html('任务添加窗口');
+
+                $dialogNew.find(".selectpicker").selectpicker('val', -1);
+                $dialogNew.find(".form-control").val("");
                 $('#dialogNew').modal();
             });
 
-            $('#btnSubmit').click(function () {
+            $btnSubmit.click(function () {
+                var requesturl = '/api/Task/add';
+                if ($editState)
+                    requesturl = '/api/Task/edit';
+                $dialogNew.modal('hide');
+                Request("put", requesturl, $dataForm.serialize());
 
-                if (parseInt($('#Power_ID').val()) == 0) {
-                    toastr.error("请选择用户所属角色");
-                } else {
-                    var requesturl = '/api/User/add';
-                    if (!edittype)
-                        requesturl = '/api/User/edit';
-                    $.ajax({
-                        type: 'put',
-                        url: requesturl,
-                        contentType: 'application/json',
-                        data: JSON.stringify({ "id": parseInt($('#id').val()), "Name": $('#Name').val(), "Power_ID": parseInt($('#Power_ID').val()), "showName": $('#showName').val(), "UserState": parseInt($('#UserState').val()), "Remark": $('#Remark').val(), "Pwd": $('#Pwd').val() }),
-                        datatype: 'json',
-                        success: function (res) {
-                            $('#dialogNew').modal('hide');
-                            if (res.state == 200) {
-                                $("#TableGroup").bootstrapTable('refresh');
-                                toastr.success(res.message);
-                            }
-                            else {
-                                toastr.error(res.message);
-                            }
-                        },
-                        error: function (e) {
-                            toastr.error(e.responseText);
-                        }
-                    });
-                }
             });
+
+            function Request(method, url, Data) {
+                $.ajax({
+                    type: method,
+                    url: url,
+                    data: Data,
+                    datatype: 'json',
+                    success: function (res) {
+                        if (res.state == 200) {
+                            $TableGroup.bootstrapTable('refresh');
+                            toastr.success(res.message);
+                        }
+                        else {
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
+                    }
+                });
+            }
 
             $('.btn_delete').on('click', function () {
                 var data = $("#TableGroup").bootstrapTable('getSelections');
@@ -88,27 +84,23 @@
             });
         });
 
-        var edittype = true;
-        var TableArrar = new Array();
-
         function edit(index) {
-            edittype = false;
+            console.log(index);
+            $editState = true;
             var Info = TableArrar[index]
             if (Info != null) {
-                $('#myModalLabel').html('用户编辑窗口');
-                $('#id').val(Info.id);
-                $('#Name').val(Info.name);
-                $('#showName').val(Info.showName);
-                $('#UserState').selectpicker('val', Info.userState);
-                $('#Power_ID').selectpicker('val', Info.power_ID);
-                $('#Remark').val(Info.remark);
-                $('#Pwd').val(Info.pwd);
-                $('#password').val(Info.password);
+                $('#myModalLabel').html('任务编辑窗口');
+
+                jQuery.each(Info, function (i, val) {
+                    $('#' + i + '').val(val);
+                    $('#' + i + '').selectpicker('val', val)
+                });
                 $('#dialogNew').modal();
             }
         }
 
         function deleteRow(data) {
+            console.log(data);
             bootbox.confirm({
                 message: "确认删除吗？",
                 buttons: {
@@ -124,7 +116,7 @@
                 callback: function (result) {
                     if (result) {
                         $.ajax({
-                            url: '/api/User',
+                            url: '/api/Task',
                             type: "delete",
                             data: JSON.stringify(data),
                             contentType: 'application/json',
@@ -156,7 +148,7 @@
             //初始化Table
             oTableInit.Init = function () {
                 $('#TableGroup').bootstrapTable({
-                    url: '/api/User',                  //请求后台的URL（*）
+                    url: '/api/Task',                  //请求后台的URL（*）
                     method: 'get',                      //请求方式（*）
                     toolbar: '#toolbar',                //工具按钮用哪个容器
                     striped: true,                      //是否显示行间隔色
@@ -184,47 +176,68 @@
                         {
                             checkbox: true
                         }, {
-                            field: 'name',
-                            title: '用户账号',
+                            field: 'id',
+                            title: '任务ID',
                             align: 'center'
                         }, {
-                            field: 'showName',
-                            title: '显示名称',
+                            field: 'index',
+                            title: 'index',
                             align: 'center'
                         }
                         , {
-                            field: 'userState',
-                            title: '用户状态',
-                            align: 'center', formatter: function (value, row, index) {
+                            field: 'phase',
+                            title: '任务阶段',
+                            align: 'center', formatter: function (value) {
                                 if (value != null) {
-                                    if (value == 0) {
-                                        return "<span class='label label-success'>正常</span>";
+                                    switch (value) {
+                                        case -1:
+                                            return "<span class='badge badge-warning'>备料</span>";
+                                        case 0:
+                                            return "<span class='badge badge-info'>等待中</span>";
+                                        case 1:
+                                            return "<span class='badge badge-info'>已接受</span>";
+                                        case 3:
+                                            return "<span class='badge badge-info'>到达取货点</span>";
+                                        case 5:
+                                            return "<span class='badge badge-info'>取货完毕</span>";
+                                        case 7:
+                                            return "<span class='badge badge-info'>到达放货点</span>";
+                                        case 9:
+                                            return "<span class='badge badge-info'>放货完毕</span>";
+                                        case 10:
+                                            return "<span class='badge badge-success'>任务完成</span>";
+                                        case 20:
+                                            return "<span class='badge badge-success'>等待确认完成</span>";
+                                        default:
+                                            return "<span class='badge badge-danger'>" + value + "</span>";
                                     }
-                                    if (value == -1) {
-                                        return "<span class='label label-errer'>禁用</span>";
-                                    }
+
                                 }
                             }
                         }, {
-                            field: 'group',
-                            title: '所属角色',
-                            align: 'center', formatter: function (value, row, index) {
-                                if (value != null)
-                                    return value.name;
-                            }
-                        }, {
-                            field: 'remark',
-                            title: '描述',
+                            field: 'ikey',
+                            title: 'ikey',
                             align: 'center'
                         }, {
-                            field: 'createTime',
-                            title: '创建时间',
+                            field: 'startingPoint',
+                            title: '起点',
                             align: 'center'
-                        },
-                        {
+                        }, {
+                            field: 'type',
+                            title: '任务类型',
+                            align: 'center'
+                        }, {
+                            field: 'endPoint',
+                            title: '终点',
+                            align: 'center'
+                        }, {
+                            field: 'interactiveState',
+                            title: '交互状态',
+                            align: 'center'
+                        }, {
                             field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
                                 TableArrar[row.id] = row;
-                                console.log(row);
+                                //console.log(row);
                                 var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
                                     '<a class="btn btn-xs btn-danger btn-remove" onclick="deleteTool(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
                                 return strHtml;
@@ -237,8 +250,7 @@
             oTableInit.queryParams = function (params) {
                 var temp = {     //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                     limit: params.limit,   //页面大小
-                    offset: params.offset,  //页码
-
+                    offset: params.offset  //页码
                 };
                 return temp;
             };
@@ -249,39 +261,10 @@
 <div class="main-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
-        <li class="breadcrumb-item">用户管理</li>
+        <li class="breadcrumb-item">Ndc任务管理</li>
     </ol>
 </div>
-<div class="card">
-    <div class="card-header">查询条件</div>
-    <div class="card-body">
 
-        <form class="form-inline">
-            <div class="row">
-                <div class="form-group col-sm-6 col-lg-auto">
-                    <label class="control-label" for="txt_menus_name">用户名称</label>
-                    <input type="text" class="form-control" id="txt_group_name">
-                </div>
-                <div class="form-group col-sm-6 col-lg-auto">
-                    <label class="control-label" for="parentName">权限组</label>
-                    <div class="input-group flex-sm-fill">
-                        <select class="selectpicker selectc group-select" id="menuselect" data-dropup-auto="false">
-                            <option value="0">请选择</option>
-                            @foreach (var item in Model.groupArray)
-                            {
-                                <option value='@item.id'>@item.name</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group col-sm-6 col-lg-auto flex-sm-fill justify-content-sm-end align-self-sm-end">
-                    <button style="margin:3px" type="button" id="btn_query" class="btn btn-primary btn-fill"><i class="fa fa-search" aria-hidden="true"></i><span>查询</span></button>
-                    <button style="margin:3px" type="button" id="btn_repeat" class="btn btn-primary btn-fill"><i class="fa fa-repeat" aria-hidden="true"></i><span>重置</span></button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 <div class="card">
     <div class="card-header">
         查询结果
@@ -319,47 +302,30 @@
     <div class="modal-body">
         <form class="form-inline" id="dataForm">
             <div class="form-row">
-                <input type="hidden" id="id" value="0" />
+                <input type="hidden" id="id" name="id" value="0" />
+
                 <div class="form-group col-sm-6">
-                    <label class="control-label" for="parentName">用户账户</label>
-                    <input type="text" class="form-control flex-sm-fill" id="Name" placeholder="不可为空" data-valid="true" />
+                    <label class="control-label" for="parentName">任务起点</label>
+                    <input type="text" class="form-control flex-sm-fill" id="startingPoint" name="startingPoint" placeholder="不可为空" data-valid="true" />
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label class="control-label" for="parentName">任务类型</label>
+                    <input type="text" class="form-control flex-sm-fill" id="type" name="type" placeholder="不可为空" data-valid="true" />
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label class="control-label" for="parentName">任务终点</label>
+                    <input type="text" class="form-control flex-sm-fill" id="endPoint" name="endPoint" placeholder="不可为空" data-valid="true" />
+                </div>
+
+                <div class="form-group col-sm-6">
+                    <label class="control-label" for="parentName">index</label>
+                    <input type="text" class="form-control flex-sm-fill" id="index" name="index" placeholder="可为空" />
                 </div>
                 <div class="form-group col-sm-6">
-                    <label class="control-label" for="parentName">所属角色</label>
-                    <div class="input-group flex-sm-fill">
-                        <select class="selectpicker selectc" id="Power_ID" data-dropup-auto="false">
-                            <option value="0">请选择</option>
-                            @foreach (var item in Model.groupArray)
-                            {
-                                <option value='@item.id'>@item.name</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="parentName">显示名称</label>
-                    <input type="text" class="form-control flex-sm-fill" id="showName" placeholder="不可为空" data-valid="true" />
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="parentName">用户状态</label>
-                    <div class="input-group flex-sm-fill">
-                        <select class="selectpicker selectc" id="UserState" data-dropup-auto="false">
-                            <option value="0">正常</option>
-                            <option value="-1">禁用</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group col-12">
-                    <label class="control-label" for="url">描述</label>
-                    <input type="text" class="form-control flex-sm-fill" id="Remark" placeholder="可为空" />
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="parentName">登陆密码</label>
-                    <input type="password" class="form-control flex-sm-fill validate-equalTo-blur" id="password" placeholder="不可为空，16字以内" maxlength="16" data-valid="true">
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="parentName">确认密码</label>
-                    <input type="password" class="form-control flex-sm-fill" id="Pwd" placeholder="与登录密码一致" maxlength="16" equalto="#password" data-valid="true" data-original-title="你的输入不相同">
+                    <label class="control-label" for="parentName">phase</label>
+                    <input type="text" class="form-control flex-sm-fill" id="phase" name="phase" placeholder="可为空" />
                 </div>
             </div>
         </form>

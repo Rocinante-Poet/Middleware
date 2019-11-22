@@ -24,33 +24,53 @@ namespace Middleware_CoreWeb.Controllers
         /// <returns></returns>
         public IActionResult Menu() => View(new NavigatorBarModel(this));
 
-        public IActionResult Group()
-        {
-            return View(new NavigatorBarModel(this));
-        }
+        public IActionResult Group() => View(new NavigatorBarModel(this));
 
         public IActionResult UserManage() => View(new NavigatorBarModel(this));
 
         public IActionResult IconView() => View();
 
-        [AllowAnonymous]
-        public IActionResult QuestionandAnswer()
-        {
-            string p = @"\wwwroot\QA\2019-04-12 MySQL和Redis.md";
-            var lll = Directory.GetCurrentDirectory() + p;
-            string markdowntext = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{p}", Encoding.UTF8);
-
-            MarkdownSharp.Markdown m = new MarkdownSharp.Markdown();
-            string html = m.Transform(markdowntext);
-            MarkDownText md = new MarkDownText()
-            {
-                title = "AGV",
-                content = html
-            };
-            return View(md);
-        }
         public IActionResult Order() => View(new NavigatorBarModel(this));
 
+        public IActionResult QuestionandAnswer()
+        {
+            MarkDownList md = new MarkDownList(this);
+            string _ndc = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\ndc.md"}", Encoding.UTF8);
 
+            md.Listmd.Add(new MarkDownText()
+            {
+                MdTitle = "ndc",
+                MdContent = new MarkdownSharp.Markdown().Transform(_ndc)
+            });
+
+            string _agv = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\agv.md"}", Encoding.UTF8);
+            md.Listmd.Add(new MarkDownText()
+            {
+                MdTitle = "agv",
+                MdContent = new MarkdownSharp.Markdown().Transform(_agv)
+            });
+
+            string _a = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\2019-09-26 子网掩码.md"}", Encoding.UTF8);
+            md.Listmd.Add(new MarkDownText()
+            {
+                MdTitle = "a",
+                MdContent = new MarkdownSharp.Markdown().Transform(_a)
+            });
+
+            string _b = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\2018-10-06 被感染的蚂蚁会主动隔离自己.md"}", Encoding.UTF8);
+            md.Listmd.Add(new MarkDownText()
+            {
+                MdTitle = "b",
+                MdContent = new MarkdownSharp.Markdown().Transform(_b)
+            });
+
+            string _c = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\2019-01-03 WPF查找子控件.md"}", Encoding.UTF8);
+            md.Listmd.Add(new MarkDownText()
+            {
+                MdTitle = "c",
+                MdContent = new MarkdownSharp.Markdown().Transform(_c)
+            });
+            return View(md);
+        }
     }
 }

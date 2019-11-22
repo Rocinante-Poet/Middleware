@@ -62,7 +62,8 @@ namespace Dapper
             }
             catch (Exception ex)
             {
-                connection.Close();
+                if (connection.State == ConnectionState.Open)
+                    connection.Close();
                 throw new Exception(ex.Message);
             }
         }
