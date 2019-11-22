@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Middleware_Tool;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ApiBaseController

@@ -39,7 +39,7 @@ namespace Middleware_DatabaseAccess
             return CRUD.ExcuteSql(connection =>
             {
                 CacheFactory.GetCache.Remove(CacheKey);
-                return connection.ExecuteAsync(group) > 0;
+                return connection.ExecuteAsync(group) != null;
             });
         }
 
