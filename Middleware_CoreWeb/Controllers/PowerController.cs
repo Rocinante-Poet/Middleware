@@ -33,7 +33,6 @@ namespace Middleware_CoreWeb.Controllers
 
         public IActionResult IconView() => View();
 
-        [AllowAnonymous]
         public IActionResult QuestionandAnswer()
         {
             string p = @"\wwwroot\QA\2019-04-12 MySQL和Redis.md";
@@ -47,8 +46,9 @@ namespace Middleware_CoreWeb.Controllers
                 title = "AGV",
                 content = html
             };
-            return View(md);
+            return View(new NavigatorBarModel(this));
         }
+
         public IActionResult Order() => View(new NavigatorBarModel(this));
 
 

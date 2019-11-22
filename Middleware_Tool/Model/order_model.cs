@@ -84,13 +84,20 @@ namespace Middleware_CoreWeb
         public int state { get; set; }
 
         /// <summary>
+        /// 优先级
+        /// </summary>
+        public int priority { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
+        [IgnoreUpdate]
         public DateTime createTime { get; set; }
 
         /// <summary>
         /// 完成时间
         /// </summary>
+        [IgnoreUpdate]
         public DateTime endTime { get; set; }
 
 

@@ -16,7 +16,7 @@ namespace Middleware_CoreWeb
             controllerBase = controller;
         }
 
-        public async Task<IEnumerable<NavigatorItem>> NavigatorBarList() => new DB_detail().NavigatorBarList((await appInfo.GetUserAsync(controllerBase.HttpContext)).Power_ID, controllerBase.Request.Path);
+        public async Task<IEnumerable<NavigatorItem>> NavigatorBarList() => new DB_detail().NavigatorBarList((await controllerBase.HttpContext.GetUserAsync()).Power_ID, controllerBase.Request.Path);
 
 
         public IEnumerable<NavigatorItem> NavigatorMenuList => new DB_Menu().GetFatherList();

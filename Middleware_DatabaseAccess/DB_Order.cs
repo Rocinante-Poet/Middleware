@@ -29,5 +29,29 @@ namespace Middleware_DatabaseAccess
             var CountPage = await connection.RecordCountAsync<order_model>(strQuery.ToString(), new { boxId = boxid });
             return new JsonData<order_model>() { rows = List, total = CountPage };
         }
+
+        public bool Add(order_model group)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.ExecuteAsync(group) > 0;
+            });
+        }
+
+        public bool Delete(List<order_model> grouparray)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.DeleteList<group_model>("WHERE id=@id", grouparray) > 0;
+            });
+        }
+
+        public bool Update(order_model group)
+        {
+            return CRUD.ExcuteSql(connection =>
+            {
+                return connection.Update(group) > 0;
+            });
+        }
     }
 }

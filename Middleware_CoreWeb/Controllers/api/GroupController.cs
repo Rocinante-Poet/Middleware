@@ -3,9 +3,11 @@ using Middleware_DatabaseAccess;
 using Middleware_CoreWeb;
 using System.Collections.Generic;
 using Middleware_Tool;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GroupController : ApiBaseController

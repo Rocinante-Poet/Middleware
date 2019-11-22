@@ -29,6 +29,7 @@ namespace Middleware_CoreWeb
             catch (Exception ex)
             {
                 Log4net.WriteError(ex.Message, ex);
+                await new DB_Log().InsertError(await context.GetUserAsync(), ex, context);
                 bool IsAjaxCall = context.Request.Headers["x-requested-with"] == "XMLHttpRequest";
                 if (IsAjaxCall || context.Request.Path.StartsWithSegments("/api"))
                 {
@@ -37,9 +38,11 @@ namespace Middleware_CoreWeb
                 }
                 else
                 {
+                    context.Response.Headers["Expires"] = " Mon, 26 Jul 1997 05:00:00 GMT";
+                    context.Response.Headers["Pragma"] = "no-cache";
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.Redirect("/Home/Error/500");
                 }
-                await new DB_Log().InsertError(await appInfo.GetUserAsync(context), ex, context);
             }
         }
     }
