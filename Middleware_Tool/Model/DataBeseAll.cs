@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     public class DataBeseAll
     {

@@ -1,4 +1,4 @@
-﻿namespace Middleware_CoreWeb
+﻿namespace Middleware_Tool
 {
     /// <summary>
     /// 

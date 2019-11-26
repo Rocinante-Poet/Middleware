@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     /*代码自动生成工具自动生成,不要在这里写代码，否则会被自动覆盖哦 */
 

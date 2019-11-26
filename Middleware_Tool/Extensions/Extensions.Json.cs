@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     /// <summary>
     /// 日 期：2019.5.02

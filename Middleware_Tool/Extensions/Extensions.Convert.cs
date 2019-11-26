@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 { 
     /// <summary>
    /// 日 期：2019.5.02

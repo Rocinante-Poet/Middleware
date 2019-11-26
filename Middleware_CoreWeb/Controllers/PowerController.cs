@@ -73,7 +73,6 @@ namespace Middleware_CoreWeb.Controllers
             return View(md);
         }
 
-
-        private 
+        public IActionResult Statistics() => View(new NavigatorBarModel(this));
     }
 }
