@@ -4,14 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_CoreWeb.cache
+namespace Middleware_Tool.cache
 {
     public class CacheFactory
     {
-        static CacheFactory()
-        {
-            GetCache = new CacheProvider(new MemoryCache(Options.Create(new MemoryCacheOptions())));
-        }
-        public static ICache GetCache { get; }
+        public static ICache GetCache = new CacheProvider(new MemoryCache(Options.Create(new MemoryCacheOptions())));
     }
 }
