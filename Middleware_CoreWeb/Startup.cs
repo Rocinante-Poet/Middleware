@@ -90,7 +90,6 @@ namespace Middleware_CoreWeb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-          
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -109,9 +108,9 @@ namespace Middleware_CoreWeb
                 RequestPath = "/node_modules",
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
             });
-        
+
             app.UseRouting();
-       
+
             // »œ÷§ ⁄»®
             app.UseMiddleware<JWTAuth>();
             app.UseAuthentication();
