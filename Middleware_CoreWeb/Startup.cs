@@ -114,9 +114,9 @@ namespace Middleware_CoreWeb
                 RequestPath = "/node_modules",
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
             });
-        
+
             app.UseRouting();
-       
+
             // »œ÷§ ⁄»®
             app.UseMiddleware<JWTAuth>();
             app.UseAuthentication();

@@ -10,6 +10,7 @@
     <OutputPath>bin\Debug\netcoreapp3.0\</OutputPath>
     <DocumentationFile>bin\Debug\netcoreapp3.0\.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
+ 
   </PropertyGroup>
 
   <ItemGroup>

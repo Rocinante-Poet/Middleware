@@ -25,12 +25,12 @@ namespace Middleware_Tool
         /// <summary>
         /// NDC系统中 执行编号
         /// </summary>
-        public int index { get; set; }
+        public int? index { get; set; }
 
         /// <summary>
         /// NDC系统中 任务阶段代号
         /// </summary>
-        public int phase { get; set; }
+        public int? phase { get; set; }
 
         /// <summary>
         /// 阶段时间 累加
@@ -40,32 +40,32 @@ namespace Middleware_Tool
         /// <summary>
         /// AVG编号
         /// </summary>
-        public int carNum { get; set; }
+        public int? carNum { get; set; }
 
         /// <summary>
         /// NDC系统中 任务订单号
         /// </summary>
-        public int ikey { get; set; }
+        public int? ikey { get; set; }
 
         /// <summary>
         /// 起点
         /// </summary>
-        public int startingPoint { get; set; }
+        public int? startingPoint { get; set; }
 
         /// <summary>
         /// 任务类型
         /// </summary>
-        public int type { get; set; }
+        public int? type { get; set; }
 
         /// <summary>
         /// 终点
         /// </summary>
-        public int endPoint { get; set; }
+        public int? endPoint { get; set; }
 
         /// <summary>
         /// 交互状态
         /// </summary>
-        public int interactiveState { get; set; }
+        public int? interactiveState { get; set; }
 
         /// <summary>
         /// 交互时间 累加
