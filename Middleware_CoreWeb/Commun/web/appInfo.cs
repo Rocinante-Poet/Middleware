@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Middleware_DatabaseAccess;
-using Middleware_CoreWeb;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Middleware_Tool;

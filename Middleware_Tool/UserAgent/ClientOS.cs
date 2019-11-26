@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     /// <summary>
     ///
@@ -77,7 +77,6 @@ namespace Middleware_CoreWeb
             new MatchExpression{
                 Regexes = new List<Regex>{
                     new Regex(@"microsoft\s(windows)\s(vista|xp)",RegexOptions.IgnoreCase),// Windows (iTunes)
-
                 },
                 Action = NameVersionAction
             },

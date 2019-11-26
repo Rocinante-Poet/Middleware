@@ -11,5 +11,7 @@ namespace Middleware_CoreWeb.Controllers
     public class TransportController : Controller
     {
         public IActionResult Ndc() => View(new NavigatorBarModel(this));
+
+        public IActionResult Equipment_error() => View(new NavigatorBarModel(this));
     }
 }

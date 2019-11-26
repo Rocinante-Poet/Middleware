@@ -1,0 +1,264 @@
+﻿@model NavigatorBarModel
+@{
+    Layout = "_Default";
+    ViewData["Title"] = "Equipment_error";
+}
+
+@section javascript {
+    <script>
+
+        var $dialogNew = $("#dialogNew");
+        var $btnSubmit = $('#btnSubmit');
+        var $dataForm = $('#dataForm');
+        var $TableGroup = $("#TableGroup");
+        var $editState = true;
+        var TableArrar = new Array();
+
+        $(function () {
+            //1.初始化Table
+            var oTable = new TableInit();
+            oTable.Init();
+            $('#btn_repeat').on('click', function () {
+                $("#txt_errorType").val("");
+                $("#txt_errorCode").val("");
+                $("#txt_sbType").val("");
+                $("#txt_sbName").val("");
+                $("#TableGroup").bootstrapTable('refresh');
+            });
+
+            $('#btn_query').on('click', function () {
+                $("#TableGroup").bootstrapTable('refresh');
+            });
+
+            $('.btn_delete').on('click', function () {
+                var data = $("#TableGroup").bootstrapTable('getSelections');
+                if (data.length > 0) {
+                    deleteRow(data);
+                } else {
+                    toastr.error("请选中后操作！");
+                }
+            });
+
+        });
+
+        function deleteRow(data) {
+            console.log(data);
+            bootbox.confirm({
+                message: "确认删除吗？",
+                buttons: {
+                    confirm: {
+                        label: '确认',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: '取消',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/api/Error',
+                            type: "delete",
+                            data: JSON.stringify(data),
+                            contentType: 'application/json',
+                            success: function (res) {
+                                if (res.state == 200) {
+                                    $("#TableGroup").bootstrapTable('refresh');
+                                    toastr.success(res.message);
+                                }
+                                else {
+                                    $("#TableGroup").bootstrapTable('refresh');
+                                    toastr.error(res.message);
+                                }
+                            },
+                            error: function (e) {
+                                toastr.error(e.responseText);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        function deleteTool(id) {
+            deleteRow([{ "id": id }]);
+        }
+        var TableInit = function () {
+            var oTableInit = new Object();
+            //初始化Table
+            oTableInit.Init = function () {
+                $('#TableGroup').bootstrapTable({
+                    url: '/api/Error',                  //请求后台的URL（*）
+                    method: 'get',                      //请求方式（*）
+                    toolbar: '#toolbar',                //工具按钮用哪个容器
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sortable: false,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
+                    queryParams: oTableInit.queryParams,//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                    search: false,                       //是否显示表格搜索，此搜索是客户端搜索，
+                    strictSearch: true,
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    /*    height: 500,            */            //行高，如果没有设置height属性，表格自动根据记录条数决定表格高度
+                    uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                    showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: false,
+                    columns: [
+                        {
+                            checkbox: true
+                        }, {
+                            field: 'id',
+                            title: 'ID',
+                            align: 'center'
+                        }, {
+                            field: 'equipmentId',
+                            title: '设备ID',
+                            align: 'center'
+                        }, {
+                            field: 'errorType',
+                            title: '错误类型',
+                            align: 'center', formatter: function (value) {
+                                if (value != null) {
+                                    switch (parseInt(value)) {
+                                        case 1:
+                                            return "<span class='badge badge-info'>&nbsp;&nbsp;一般错误&nbsp;&nbsp;&nbsp;</span>";
+                                        case 2:
+                                            return "<span class='badge badge-warning'>&nbsp;&nbsp;设备异常&nbsp;&nbsp;&nbsp;</span>";
+                                        case 3:
+                                            return "<span class='badge badge-danger'>&nbsp;&nbsp;人工干预&nbsp;&nbsp;&nbsp;</span>";
+                                    }
+                                }
+                            }
+                        }
+                        , {
+                            field: 'errorCode',
+                            title: '错误码',
+                            align: 'center'
+                        }, {
+                            field: 'errorInfo',
+                            title: '错误详情',
+                            align: 'center'
+                        }, {
+                            field: 'errorTime',
+                            title: '时间',
+                            align: 'center', formatter: function (value) {
+                                if (value.length == 12) {
+                                    return value.substr(2, 2) + '月' + value.substr(4, 2) + '日 ' + value.substr(6, 2) + ':' + value.substr(8, 2) + ':' + value.substr(10, 2);
+                                }
+                                else return value;
+                            }
+                        }, {
+                            field: 'type',
+                            title: '设备类型',
+                            align: 'center', formatter: function (value) {
+                                if (value != null) {
+                                    switch (parseInt(value)) {
+                                        case 1:
+                                            return "<span class='badge badge-primary'>&nbsp;&nbsp;磁导设备&nbsp;&nbsp;&nbsp;</span>";
+                                        case 2:
+                                            return "<span class='badge badge-dark'>&nbsp;&nbsp;激光导航&nbsp;&nbsp;&nbsp;</span>";
+                                        case 3:
+                                            return "<span class='badge badge-primary'>&nbsp;&nbsp;环境导航&nbsp;&nbsp;&nbsp;</span>";
+                                    }
+                                }
+                            }
+                        }, {
+                            field: 'name',
+                            title: '设备名称',
+                            align: 'center'
+                        }, {
+                            field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
+                                TableArrar[row.id] = row;
+                                return '<a class="btn btn-xs btn-danger btn-remove" onclick="deleteTool(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
+                            },
+                            edit: false
+                        }]
+                });
+            };
+            //得到查询的参数
+            oTableInit.queryParams = function (params) {
+                var temp = {     //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    limit: params.limit,   //页面大小
+                    offset: params.offset, //页码
+
+                    sbType: $("#txt_sbType").val(),
+                    sbName: $("#txt_sbName").val(),
+                    errorCode: $("#txt_errorCode").val(),
+                    errorType: $("#txt_errorType").val(),
+                };
+                return temp;
+            };
+            return oTableInit;
+        };
+    </script>
+}
+
+<div class="main-he级别ader">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
+        <li class="breadcrumb-item">设备错误汇总</li>
+    </ol>
+</div>
+<div class="card">
+    <div class="card-header">查询条件</div>
+    <div class="card-body">
+
+        <form class="form-inline">
+            <div class="row">
+                <div class="form-group col-sm-6 col-lg-auto">
+                    <label class="control-label">错误类型</label>
+                    <input type="text" class="form-control" id="txt_errorType">
+                </div>
+                <div class="form-group col-sm-6 col-lg-auto">
+                    <label class="control-label">错误代码</label>
+                    <input type="text" class="form-control" id="txt_errorCode">
+                </div>
+                <div class="form-group col-sm-6 col-lg-auto">
+                    <label class="control-label">设备类型</label>
+                    <input type="text" class="form-control" id="txt_sbType">
+                </div>
+                <div class="form-group col-sm-6 col-lg-auto">
+                    <label class="control-label">设备名称</label>
+                    <input type="text" class="form-control" id="txt_sbName">
+                </div>
+                <div class="form-group col-sm-6 col-lg-auto flex-sm-fill justify-content-sm-end align-self-sm-end">
+                    <button style="margin:3px" type="button" id="btn_query" class="btn btn-primary btn-fill"><i class="fa fa-search" aria-hidden="true"></i><span>查询</span></button>
+                    <button style="margin:3px" type="button" id="btn_repeat" class="btn btn-primary btn-fill"><i class="fa fa-repeat" aria-hidden="true"></i><span>重置</span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        查询结果
+    </div>
+    <div class="card-body">
+        <div class="alert alert-danger" role="alert">
+            <span>非超级管理用户请谨慎修改</span>
+        </div>
+        <div id="toolbar" class="">
+            <div class="gear btn-group">
+                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
+                <div class="dropdown-menu">
+                    <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
+                </div>
+            </div>
+            <div class="toolbar btn-group">
+                <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
+            </div>
+        </div>
+        <table id="TableGroup"></table>
+        <div class="clearfix"></div>
+    </div>
+</div>

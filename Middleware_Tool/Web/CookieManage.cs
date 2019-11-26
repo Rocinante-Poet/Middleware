@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     public static class CookieManage
     {
@@ -22,7 +22,6 @@ namespace Middleware_CoreWeb
                 Expires = DateTime.Now.AddMinutes(minutes)
             });
         }
-
 
         /// <summary>
         /// 获取cookies

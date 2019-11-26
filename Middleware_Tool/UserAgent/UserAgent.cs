@@ -1,7 +1,7 @@
-﻿namespace Middleware_CoreWeb
+﻿namespace Middleware_Tool
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class UserAgent
     {
@@ -10,7 +10,7 @@
         private ClientBrowser _browser;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ClientBrowser Browser
         {
@@ -27,7 +27,7 @@
         private ClientOS _os;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ClientOS OS
         {
@@ -42,7 +42,7 @@
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="userAgent"></param>
         public UserAgent(string userAgent)

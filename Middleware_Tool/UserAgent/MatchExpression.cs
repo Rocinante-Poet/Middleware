@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     /// <summary>
     ///

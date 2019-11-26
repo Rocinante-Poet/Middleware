@@ -1,7 +1,5 @@
 ﻿using Dapper;
-using Middleware_CoreWeb;
 using Middleware_Tool;
-using Middleware_Tool.cache;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +8,6 @@ namespace Middleware_DatabaseAccess
     public class DB_detail
     {
         private string CachedetailKey = "Middleware_detail_Cache";
-
 
         public IEnumerable<detail_model> Get(int groupid)
         {
@@ -23,7 +20,6 @@ namespace Middleware_DatabaseAccess
             }
             return List.Where(p => p.groupid == groupid);
         }
-
 
         public bool Add(IEnumerable<menu_model> detailList, int id)
         {
@@ -44,7 +40,6 @@ namespace Middleware_DatabaseAccess
                 }
             });
         }
-
 
         public List<NavigatorItem> NavigatorBarList(int GroupID, string Active = "")
         {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     public class JWTModel
     {

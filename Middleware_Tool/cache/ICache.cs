@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_Tool.cache
+namespace Middleware_Tool
 {
     public interface ICache
     {   /// <summary>
@@ -20,7 +20,6 @@ namespace Middleware_Tool.cache
         /// <param name="data">缓存值</param>
         /// <param name="cacheTime">过期时间（秒）</param>
         void Set<T>(string key, T data, int cacheTime = 30);
-
 
         /// <summary>
         /// 添加缓存项

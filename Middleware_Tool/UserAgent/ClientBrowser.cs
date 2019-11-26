@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     /// <summary>
     ///
@@ -46,7 +46,6 @@ namespace Middleware_CoreWeb
                     }
                     catch (Exception)
                     {
-
                     }
                 }
             }
@@ -66,7 +65,6 @@ namespace Middleware_CoreWeb
         ///
         /// </summary>
         public string Version { get; set; }
-
 
         private static void NameVersionAction(Match match, Object obj)
         {
