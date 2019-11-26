@@ -1,9 +1,11 @@
 ﻿using Microsoft.CSharp.RuntimeBinder;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -30,13 +32,19 @@ namespace Dapper
     /// </summary>
     public static partial class CRUD
     {
+
         static CRUD()
         {
+            Configuration = new ConfigurationBuilder()
+              .SetBasePath(Directory.GetCurrentDirectory())
+              .AddJsonFile("appsettings.json", optional: true)
+              .Build();
+            _connstring = Configuration.GetConnectionString("Default");
             SetDialect(_dialect);
         }
 
-        private static string _connstring = "server = 127.0.0.1; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
-
+        private static IConfiguration Configuration;
+        private static string _connstring;
         private static Dialect _dialect = Dialect.MySQL;
         private static string _encapsulation;
         private static string _getIdentitySql;

@@ -15,7 +15,10 @@ namespace Middleware_CoreWeb.Controllers
     public class HomeController : Controller
     {
         [HttpGet]
-        public IActionResult LoginMain() => View();
+        public IActionResult LoginMain() 
+        {
+            return View();
+        } 
 
         [HttpGet]
         [Authorize]
