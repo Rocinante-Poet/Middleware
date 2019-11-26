@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Middleware_DatabaseAccess;
-using Middleware_CoreWeb;
-using System.Collections.Generic;
 using Middleware_Tool;
-using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace Middleware_CoreWeb.Controllers.api
 {

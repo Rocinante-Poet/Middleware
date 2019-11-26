@@ -1,7 +1,5 @@
 ﻿using Dapper;
-using Middleware_CoreWeb;
 using Middleware_Tool;
-using Middleware_Tool.cache;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,8 +78,6 @@ namespace Middleware_DatabaseAccess
             return navigatorItems;
         }
 
-
-
         public bool AddMenu(menu_model menu)
         {
             return CRUD.ExcuteSql(connection =>
@@ -111,7 +107,6 @@ namespace Middleware_DatabaseAccess
 
         public menu_model Get(int id)
         {
-
             var List = CacheFactory.GetCache.Get<IEnumerable<menu_model>>(CacheMenuKey);
             if (List == null)
             {

@@ -46,7 +46,6 @@ namespace Middleware_Tool
                     }
                     catch (Exception)
                     {
-
                     }
                 }
             }
@@ -66,7 +65,6 @@ namespace Middleware_Tool
         ///
         /// </summary>
         public string Version { get; set; }
-
 
         private static void NameVersionAction(Match match, Object obj)
         {

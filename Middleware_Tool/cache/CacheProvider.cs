@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Middleware_Tool.cache
+namespace Middleware_Tool
 {
-    public class CacheProvider: ICache
+    public class CacheProvider : ICache
     {
         private IMemoryCache _cache;
+
         public CacheProvider(IMemoryCache cache)
         {
             _cache = cache;
@@ -92,7 +93,6 @@ namespace Middleware_Tool.cache
         /// 获取缓存总数据项的个数
         /// </summary>
         public int Count { get { return 0; } }
-
 
         /// <summary>
         /// 单个清除

@@ -1,12 +1,9 @@
 ﻿using Dapper;
-using Middleware_CoreWeb;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Middleware_Tool;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Middleware_DatabaseAccess
 {
@@ -39,7 +36,6 @@ namespace Middleware_DatabaseAccess
             return new JsonData<Operatinginfo>() { rows = List, total = CountPage };
         }
 
-
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -60,7 +56,6 @@ namespace Middleware_DatabaseAccess
             var CountPage = await connection.RecordCountAsync<error_model>(strQuery.ToString(), new { User = $"%{Name}%" });
             return new JsonData<error_model>() { rows = List, total = CountPage };
         }
-
 
         public async Task<int?> InsertError(Userinfo userinfo, Exception exception, HttpContext context)
         {

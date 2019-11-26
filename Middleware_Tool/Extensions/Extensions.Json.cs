@@ -21,6 +21,7 @@ namespace Middleware_Tool
         {
             return Json == null ? null : JsonConvert.DeserializeObject(Json);
         }
+
         /// <summary>
         /// 转成json字串
         /// </summary>
@@ -31,6 +32,7 @@ namespace Middleware_Tool
             var timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
             return JsonConvert.SerializeObject(obj, timeConverter);
         }
+
         /// <summary>
         /// 转成json字串
         /// </summary>
@@ -42,6 +44,7 @@ namespace Middleware_Tool
             var timeConverter = new IsoDateTimeConverter { DateTimeFormat = datetimeformats };
             return JsonConvert.SerializeObject(obj, timeConverter);
         }
+
         /// <summary>
         /// 字串反序列化成指定对象实体
         /// </summary>
@@ -52,6 +55,7 @@ namespace Middleware_Tool
         {
             return Json == null ? default(T) : JsonConvert.DeserializeObject<T>(Json);
         }
+
         /// <summary>
         /// 字串反序列化成指定对象实体(列表)
         /// </summary>
@@ -62,6 +66,7 @@ namespace Middleware_Tool
         {
             return Json == null ? null : JsonConvert.DeserializeObject<List<T>>(Json);
         }
+
         /// <summary>
         /// 字串反序列化成DataTable
         /// </summary>
@@ -71,6 +76,7 @@ namespace Middleware_Tool
         {
             return Json == null ? null : JsonConvert.DeserializeObject<DataTable>(Json);
         }
+
         /// <summary>
         /// 字串反序列化成linq对象
         /// </summary>

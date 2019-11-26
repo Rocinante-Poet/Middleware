@@ -5,10 +5,6 @@ using System.Text;
 
 namespace Middleware_Tool
 {
-    public class DataBeseAll
-    {
-    }
-
     [Table("logstr")]
     public class Log4Info
     {
@@ -48,7 +44,6 @@ namespace Middleware_Tool
         public string OS { get; set; }
 
         public int state { get; set; }
-
     }
 
     public class Powerdetails
@@ -118,12 +113,8 @@ namespace Middleware_Tool
         /// </summary>
         public string showName { get; set; }
 
-
         [Editable(false)]
         public group_model group { get; set; }
-
-
-
     }
 
     [Table("menu")]
@@ -175,5 +166,38 @@ namespace Middleware_Tool
         /// 排序
         /// </summary>
         public int no { get; set; }
+    }
+
+    [Table("equipment")]
+    public class Equipment
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int num { get; set; }
+        public string type { get; set; }
+        public string name { get; set; }
+    }
+
+    [Table("equipment_error")]
+    public class Equipment_error
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int equipmentId { get; set; }
+        public string errorType { get; set; }
+        public string errorTime { get; set; }
+    }
+
+    [Table("error_type")]
+    public class Error_type
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int errorCode { get; set; }
+        public string errorType { get; set; }
+        public string errorInfo { get; set; }
     }
 }

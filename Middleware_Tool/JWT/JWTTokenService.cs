@@ -1,12 +1,10 @@
 ﻿using IdentityModel;
-using Microsoft.IdentityModel.Tokens;
 using Middleware_Tool;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
-namespace Middleware_CoreWeb
+namespace Middleware_Tool
 {
     public interface IJWTTokenService
     {

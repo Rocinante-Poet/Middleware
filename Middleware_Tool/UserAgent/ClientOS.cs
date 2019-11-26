@@ -77,7 +77,6 @@ namespace Middleware_Tool
             new MatchExpression{
                 Regexes = new List<Regex>{
                     new Regex(@"microsoft\s(windows)\s(vista|xp)",RegexOptions.IgnoreCase),// Windows (iTunes)
-
                 },
                 Action = NameVersionAction
             },

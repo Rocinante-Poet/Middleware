@@ -2,14 +2,15 @@
 using System.Net;
 
 namespace Middleware_Tool
-{ 
+{
     /// <summary>
-   /// 日 期：2019.5.02
-   /// 描 述：类型转换扩展
-   /// </summary>
+    /// 日 期：2019.5.02
+    /// 描 述：类型转换扩展
+    /// </summary>
     public static partial class Extensions
     {
         #region 数值转换
+
         /// <summary>
         /// 转换为整型
         /// </summary>
@@ -101,7 +102,7 @@ namespace Middleware_Tool
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="digits">小数位数</param>
-        public static decimal ToDecimal(this  object data, int digits)
+        public static decimal ToDecimal(this object data, int digits)
         {
             return Math.Round(ToDecimal(data), digits);
         }
@@ -110,7 +111,7 @@ namespace Middleware_Tool
         /// 转换为可空高精度浮点数
         /// </summary>
         /// <param name="data">数据</param>
-        public static decimal? ToDecimalOrNull(this  object data)
+        public static decimal? ToDecimalOrNull(this object data)
         {
             if (data == null)
                 return null;
@@ -134,9 +135,10 @@ namespace Middleware_Tool
             return Math.Round(result.Value, digits);
         }
 
-        #endregion
+        #endregion 数值转换
 
         #region 日期转换
+
         /// <summary>
         /// 转换为日期
         /// </summary>
@@ -164,9 +166,10 @@ namespace Middleware_Tool
             return null;
         }
 
-        #endregion
+        #endregion 日期转换
 
         #region 布尔转换
+
         /// <summary>
         /// 转换为布尔值
         /// </summary>
@@ -193,16 +196,22 @@ namespace Middleware_Tool
             {
                 case "0":
                     return false;
+
                 case "1":
                     return true;
+
                 case "是":
                     return true;
+
                 case "否":
                     return false;
+
                 case "yes":
                     return true;
+
                 case "no":
                     return false;
+
                 default:
                     return null;
             }
@@ -226,9 +235,10 @@ namespace Middleware_Tool
             return null;
         }
 
-        #endregion
+        #endregion 布尔转换
 
         #region 字符串转换
+
         /// <summary>
         /// 转换为字符串
         /// </summary>
@@ -237,11 +247,11 @@ namespace Middleware_Tool
         {
             return data == null ? string.Empty : data.ToString().Trim();
         }
-        #endregion
 
+        #endregion 字符串转换
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
