@@ -12,7 +12,7 @@ namespace Middleware_CoreWeb
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-          WebHost.CreateDefaultBuilder(args).UseUrls("http://localhost:5000;https://localhost:8000")
+          WebHost.CreateDefaultBuilder(args).UseUrls("http://localhost:5000")
               .UseStartup<Startup>();
     }
 }

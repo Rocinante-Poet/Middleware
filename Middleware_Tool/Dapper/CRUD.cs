@@ -35,7 +35,7 @@ namespace Dapper
             SetDialect(_dialect);
         }
 
-        private static string _connstring = "server = 118.31.71.216; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
+        private static string _connstring = "server = 127.0.0.1; User Id = root; password = password; database = wcs; Persist Security Info = True; charset='gbk';";
 
         private static Dialect _dialect = Dialect.MySQL;
         private static string _encapsulation;

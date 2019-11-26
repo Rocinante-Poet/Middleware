@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Middleware_CoreWeb.cache
+namespace Middleware_Tool.cache
 {
     public interface ICache
     {   /// <summary>

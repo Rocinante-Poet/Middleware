@@ -35,6 +35,7 @@
         var $editState = true;
         var $btnSubmit = $('#btnSubmit');
         var $dataForm = $('#dataForm');
+        var $btn_delete = $('.btn_delete');
         var $id = $('#id');
 
         $(function () {
@@ -89,10 +90,15 @@
                     if ($editState)
                         requesturl = '/api/order/edit';
                     $dialogNew.modal('hide');
-                    Request("put", requesturl, $dataForm.serialize());
+                    Request("put", requesturl, serializeNotNull($dataForm.serialize()));
                 }
             });
         });
+
+
+        function serializeNotNull(serStr) {
+                return serStr.split("&").filter(str => !str.endsWith("=")).join("&");
+        }
 
         function Request(method, url, Data) {
             $.ajax({
@@ -128,6 +134,59 @@
                 });
                 $dialogNew.modal();
             }
+        }
+
+        $btn_delete.on("click", function () {
+            var data = $TableGroup.bootstrapTable('getSelections');
+            if (data.length > 0) {
+                deleteRow(data);
+            } else {
+                toastr.error("请选中后操作！");
+            }
+        });
+
+
+        function deleteTool(id) {
+            deleteRow([{ "id": id }]);
+        }
+
+        function deleteRow(data) {
+            bootbox.confirm({
+                message: "确认删除吗？",
+                buttons: {
+                    confirm: {
+                        label: '确认',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: '取消',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/api/order',
+                            type: "delete",
+                            data: JSON.stringify(data),
+                            contentType: 'application/json',
+                            success: function (res) {
+                                if (res.state == 200) {
+                                    $TableGroup.bootstrapTable('refresh');
+                                    toastr.success(res.message);
+                                }
+                                else {
+                                    $TableGroup.bootstrapTable('refresh');
+                                    toastr.error(res.message);
+                                }
+                            },
+                            error: function (e) {
+                                toastr.error(e.responseText);
+                            }
+                        });
+                    }
+                }
+            });
         }
 
         var DataArrar = new Array();
@@ -232,7 +291,12 @@
                         }, {
                             field: 'createTime',
                             title: '创建时间',
-                            align: 'center'
+                            align: 'center',
+                            formatter: function (value, row, index) {
+                                if (value != null) {
+                                    return value.replace('T', ' ');
+                                }
+                            }
                         }, {
                             field: 'endTime',
                             title: '完成时间',
@@ -242,7 +306,7 @@
                             field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
                                 DataArrar[row.id] = row;
                                 var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
-                                    '<a class="btn btn-xs btn-danger btn-remove" onclick="deletemenu(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
+                                    '<a class="btn btn-xs btn-danger btn-remove" onclick="deleteTool(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
                                 return strHtml;
                             }, edit: false
                         }
@@ -402,13 +466,13 @@
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="parentName">优先级</label>
                     <div class="input-group flex-sm-fill">
-                        <input type="text" class="form-control digits" id="priority" name="priority" data-default-val="10" placeholder="不为空，默认为0，最大9999" maxlength="8" data-valid="true" />
+                        <input type="text" class="form-control digits" id="priority" name="priority" data-default-val="10" placeholder="不为空，默认为0，最大9999" maxlength="4" data-valid="true" />
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
                     <label class="control-label" for="icon">重量</label>
                     <div class="input-group flex-sm-fill">
-                        <input type="text" class="form-control digits" id="weight" name="weight" data-default-val="10" placeholder="可为空" />
+                        <input type="text" class="form-control digits" id="weight"  name="weight" data-default-val="10" placeholder="不为空，默认0" data-valid="true"  />
                     </div>
                 </div>
                 <div class="form-group col-sm-6">
@@ -423,10 +487,6 @@
                         </select>
                     </div>
                 </div>
-                @*<div class="form-group col-12">
-                        <label class="control-label" for="url">说明</label>
-                        <input type="text" class="form-control flex-sm-fill" id="explain" placeholder="可为空" />
-                    </div>*@
             </div>
         </form>
     </div>

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Middleware_CoreWeb.cache
+namespace Middleware_Tool.cache
 {
     public class CacheProvider: ICache
     {

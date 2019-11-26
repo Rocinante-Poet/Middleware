@@ -34,6 +34,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
+                group.createTime = DateTime.Now;
                 return connection.ExecuteAsync(group) > 0;
             });
         }
@@ -42,7 +43,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.DeleteList<group_model>("WHERE id=@id", grouparray) > 0;
+                return connection.DeleteList<order_model>("WHERE id=@id", grouparray) > 0;
             });
         }
 
