@@ -16,14 +16,7 @@ namespace Middleware_CoreWeb.Controllers.api
     public class ReportFormsController : ApiBaseController
     {
         private DB_Statistics Get__StatisticsDb = new DB_Statistics();
-        //// GET: api/ReportForms
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
 
-        // GET: api/ReportForms/5
         [HttpGet("{id}", Name = "Get")]
         public Responsemessage Get(int id)
         {
@@ -46,27 +39,19 @@ namespace Middleware_CoreWeb.Controllers.api
                 return Error();
             }
         }
-
-        //// POST: api/ReportForms
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT: api/ReportForms/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
-
-
-
+        [HttpGet]
+        public Responsemessage Get()
+        {
+            var data = Get__StatisticsDb.GetErrorGroup();
+            if (data.Count() > 0)
+            {
+                return succeed<ChartError<int>>(data);
+            }
+            else
+            {
+                return Error();
+            }
+        }
 
 
     }

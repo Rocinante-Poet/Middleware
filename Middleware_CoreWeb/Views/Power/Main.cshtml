@@ -1,0 +1,267 @@
+﻿@model NavigatorBarModel
+@{
+    Layout = "_Default";
+}
+@section css
+{
+    <style>
+        .panel-count {
+            margin: 2px 10px;
+            height: 114px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 5px 5px 0 rgba(0,0,0,.25);
+        }
+        .panel-count-sx {
+            margin: 2px 10px;
+            height: 400px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 5px 5px 0 rgba(0,0,0,.25);
+        }
+
+        .panel-ls {
+            padding: 0px;
+        }
+
+        .row {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
+        .panel-count-ls {
+            width: 48%;
+            height: 100%;
+            /*background-color:red;*/
+            /*margin:3px;*/
+            display: inline-block;
+        }
+
+        .description {
+            display: inline-block;
+            font-size: 18px;
+            /* height: 114px; */
+            position: absolute;
+            top: 30px;
+            left: 150px;
+            font-family: 微软雅黑;
+        }
+
+        .panel-icon {
+            width: 130px;
+            height: 100%;
+            font-size: 70px;
+            text-align: center;
+            color: #dddddd;
+            position: absolute;
+            top: 20px;
+            right: 10px;
+        }
+
+        .panel-chartNum {
+            position: absolute;
+            font-size: 18px;
+            top: 43px;
+            left: 41px;
+        }
+
+        .panel-chart {
+            width: 114px;
+            height: 114px;
+            display: inline-block;
+        }
+
+        @@media screen and (min-width: 1200px) and (max-width: 1580px) {
+            .panel-icon {
+                display: none;
+            }
+        }
+
+        @@media screen and (min-width: 1580px) and (max-width: 1700px) {
+            .description {
+                left: 120px;
+            }
+        }
+
+        /* 小屏幕 */
+        @@media all and (max-width: 1200px) {
+        }
+
+        /* 平板 */
+        @@media all and (max-width: 1024px) {
+        }
+
+        /* 手机 */
+        @@media all and (max-width: 768px) {
+            .description {
+                left: 120px;
+            }
+        }
+
+        /* 超小屏幕（苹果SE） */
+        @@media all and (max-width: 340px) {
+            .panel-icon {
+                display: none;
+            }
+        }
+    </style>
+
+}
+@section javascript {
+    <script src="~/node_modules/echarts/dist/echarts.min.js"></script>
+    <script>
+
+        var Chart1 = echarts.init(document.getElementById('main1'));
+        var Chart2 = echarts.init(document.getElementById('main2'));
+        var Chart3 = echarts.init(document.getElementById('main3'));
+        var Chart4 = echarts.init(document.getElementById('main4'));
+        option = {
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    hoverAnimation: false,
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                        }
+                    },
+                    data: [
+                        { value: 20 },
+                        { value: 80 }
+                    ], itemStyle: {
+                        //emphasis: {
+                        //    shadowBlur: 10,
+                        //    shadowOffsetX: 0,
+                        //    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        //},
+                        normal: {
+                            color: function (params) {
+                                //自定义颜色
+                                var colorList = [
+                                    '#fff', '#e0e0e0',
+                                ];
+                                return colorList[params.dataIndex]
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+        Chart1.setOption(option);
+        Chart2.setOption(option);
+        Chart3.setOption(option);
+        Chart4.setOption(option);
+    </script>
+}
+<div class="main-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:"><i class="fa fa-home"></i>系统</a></li>
+        <li class="breadcrumb-item">首页</li>
+    </ol>
+</div>
+<div class="row">
+    <div class="col-xl-3 panel-ls">
+        <div class="panel-count">
+            <i class="fa fa-map panel-icon"></i>
+            <div style="width:114px;height:114px;display:inline-block;position:relative">
+                <div class="panel-chart " id="main1"></div>
+                <span class="panel-chartNum">50%</span>
+            </div>
+            <div class="description">
+                <div class="ng-binding">
+                    <font>待执行订单</font>
+                </div>
+                <div class="description-stats ng-binding">
+                    <font><span style="font-weight:bold">10</span>单</font>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 panel-ls">
+        <div class="panel-count">
+            <i class="fa fa-paper-plane panel-icon"></i>
+            <div class="panel-chart">
+                <div class="panel-chart" id="main2"></div>
+                <span class="panel-chartNum">50%</span>
+            </div>
+            <div class="description">
+                <div class="ng-binding">
+                    <font>待执行订单</font>
+                </div>
+                <div class="description-stats ng-binding">
+                    <font><span style="font-weight:bold">10</span>单</font>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 panel-ls">
+        <div class="panel-count">
+            <i class="fa fa-tags panel-icon"></i>
+            <div class="panel-chart">
+                <div class="panel-chart" id="main3"></div>
+                <span class="panel-chartNum">50%</span>
+            </div>
+            <div class="description">
+                <div class="ng-binding">
+                    <font>待执行订单</font>
+                </div>
+                <div class="description-stats ng-binding">
+                    <font><span style="font-weight:bold">10</span>单</font>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 panel-ls">
+        <div class="panel-count">
+            <i class="fa fa-user-circle panel-icon"></i>
+            <div class="panel-chart">
+                <div class="panel-chart" id="main4"></div>
+                <span class="panel-chartNum">50%</span>
+            </div>
+            <div class="description">
+                <div class="ng-binding">
+                    <font>待执行订单</font>
+                </div>
+                <div class="description-stats ng-binding">
+                    <font><span style="font-weight:bold">10</span>单</font>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<div class="panel-ls">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title">
+            <font>采购渠道</font>
+        </h3>
+    </div>
+    <div class="panel-body">
+    </div>
+</div>*@
+<div class="row" style="margin-top:20px;">
+    <div class="col-xl-6 panel-ls">
+        <div class="panel-count-sx">
+           
+        </div>
+    </div>
+    <div class="col-xl-6 panel-ls">
+        <div class="panel-count-sx">
+
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top:20px;">
+    <div class="col-xl panel-ls">
+        <div class="panel-count-sx">
+
+        </div>
+    </div>
+</div>
