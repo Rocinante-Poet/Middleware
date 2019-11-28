@@ -10,4 +10,18 @@ namespace Middleware_Tool
 
         public int value { get; set; }
     }
+
+    public class Chartpercent
+    {
+        public string percent { get; set; }
+        public IEnumerable<Chart> Chartdata { get; set; }
+    }
+
+
+    public class MainChart
+    {
+        public Chartpercent GetChartpercentOrder { get; set; }
+
+        public Chartpercent GetChartpercentError { get; set; }
+    }
 }

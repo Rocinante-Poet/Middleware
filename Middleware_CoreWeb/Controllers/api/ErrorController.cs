@@ -21,6 +21,6 @@ namespace Middleware_CoreWeb.Controllers.api
         public JsonData<object> Get([FromQuery]int limit, int offset, string sbType, string sbName, int? errorCode, int? errorType) => db.GetList(limit, offset, sbType, sbName, errorCode, errorType);
 
         [HttpDelete]
-        public Responsemessage delete([FromBody]List<Equipment_error> itemArray) => db.Delete(itemArray) ? succeed() : Error();
+        public Basemessage delete([FromBody]List<Equipment_error> itemArray) => db.Delete(itemArray) ? succeed() : Error();
     }
 }

@@ -21,7 +21,7 @@ namespace Middleware_CoreWeb
             {
                 context.RemoveCookie(CoreConfiguration.JwtCookiesTokenKey);
                 context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(new Responsemessage() { state = 500, message = "Token签名错误，未找到该用户信息" }.ToJson());
+                await context.Response.WriteAsync(new Basemessage() { state = 500, message = "Token签名错误，未找到该用户信息" }.ToJson());
                 return new Userinfo();
             }
             userInfo.group = new DB_Group().Get(userInfo.Power_ID);

@@ -10,7 +10,7 @@ using Middleware_Tool;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReportFormsController : ApiBaseController
@@ -18,7 +18,7 @@ namespace Middleware_CoreWeb.Controllers.api
         private DB_Statistics Get__StatisticsDb = new DB_Statistics();
 
         [HttpGet("{id}", Name = "Get")]
-        public Responsemessage Get(int id)
+        public Basemessage Get(int id)
         {
             IEnumerable<Chart> data = new List<Chart>();
             switch (id)
@@ -40,7 +40,7 @@ namespace Middleware_CoreWeb.Controllers.api
             }
         }
         [HttpGet]
-        public Responsemessage Get()
+        public Basemessage Get()
         {
             var data = Get__StatisticsDb.GetErrorGroup();
             if (data.Count() > 0)
@@ -53,6 +53,10 @@ namespace Middleware_CoreWeb.Controllers.api
             }
         }
 
-
+        [HttpGet("MainChart")]
+        public Basemessage GetMainChart()
+        {
+            return succeed(Get__StatisticsDb.GetMainChart());
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace Middleware_CoreWeb
                 if (IsAjaxCall || context.Request.Path.StartsWithSegments("/api"))
                 {
                     context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(new Responsemessage() { state = 500, message = "系统出错啦，相关异常信息已记录到日志，请联系管理员处理！", }.ToJson());
+                    await context.Response.WriteAsync(new Basemessage() { state = 500, message = "系统出错啦，相关异常信息已记录到日志，请联系管理员处理！", }.ToJson());
                 }
                 else
                 {

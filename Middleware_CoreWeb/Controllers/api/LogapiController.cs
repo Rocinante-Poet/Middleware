@@ -27,7 +27,7 @@ namespace Middleware_CoreWeb.Controllers.api
         public async Task<JsonData<error_model>> Geterror([FromQuery]int limit, int offset, string Name) => await Get_LogDb.GetErrorList(limit, offset, Name);
 
         [HttpGet("file")]
-        public Responsemessage GetlogArray()
+        public Basemessage GetlogArray()
         {
             try
             {

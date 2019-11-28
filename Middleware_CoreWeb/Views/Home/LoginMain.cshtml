@@ -131,7 +131,7 @@
                 success: function (res) {
                     if (res.success) {
                         localStorage.setItem("token", res.access_token);
-                        location.href = "/Power/Menu/";
+                        location.href = "/Power/Main/";
                     }
                     else {
                         toastr.error(res.message);
