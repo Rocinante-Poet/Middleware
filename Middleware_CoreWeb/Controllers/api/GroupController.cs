@@ -20,12 +20,12 @@ namespace Middleware_CoreWeb.Controllers.api
         public IEnumerable<group_model> Getparentmenus() => Get_GroupDb.Get();
 
         [HttpPut("add")]
-        public Responsemessage Put([FromBody]group_model item) => Get_GroupDb.Add(item) ? succeed() : Error();
+        public Basemessage Put([FromBody]group_model item) => Get_GroupDb.Add(item) ? succeed() : Error();
 
         [HttpDelete]
-        public Responsemessage delete([FromBody]List<group_model> itemArray) => Get_GroupDb.Delete(itemArray) ? succeed() : Error();
+        public Basemessage delete([FromBody]List<group_model> itemArray) => Get_GroupDb.Delete(itemArray) ? succeed() : Error();
 
         [HttpPut("edit")]
-        public Responsemessage Putedit([FromBody]group_model item) => Get_GroupDb.Update(item) ? succeed() : Error();
+        public Basemessage Putedit([FromBody]group_model item) => Get_GroupDb.Update(item) ? succeed() : Error();
     }
 }

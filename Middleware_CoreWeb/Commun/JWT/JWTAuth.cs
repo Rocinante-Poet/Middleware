@@ -19,8 +19,6 @@ namespace Middleware_CoreWeb
     {
         private readonly RequestDelegate _next;
 
-        private JWTUpload _upload = new JWTUpload();
-
         public JWTAuth(RequestDelegate next)
         {
             _next = next;
@@ -55,7 +53,7 @@ namespace Middleware_CoreWeb
                 if (IsAjaxCall || IsapiRequest)
                 {
                     httpContext.Response.ContentType = "application/json";
-                    await httpContext.Response.WriteAsync(new Responsemessage() { state = 500, message = "登录过期，无权限访问！" }.ToJson());
+                    await httpContext.Response.WriteAsync(new Basemessage() { state = 500, message = "登录过期，无权限访问！" }.ToJson());
                 }
                 else
                 {

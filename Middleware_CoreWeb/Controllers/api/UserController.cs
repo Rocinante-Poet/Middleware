@@ -19,7 +19,7 @@ namespace Middleware_CoreWeb.Controllers.api
         public JsonData<Userinfo> Get([FromQuery]int limit, int offset, string Name, int Group) => Get_UserpDb.GetList(limit, offset, Name, Group);
 
         [HttpPut("add")]
-        public Responsemessage Put([FromBody]Userinfo item)
+        public Basemessage Put([FromBody]Userinfo item)
         {
             if (Get_UserpDb.Get(item).Count() > 0)
             {
@@ -33,9 +33,9 @@ namespace Middleware_CoreWeb.Controllers.api
         }
 
         [HttpDelete]
-        public Responsemessage delete([FromBody]List<Userinfo> itemArray) => Get_UserpDb.Delete(itemArray) ? succeed() : Error();
+        public Basemessage delete([FromBody]List<Userinfo> itemArray) => Get_UserpDb.Delete(itemArray) ? succeed() : Error();
 
         [HttpPut("edit")]
-        public Responsemessage Putedit([FromBody]Userinfo item) => Get_UserpDb.Update(item) ? succeed() : Error();
+        public Basemessage Putedit([FromBody]Userinfo item) => Get_UserpDb.Update(item) ? succeed() : Error();
     }
 }

@@ -22,13 +22,13 @@ namespace Middleware_CoreWeb.Controllers.api
 
 
         [HttpPut("add")]
-        public Responsemessage Put([FromForm]order_model item) => Get_OrderDb.Add(item) ? succeed() : Error();
+        public Basemessage Put([FromForm]order_model item) => Get_OrderDb.Add(item) ? succeed() : Error();
 
         [HttpDelete]
-        public Responsemessage delete([FromBody]List<order_model> itemArray) => Get_OrderDb.Delete(itemArray) ? succeed() : Error();
+        public Basemessage delete([FromBody]List<order_model> itemArray) => Get_OrderDb.Delete(itemArray) ? succeed() : Error();
 
         [HttpPut("edit")]
-        public Responsemessage Putedit([FromForm]order_model item) => Get_OrderDb.Update(item) ? succeed() : Error();
+        public Basemessage Putedit([FromForm]order_model item) => Get_OrderDb.Update(item) ? succeed() : Error();
 
     }
 }

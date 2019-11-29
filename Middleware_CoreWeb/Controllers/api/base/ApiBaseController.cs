@@ -7,34 +7,39 @@ namespace Middleware_CoreWeb
 {
     public class ApiBaseController : ControllerBase
     {
-        public Responsemessage succeed()
+        public Basemessage succeed()
         {
-            return new Responsemessage() { message = "成功", state = 200 };
+            return new Basemessage() { message = "成功", state = 200 };
         }
 
-        public Responsemessage succeed(string message)
+        public Basemessage succeed(string message)
         {
-            return new Responsemessage() { message = message, state = 200 };
+            return new Basemessage() { message = message, state = 200 };
         }
 
-        public Responsemessage succeed(string message, IEnumerable<object> list)
+        public Basemessage succeed<T>(string message, IEnumerable<T> list)
         {
-            return new Responsemessage() { message = message, state = 200, Data = list };
+            return new Responsemessage<T>() { message = message, state = 200, Data = list };
         }
 
-        public Responsemessage succeed<T>(IEnumerable<object> list)
+        public Basemessage succeed<T>(IEnumerable<T> list)
         {
-            return new Responsemessage() { message = "成功", state = 200, Data = list };
+            return new Responsemessage<T>() { message = "成功", state = 200, Data = list };
         }
 
-        public Responsemessage Error()
+        public Basemessage succeed<T>(T data)
         {
-            return new Responsemessage() { message = "操作失败", state = 500 };
+            return new Jsonmessage<T>() { message = "成功", state = 200, Data = data };
         }
 
-        public Responsemessage Error(string message)
+        public Basemessage Error()
         {
-            return new Responsemessage() { message = message, state = 500 };
+            return new Basemessage() { message = "操作失败", state = 500 };
+        }
+
+        public Basemessage Error(string message)
+        {
+            return new Basemessage() { message = message, state = 500 };
         }
     }
 }

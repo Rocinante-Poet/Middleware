@@ -24,18 +24,18 @@ namespace Middleware_CoreWeb.Controllers.api
         public IEnumerable<menu_model> Getparentmenus() => Get_MenuDb.GetFatherLists();
 
         [HttpPut("add")]
-        public Responsemessage Put([FromBody]menu_model menu) => Get_MenuDb.AddMenu(menu) ? succeed() : Error();
+        public Basemessage Put([FromBody]menu_model menu) => Get_MenuDb.AddMenu(menu) ? succeed() : Error();
 
         [HttpDelete]
-        public Responsemessage delete([FromBody]List<menu_model> menuArray) => Get_MenuDb.DeleteMenu(menuArray) ? succeed() : Error();
+        public Basemessage delete([FromBody]List<menu_model> menuArray) => Get_MenuDb.DeleteMenu(menuArray) ? succeed() : Error();
 
         [HttpPut("edit")]
-        public Responsemessage Putedit([FromBody]menu_model menu) => Get_MenuDb.UpdateMenu(menu) ? succeed() : Error();
+        public Basemessage Putedit([FromBody]menu_model menu) => Get_MenuDb.UpdateMenu(menu) ? succeed() : Error();
 
         [HttpGet("detail")]
-        public Responsemessage detail([FromQuery] group_model group) => succeed<detail_model>(Get_detailDb.Get(group.id));
+        public Basemessage detail([FromQuery] group_model group) => succeed<detail_model>(Get_detailDb.Get(group.id));
 
         [HttpPost("add")]
-        public Responsemessage AddDetail([FromBody] IEnumerable<menu_model> menu, [FromQuery] int id) => Get_detailDb.Add(menu, id) ? succeed() : Error();
+        public Basemessage AddDetail([FromBody] IEnumerable<menu_model> menu, [FromQuery] int id) => Get_detailDb.Add(menu, id) ? succeed() : Error();
     }
 }

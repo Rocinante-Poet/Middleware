@@ -23,16 +23,16 @@ namespace Middleware_CoreWeb.Controllers.api
         public JsonData<Transportndc_model> Get([FromQuery]int limit, int offset) => db.GetList(limit, offset);
 
         [HttpPut("add")]
-        public Responsemessage Put([FromForm]Transportndc_model item)
+        public Basemessage Put([FromForm]Transportndc_model item)
         {
             return db.Add(item) ? succeed() : Error();
         }
 
         [HttpDelete]
-        public Responsemessage delete([FromBody]List<Transportndc_model> itemArray) => db.Delete(itemArray) ? succeed() : Error();
+        public Basemessage delete([FromBody]List<Transportndc_model> itemArray) => db.Delete(itemArray) ? succeed() : Error();
 
         [HttpPut("edit")]
-        public Responsemessage Putedit([FromForm]Transportndc_model item) => db.Update(item) ? succeed() : Error();
+        public Basemessage Putedit([FromForm]Transportndc_model item) => db.Update(item) ? succeed() : Error();
 
         #endregion NDC
     }

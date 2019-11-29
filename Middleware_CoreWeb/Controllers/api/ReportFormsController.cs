@@ -10,22 +10,15 @@ using Middleware_Tool;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReportFormsController : ApiBaseController
     {
         private DB_Statistics Get__StatisticsDb = new DB_Statistics();
-        //// GET: api/ReportForms
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
 
-        // GET: api/ReportForms/5
-        [HttpGet("{id}")]
-        public Responsemessage Get(int id)
+        [HttpGet("{id}", Name = "Get")]
+        public Basemessage Get(int id)
         {
             IEnumerable<Chart> data = new List<Chart>();
             switch (id)
@@ -33,7 +26,6 @@ namespace Middleware_CoreWeb.Controllers.api
                 case 1:
                     data = Get__StatisticsDb.Get();
                     break;
-
                 case 2:
                     data = Get__StatisticsDb.GetErrorType();
                     break;
@@ -47,23 +39,24 @@ namespace Middleware_CoreWeb.Controllers.api
                 return Error();
             }
         }
+        [HttpGet]
+        public Basemessage Get()
+        {
+            var data = Get__StatisticsDb.GetErrorGroup();
+            if (data.Count() > 0)
+            {
+                return succeed<ChartError<int>>(data);
+            }
+            else
+            {
+                return Error();
+            }
+        }
 
-        //// POST: api/ReportForms
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT: api/ReportForms/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        [HttpGet("MainChart")]
+        public Basemessage GetMainChart()
+        {
+            return succeed(Get__StatisticsDb.GetMainChart());
+        }
     }
 }

@@ -11,34 +11,17 @@ namespace Middleware_Tool
         public int value { get; set; }
     }
 
-    public class ChartDataPile
+    public class Chartpercent
     {
-        public ChartDataPile()
-        {
-            xAxisTitle = new List<string>();
-            timeA = new List<int>();
-            timeB = new List<int>();
-            timeC = new List<int>();
-        }
-
-        public List<string> xAxisTitle { get; set; }
-
-        public List<int> timeA { get; set; }
-
-        public List<int> timeB { get; set; }
-
-        public List<int> timeC { get; set; }
+        public string percent { get; set; }
+        public IEnumerable<Chart> Chartdata { get; set; }
     }
 
-    public class ChartStack<T>
-    {
-        public ChartStack()
-        {
-            data = new List<T>();
-        }
 
-        public string name { get; set; }
-        public string type { get; set; }
-        public List<T> data { get; set; }
+    public class MainChart
+    {
+        public Chartpercent GetChartpercentOrder { get; set; }
+
+        public Chartpercent GetChartpercentError { get; set; }
     }
 }
