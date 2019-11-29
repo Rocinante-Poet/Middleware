@@ -151,6 +151,11 @@ namespace Middleware_Tool
             return DateTime.TryParse(data.ToString(), out result) ? result : DateTime.MinValue;
         }
 
+        public static DateTime ToDateStr(this string data)
+        {
+            return Convert.ToDateTime(data);
+        }
+
         /// <summary>
         /// 转换为可空日期
         /// </summary>

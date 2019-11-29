@@ -24,7 +24,7 @@ namespace Middleware_CoreWeb.Controllers.api
         //}
 
         // GET: api/ReportForms/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public Responsemessage Get(int id)
         {
             IEnumerable<Chart> data = new List<Chart>();
@@ -33,6 +33,7 @@ namespace Middleware_CoreWeb.Controllers.api
                 case 1:
                     data = Get__StatisticsDb.Get();
                     break;
+
                 case 2:
                     data = Get__StatisticsDb.GetErrorType();
                     break;
@@ -64,10 +65,5 @@ namespace Middleware_CoreWeb.Controllers.api
         //public void Delete(int id)
         //{
         //}
-
-
-
-
-
     }
 }
