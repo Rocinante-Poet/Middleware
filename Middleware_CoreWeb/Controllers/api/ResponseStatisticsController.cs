@@ -18,7 +18,7 @@ namespace Middleware_CoreWeb.Controllers.api
         private DB_Task db = new DB_Task();
 
         [HttpGet("{id}")]
-        public Responsemessage Get(int id)
+        public Basemessage Get(int id)
         {
             IEnumerable<Chart> data = new List<Chart>();
             switch (id)
