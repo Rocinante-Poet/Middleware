@@ -13,5 +13,7 @@ namespace Middleware_CoreWeb.Controllers
         public IActionResult Ndc() => View(new NavigatorBarModel(this));
 
         public IActionResult Equipment_error() => View(new NavigatorBarModel(this));
+
+        public IActionResult Equipment_statistics() => View(new NavigatorBarModel(this));
     }
 }

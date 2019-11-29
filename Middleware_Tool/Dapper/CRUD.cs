@@ -32,7 +32,6 @@ namespace Dapper
     /// </summary>
     public static partial class CRUD
     {
-
         static CRUD()
         {
             Configuration = new ConfigurationBuilder()
@@ -61,6 +60,8 @@ namespace Dapper
 
         public static IDbConnection GetOpenConnection()
         {
+            _connstring = @"server = 118.31.71.216; User Id = root; password = password; database = wcs; Persist Security Info = True; charset = 'gbk'";
+
             using IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(_connstring);
             try
             {
