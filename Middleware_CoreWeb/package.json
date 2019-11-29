@@ -16,6 +16,7 @@
     "validate": "5.1.0",
     "bootbox": "5.3.4",
     "nestable2": "1.6.0",
-    "echarts": "4.5.0"
+    "echarts": "4.5.0",
+    "bootstrap-fileinput": "5.0.7"
   }
 }

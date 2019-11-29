@@ -1,0 +1,160 @@
+﻿@model NavigatorBarModel
+@{
+    Layout = "_Default";
+}
+@section css
+{
+    <link href="~/node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+}
+
+@section javascript{
+    <script src="~/node_modules/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="~/node_modules/bootstrap-fileinput/js/locales/zh.js"></script>
+    <script src="~/node_modules/bootstrap-fileinput/themes/fa/theme.min.js"></script>
+
+    <script>
+        var $headerIcon = $('.userinfo img, .nav-header img');
+        var preIcon = $headerIcon.attr('src');
+        var $file = $('#fileIcon');
+        var defFileName = $file.attr('data-file');
+        $file.fileinput({
+            uploadUrl: "",
+            deleteUrl: "",
+            layoutTemplates: {
+                actionDelete: '', //去除上传预览的缩略图中的删除图标
+
+            },
+            browseOnZoneClick: true,
+            theme: 'fa',
+            language: 'zh',
+            maxFileSize: 5000,
+            allowedFileExtensions: ['jpg', 'png', 'bmp', 'gif', 'jpeg'],
+            initialPreview: [
+                preIcon
+            ],
+            initialPreviewConfig: [
+                { caption: "", size: $file.attr('data-init'), showZoom: true, showRemove: defFileName !== 'default.jpg', key: defFileName }
+            ],
+            initialPreviewAsData: true,
+            overwriteInitial: true,
+            dropZoneTitle: "请选择头像",
+            msgPlaceholder: "请选择头像",
+            fileActionSettings: { showUpload: false }
+        }).on('fileuploaded', function (event, data, previewId, index) {
+            var url = data.response.initialPreview[0];
+            if (!!url === true) $headerIcon.attr('src', url);
+        }).on('filebeforedelete', function (e, key) {
+            if (key === "default.jpg") return true;
+            return new Promise(function (resolve, reject) {
+                var swalDeleteOptions = {
+                    title: "您确定要删除吗？",
+                    html: '您确定要删除选中的所有数据吗',
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: "我要删除",
+                    cancelButtonText: "取消"
+                };
+                swal(swalDeleteOptions).then(function (result) {
+                    if (result.value) {
+                        resolve(false);
+                        $file.fileinput('default');
+                    }
+                });
+            });
+        });
+            //.on('filedeleted', function (event, key, jqXHR, data) {
+            //    console.log("2555");
+            //    $headerIcon.attr('src', $.formatUrl('images/uploader/default.jpg'));
+            //});
+
+            //$.fn.fileinput.Constructor.prototype.default = function () {
+            //      console.log("2555");
+
+            //    $.extend(this, {
+            //        initialPreview: [
+            //            $.formatUrl('images/uploader/default.jpg')
+            //        ],
+            //        initialPreviewConfig: [
+            //            { caption: "", size: 7195, showZoom: true, showRemove: false, key: 'default.jpg' }
+            //        ]
+            //    });
+            //    this._initPreviewCache();
+            //    this._initPreview(true);
+            //    this._initPreviewActions();
+            //    this._initZoom();
+            //};
+    </script>
+
+
+
+}
+
+<div class="main-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
+        <li class="breadcrumb-item">订单管理</li>
+    </ol>
+</div>
+<div class="card">
+    <div class="card-header">基本资料</div>
+    <div class="card-body" data-toggle="LgbValidate" data-valid-button="#btnSaveDisplayName">
+
+        <form class="form-inline">
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-auto">
+                    <label class="control-label" for="userName">登录名称</label>
+                    <input type="text" class="form-control ignore" id="userName" name="userName" value="@((await Model.GetUserinfo()).Name)" readonly="">
+                </div>
+                <div class="form-group col-sm-6 col-md-auto">
+                    <label class="control-label" for="DisplayName">显示名称</label>
+                    <input type="text" class="form-control" id="displayName" name="displayName" value="@((await Model.GetUserinfo()).showName)" placeholder="不可为空，20字以内" maxlength="20" data-valid="true">
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button id="btnSaveDisplayName" data-method="user" class="btn btn-secondary" type="button"><i class="fa fa-save"></i><span>保存</span></button>
+        </div>
+    </div>
+</div>
+<div class="card" asp-auth="savePassword">
+    <div class="card-header">修改密码</div>
+    <div class="card-body" data-toggle="LgbValidate" data-valid-button="#btnSavePassword">
+        @*<div class="alert alert-danger" role="alert">
+                <span>演示系统禁止更改管理员密码</span>
+            </div>*@
+        <form class="form-inline">
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-auto">
+                    <label class="control-label" for="currentPassword">原密码: </label>
+                    <input type="password" class="form-control" id="currentPassword" placeholder="原密码" maxlength="16" data-valid="true" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-auto">
+                    <label class="control-label" for="newPassword">新密码: </label>
+                    <input type="password" class="form-control" id="newPassword" placeholder="新密码" maxlength="16" data-valid="true" />
+                </div>
+                <div class="form-group col-sm-6 col-md-auto">
+                    <label class="control-label" for="confirmPassword">确认密码: </label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="与新密码一致" maxlength="16" equalTo="#newPassword" data-valid="true" />
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button id="btnSavePassword" data-method="password" class="btn btn-secondary" type="button"><i class="fa fa-save"></i><span>保存</span></button>
+        </div>
+    </div>
+</div>
+<div class="card" asp-auth="saveIcon">
+    <div class="card-header">修改头像</div>
+    <div class="card-body">
+        <form enctype="multipart/form-data">
+            <div class="form-group">
+                <input id="fileIcon" type="file" data-init="" data-file="">
+            </div>
+        </form>
+        <img class="card-img d-none" src="" />
+    </div>
+</div>

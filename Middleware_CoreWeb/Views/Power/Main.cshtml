@@ -172,30 +172,30 @@
             margin-top: 0;
         }
 
-        ul.todo-list li {
-            margin: 0 0 -1px;
-            padding: 12px;
-            list-style: none;
-            position: relative;
-            border: 1px solid #cbcbcb;
-            cursor: -webkit-grab;
-            cursor: grab;
-            height: 42px;
-        }
-
-            ul.todo-list li i.mark {
-                display: block;
-                position: absolute;
-                top: -1px;
-                left: -1px;
+            ul.todo-list li {
+                margin: 0 0 -1px;
+                padding: 12px;
+                list-style: none;
+                position: relative;
+                border: 1px solid #cbcbcb;
+                cursor: -webkit-grab;
+                cursor: grab;
                 height: 42px;
-                min-width: 4px;
-                background: #cbcbcb;
-                cursor: pointer;
-                -webkit-transition: min-width .3s ease-out;
-                transition: min-width .3s ease-out;
-                background-color: #0e8174;
             }
+
+                ul.todo-list li i.mark {
+                    display: block;
+                    position: absolute;
+                    top: -1px;
+                    left: -1px;
+                    height: 42px;
+                    min-width: 4px;
+                    background: #cbcbcb;
+                    cursor: pointer;
+                    -webkit-transition: min-width .3s ease-out;
+                    transition: min-width .3s ease-out;
+                    background-color: #0e8174;
+                }
 
         .mark, mark {
             padding: .2em;
@@ -273,6 +273,7 @@
         .span-text {
             font-weight: bold
         }
+
         .chartNum-text {
             position: absolute;
             top: 0px;
@@ -281,6 +282,7 @@
             width: 114px;
             height: 114px;
         }
+
         @@media screen and (min-width: 1200px) and (max-width: 1580px) {
             .panel-icon {
                 display: none;
@@ -329,14 +331,14 @@
 }
 @section javascript {
     <script src="~/node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="~/js/westeros.js"></script>
     <script>
-
-        var mainCharts1 = echarts.init(document.getElementById('main-charts1'));
-        var mainCharts2 = echarts.init(document.getElementById('main-charts2'));
-        var mainCharts3 = echarts.init(document.getElementById('main-charts3'));
-        var mainCharts4 = echarts.init(document.getElementById('main-charts4'));
-        var ChartCenter = echarts.init(document.getElementById('chart-center'));
-        var ChartBottom = echarts.init(document.getElementById('chart-bottom'));
+        var mainCharts1 = echarts.init(document.getElementById('main-charts1'), "westeros");
+        var mainCharts2 = echarts.init(document.getElementById('main-charts2'), "westeros");
+        var mainCharts3 = echarts.init(document.getElementById('main-charts3'), "westeros");
+        var mainCharts4 = echarts.init(document.getElementById('main-charts4'), "westeros");
+        var ChartCenter = echarts.init(document.getElementById('chart-center'), "westeros");
+        var ChartBottom = echarts.init(document.getElementById('chart-bottom'), "westeros");
 
         function mainChart(index, data) {
             optionData1 = {
@@ -353,8 +355,8 @@
                             }
                         },
                         data: [
-                            { value: 0, name: "" },
-                            { value: 0, name: "" }
+                            { value: 2, name: "" },
+                            { value: 10, name: "" }
                         ],
                         itemStyle: {
                             normal: {
@@ -442,7 +444,7 @@
                 }
             },
             legend: {
-                data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                data: ['RGV库', '穿梭车库', '重载库']
             },
             grid: {
                 left: '3%',
@@ -464,46 +466,27 @@
             ],
             series: [
                 {
-                    name: '邮件营销',
+                    name: 'RGV库',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {},
                     data: [120, 132, 101, 134, 90, 230, 210]
                 },
                 {
-                    name: '联盟广告',
+                    name: '穿梭车库',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {},
                     data: [220, 182, 191, 234, 290, 330, 310]
                 },
                 {
-                    name: '视频广告',
+                    name: '重载库',
                     type: 'line',
                     stack: '总量',
                     areaStyle: {},
                     data: [150, 232, 201, 154, 190, 330, 410]
-                },
-                {
-                    name: '直接访问',
-                    type: 'line',
-                    stack: '总量',
-                    areaStyle: { normal: {} },
-                    data: [320, 332, 301, 334, 390, 330, 320]
-                },
-                {
-                    name: '搜索引擎',
-                    type: 'line',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'top'
-                        }
-                    },
-                    areaStyle: { normal: {} },
-                    data: [820, 932, 901, 934, 1290, 1330, 1320]
                 }
+
             ]
         };
 
@@ -533,7 +516,7 @@
             <div class="panel-chart">
                 <div class="panel-chart " id="main-charts1"></div>
                 <div class="chartNum-text">
-                    <span class="panel-chartNum">0%</span>
+                    <span class="panel-chartNum">10%</span>
                 </div>
             </div>
             <div class="description">
@@ -552,7 +535,7 @@
             <div class="panel-chart">
                 <div class="panel-chart" id="main-charts2"></div>
                 <div class="chartNum-text">
-                    <span class="panel-chartNum">0%</span>
+                    <span class="panel-chartNum">30%</span>
                 </div>
             </div>
             <div class="description">
@@ -571,7 +554,7 @@
             <div class="panel-chart">
                 <div class="panel-chart" id="main-charts3"></div>
                 <div class="chartNum-text">
-                    <span class="panel-chartNum">0%</span>
+                    <span class="panel-chartNum">40%</span>
                 </div>
             </div>
             <div class="description">
@@ -590,7 +573,7 @@
             <div class="panel-chart">
                 <div class="panel-chart" id="main-charts4"></div>
                 <div class="chartNum-text">
-                    <span class="panel-chartNum">0%</span>
+                    <span class="panel-chartNum">50%</span>
                 </div>
             </div>
             <div class="description">

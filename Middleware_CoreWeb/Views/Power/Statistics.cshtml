@@ -35,11 +35,12 @@
 }
 @section javascript {
     <script src="~/node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="~/js/westeros.js"></script>
     <script>
         // 基于准备好的dom，初始化echarts实例
-        var Chart1 = echarts.init(document.getElementById('main1'));
-        var Chart2 = echarts.init(document.getElementById('main2'));
-        var Chart3 = echarts.init(document.getElementById('main3'));
+        var Chart1 = echarts.init(document.getElementById('main1'),"westeros");
+        var Chart2 = echarts.init(document.getElementById('main2'),"westeros");
+        var Chart3 = echarts.init(document.getElementById('main3'),"westeros");
 
         function ChartGroup(data) {
 

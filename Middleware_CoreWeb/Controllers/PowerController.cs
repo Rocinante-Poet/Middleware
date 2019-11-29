@@ -74,5 +74,9 @@ namespace Middleware_CoreWeb.Controllers
         }
 
         public IActionResult Statistics() => View(new NavigatorBarModel(this));
+
+
+        public IActionResult PersonalCenter() => View(new NavigatorBarModel(this));
+
     }
 }
