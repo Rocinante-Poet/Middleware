@@ -14,6 +14,11 @@
         hideMethod: "fadeOut"
     };
 
+$("[data-toggle='tooltip']").tooltip({
+    //指定显示时延迟和消失时延迟
+    delay: { show: 100, hide: 300 }
+});
+
 //监听div大小变化
 (function ($, h, c) {
     var a = $([]),

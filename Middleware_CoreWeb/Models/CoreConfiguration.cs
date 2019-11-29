@@ -13,7 +13,10 @@ namespace Middleware_CoreWeb
         public static string JwtCookiesTokenKey { get { return "access_token"; } }
 
 
-        public static string DefaultLogin { get { return "/Home/LoginMain"; } }
+        public static string DefaultLogin { get { return "/Home/Login/"; } }
+
+
+        public static string DefaultMain { get { return "/Power/Main/"; } }
 
     }
 }

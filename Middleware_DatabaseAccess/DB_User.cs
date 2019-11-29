@@ -9,6 +9,8 @@ namespace Middleware_DatabaseAccess
 {
     public class DB_User
     {
+        private string CacheKey = "Middleware_User_Cache";
+
         /// <summary>
         /// 登录
         /// </summary>
@@ -45,6 +47,7 @@ namespace Middleware_DatabaseAccess
                 return false;
             else
             {
+                CacheFactory.GetCache.Remove(CacheKey);
                 await connection.InsertAsync<int, JWTUserModel>(_user);//new JWTUserModel { Name = _user.Name, Pwd = _user.Pwd, UserState = _user.UserState, Power_ID = _user.Power_ID, Remark = _user.Remark }
 
                 return true;
@@ -90,6 +93,7 @@ namespace Middleware_DatabaseAccess
             });
         }
 
+
         public bool Add(Userinfo group)
         {
             return CRUD.ExcuteSql(connection =>
@@ -102,6 +106,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
+                CacheFactory.GetCache.Remove(CacheKey);
                 return connection.DeleteList<Userinfo>("WHERE UserID=@id", grouparray) > 0;
             });
         }
@@ -110,6 +115,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
+                CacheFactory.GetCache.Remove(CacheKey);
                 return connection.Update(group) > 0;
             });
         }
@@ -118,7 +124,13 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.GetList<Userinfo>(new { Name = group.Name });
+                var List = CacheFactory.GetCache.Get<IEnumerable<Userinfo>>(CacheKey);
+                if (List == null)
+                {
+                    List = connection.GetList<Userinfo>();
+                    CacheFactory.GetCache.Set(CacheKey, List);
+                }
+                return List.Where(p => p.Name == group.Name);
             });
         }
 
@@ -126,7 +138,13 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
-                return connection.Get<Userinfo>(id);
+                var List = CacheFactory.GetCache.Get<IEnumerable<Userinfo>>(CacheKey);
+                if (List == null)
+                {
+                    List = connection.GetList<Userinfo>();
+                    CacheFactory.GetCache.Set(CacheKey, List);
+                }
+                return List.FirstOrDefault(p => p.id == id);
             });
         }
     }

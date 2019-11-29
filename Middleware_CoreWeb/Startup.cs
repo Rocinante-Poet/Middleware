@@ -125,7 +125,7 @@ namespace Middleware_CoreWeb
             {
                 endpoints.MapControllerRoute(
                           name: "default",
-                          pattern: "{controller=Home}/{action=LoginMain}/{id?}");
+                          pattern: "{controller=Home}/{action=Login}/{id?}");
             });
         }
     }

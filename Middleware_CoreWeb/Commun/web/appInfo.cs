@@ -11,9 +11,20 @@ namespace Middleware_CoreWeb
 {
     public static class appInfo
     {
+        /// <summary>
+        /// 从Token获取用户信息
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static async Task<Userinfo> GetUserAsync(this HttpContext context)
         {
             AuthenticateResult result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+            if (result.Principal == null)
+            {
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(new Basemessage() { state = 500, message = "Token签名错误,请检查是否授权" }.ToJson());
+                return new Userinfo();
+            }
             var ClaimResult = result.Principal.Claims.ToList().FirstOrDefault(x => x.Type == JwtClaimTypes.Id);
             var userId = ClaimResult != null ? ClaimResult.Value.ToInt() : 0;
             var userInfo = new DB_User().GetUser(userId);

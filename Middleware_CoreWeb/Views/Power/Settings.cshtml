@@ -1,0 +1,116 @@
+﻿
+@{
+    Layout = "_Default";
+}
+
+@section css {
+    <style>
+
+    </style>
+}
+@section javascript{
+
+}
+
+<div class="main-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain"><i class="fa fa-home"></i>首页</a></li>
+        <li class="breadcrumb-item">网站设置</li>
+    </ol>
+</div>
+<div class="card">
+    <div class="card-header">网站样式</div>
+    <div class="card-body">
+        @*<div class="alert alert-info" role="alert">
+                <span>注意：本设置将覆盖<b>网站设置</b>中设置的网站样式</span>
+            </div>*@
+        <form class="form-inline">
+            <div class="row">
+                <div class="form-group col-sm-6 col-lg-auto">
+                    <label class="control-label">系统主题</label>
+                    <div class="input-group flex-sm-fill">
+                        <select class="selectpicker selectc" id="messageName" style="text-align: center; text-align-last: center;" name="messageName" data-dropup-auto="false">
+                            <option value="stockOut">默认样式</option>
+                            <option value="boxAnnounce">AdminLTE</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button id="btnSaveCss" data-method="profileCss" class="btn btn-info" type="button">@*<i class="fa fa-save"></i>*@<span>保存</span></button>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <span class="flex-fill">网站缓存</span>
+            <a data-method="clear" href="#" class="fa fa-times-circle-o" title="" data-toggle="tooltip" data-placement="left" data-original-title="全部清除"></a>
+            <a data-method="refresh" href="#" class="fa fa-refresh ml-3" title="" data-toggle="tooltip" data-original-title="点击刷新"></a>
+        </div>
+    </div>
+    <div class="card-body" id="sortable">
+        <div class="card-cache">
+            @*<h6>系统后台数据缓存</h6>*@
+            <div class="cache-item">
+                <i class="fa fa-ellipsis-v"></i>
+                <span data-toggle="tooltip" title="" data-original-title="指定用户授权应用数据缓存">指定用户授权应用数据缓存</span>
+                <span class="badge badge-pill badge-success">600</span>
+                <span title="List`1">List`1</span>
+                <div>
+                    <span></span>
+                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=AppHelper-RetrieveAppsByUserName-Admin" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="AppHelper-RetrieveAppsByUserName-Admin"><i class="fa fa-trash-o"></i></button>
+                </div>
+            </div>
+            <div class="cache-item">
+                <i class="fa fa-ellipsis-v"></i>
+                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
+                <span class="badge badge-pill badge-success">600</span>
+                <span title="List`1">List`1</span>
+                <div>
+                    <span></span>
+                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="cache-item">
+                <i class="fa fa-ellipsis-v"></i>
+                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
+                <span class="badge badge-pill badge-success">600</span>
+                <span title="List`1">List`1</span>
+                <div>
+                    <span></span>
+                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="cache-item">
+                <i class="fa fa-ellipsis-v"></i>
+                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
+                <span class="badge badge-pill badge-success">600</span>
+                <span title="List`1">List`1</span>
+                <div>
+                    <span></span>
+                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="cache-item">
+                <i class="fa fa-ellipsis-v"></i>
+                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
+                <span class="badge badge-pill badge-success">600</span>
+                <span title="List`1">List`1</span>
+                <div>
+                    <span></span>
+                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

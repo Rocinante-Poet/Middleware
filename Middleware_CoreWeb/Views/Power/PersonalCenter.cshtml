@@ -93,14 +93,13 @@
 
 <div class="main-header">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
-        <li class="breadcrumb-item">订单管理</li>
+        <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain"><i class="fa fa-home"></i>首页</a></li>
+        <li class="breadcrumb-item">个人中心</li>
     </ol>
 </div>
 <div class="card">
     <div class="card-header">基本资料</div>
     <div class="card-body" data-toggle="LgbValidate" data-valid-button="#btnSaveDisplayName">
-
         <form class="form-inline">
             <div class="row">
                 <div class="form-group col-sm-6 col-md-auto">
@@ -114,7 +113,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button id="btnSaveDisplayName" data-method="user" class="btn btn-secondary" type="button"><i class="fa fa-save"></i><span>保存</span></button>
+            <button id="btnSaveDisplayName" data-method="user" class="btn btn-info" type="button">@*<i class="fa fa-save"></i>*@<span>保存</span></button>
         </div>
     </div>
 </div>
@@ -143,7 +142,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button id="btnSavePassword" data-method="password" class="btn btn-secondary" type="button"><i class="fa fa-save"></i><span>保存</span></button>
+            <button id="btnSavePassword" data-method="password" class="btn btn-info" type="button">@*<i class="fa fa-save"></i>*@<span>保存</span></button>
         </div>
     </div>
 </div>
