@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Middleware_CoreWeb.Controllers
+namespace Middleware_CoreWeb
 {
     [Authorize]
     public class PowerController : Controller
@@ -79,7 +79,7 @@ namespace Middleware_CoreWeb.Controllers
         public IActionResult PersonalCenter() => View(new NavigatorBarModel(this));
 
 
-        public IActionResult Settings() => View(new NavigatorBarModel(this));
+        public IActionResult Settings() => View(new SettingsModel(this));
 
     }
 }

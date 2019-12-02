@@ -130,7 +130,7 @@ namespace Middleware_Tool
         /// 获取所有缓存键
         /// </summary>
         /// <returns></returns>
-        private List<string> GetCacheKeys()
+        public List<string> GetCacheKeys()
         {
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
             var entries = _cache.GetType().GetField("_entries", flags).GetValue(_cache);

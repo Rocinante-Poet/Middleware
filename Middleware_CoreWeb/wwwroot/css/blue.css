@@ -13,7 +13,7 @@
 }
 
     .navbar-light .navbar-nav .nav-link:hover, .nav-link .navbar-nav .active > .nav-link:hover {
-        color: #0056b3;
+        /*color: #0056b3;*/
     }
 
 .dropdown-item.active, .dropdown-item:active {
@@ -22,11 +22,11 @@
 
 .dropdown-item:hover, .nav .dropdown-item:nth-of-type(odd):hover, .dropdown-item:active, .dropdown-item.active,
 .bootstrap-table .export .dropdown-menu li:hover {
-    background-color: #77afd5;
+    /*background-color: #77afd5;*/
 }
 
 .userinfo .dropdown-item:hover {
-    background-color: #f8f9fa;
+    /*background-color: #f8f9fa;*/
 }
 
 .breadcrumb, .pagination-detail {
@@ -34,8 +34,8 @@
 }
 
 .card-header, .modal-header, .popover-header {
-    background-color: #5899c8;
-    border-color: #3581b8;
+    /*background-color: #5899c8;
+    border-color: #3581b8;*/
     border-radius: 4px 4px 0 0;
 }
 
@@ -58,15 +58,15 @@
 .card, .modal-footer, .form-control, .popover, .date .input-group-text,
 .input-group .btn:not(.btn-secondary):not(.btn-primary):not(.btn-warning):not(.btn-info):not(.btn-danger),
 .form-select-input:hover {
-    border-color: #84bbe2;
+    /*border-color: #84bbe2;*/
 }
 
     .card:hover {
-        border-top-color: #337ab7;
+        /*border-top-color: #337ab7;*/
     }
 
     .card .card-header, .modal-header {
-        background-image: linear-gradient(to bottom, #5893be 0%, #63a6d7 100%);
+        /*background-image: linear-gradient(to bottom, #5893be 0%, #63a6d7 100%);*/
     }
 
         .card .card-header, a[data-toggle="collapse"], .modal-header, .modal-header .close, .popover-header,
@@ -74,24 +74,24 @@
         .card .card-header a:hover,
         .close:not(:disabled):not(.disabled):hover,
         .close:not(:disabled):not(.disabled):focus {
-            color: #fff;
+            /*color: black;*/
         }
 
             .card .card-header a {
-                color: #eee;
+                /*color: #eee;*/
             }
 
 .control-label {
-    color: #467fa7;
+    /*color: #467fa7;*/
 }
 
 .breadcrumb > li + li:before, .breadcrumb, .pagination-detail, .form-select-append {
-    color: #337ab7;
+    /*color: #337ab7;*/
 }
 
 .form-control[disabled], .form-control[readonly], .date .form-control, .date .input-group-text,
 .input-group .btn:not(.btn-secondary):not(.btn-primary):not(.btn-warning):not(.btn-info):not(.btn-danger) {
-    background-color: rgba(84, 189, 220, 0.21);
+    /*background-color: rgba(84, 189, 220, 0.21);*/
 }
 
 .sidebar .nav-sidebar > .nav-item > .nav-link.active {

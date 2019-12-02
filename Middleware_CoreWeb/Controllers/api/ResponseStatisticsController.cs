@@ -36,7 +36,7 @@ namespace Middleware_CoreWeb.Controllers.api
                     break;
             }
 
-            if (data.Count() > 0)
+            if (data.Any())
             {
                 return succeed<Chart>(data);
             }

@@ -113,8 +113,20 @@ namespace Middleware_Tool
         /// </summary>
         public string showName { get; set; }
 
+        /// <summary>
+        ///图像 
+        /// </summary>
+        public string Imgurl { get; set; }
+
+
         [Editable(false)]
         public group_model group { get; set; }
+
+        /// <summary>
+        /// 原密码
+        /// </summary>
+        [Editable(false)]
+        public string originalPwd { get; set; }
     }
 
     [Table("menu")]

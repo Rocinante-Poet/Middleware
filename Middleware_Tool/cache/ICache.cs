@@ -74,5 +74,12 @@ namespace Middleware_Tool
         /// <param name="value"></param>
         /// <returns></returns>
         List<string> GetKeys<T>(T value);
+
+
+        /// <summary>
+        /// 获取所有缓存键
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetCacheKeys();
     }
 }

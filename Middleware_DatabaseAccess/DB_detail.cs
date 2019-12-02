@@ -28,7 +28,7 @@ namespace Middleware_DatabaseAccess
                 CacheFactory.GetCache.Remove(CachedetailKey);
                 var list = new List<detail_model>();
                 detailList.ToList().ForEach(p => list.Add(new detail_model() { groupid = id, menuid = p.id }));
-                if (list.Count() > 0)
+                if (list.Any())
                 {
                     connection.DeleteList<detail_model>("WHERE groupid=@groupid", new { groupid = id }, transaction);
                     return connection.Execute("insert into detail(groupid,menuid) values(@groupid, @menuid)", list, transaction) > 0;

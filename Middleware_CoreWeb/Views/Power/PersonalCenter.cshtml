@@ -17,18 +17,21 @@
         var preIcon = $headerIcon.attr('src');
         var $file = $('#fileIcon');
         var defFileName = $file.attr('data-file');
+        var $btnSaveDisplayName = $('#btnSaveDisplayName');
+        var $displayName = $('#displayName');
+        var $username = $('.show_Name');
+        var $btnSavePassword = $('#btnSavePassword');
         $file.fileinput({
-            uploadUrl: "",
+            uploadUrl: "/api/User/",
             deleteUrl: "",
             layoutTemplates: {
                 actionDelete: '', //去除上传预览的缩略图中的删除图标
-
             },
             browseOnZoneClick: true,
             theme: 'fa',
             language: 'zh',
             maxFileSize: 5000,
-            allowedFileExtensions: ['jpg', 'png', 'bmp', 'gif', 'jpeg'],
+            allowedFileExtensions: ['jpg', 'png', 'bmp', 'gif', 'jpeg','svg'],
             initialPreview: [
                 preIcon
             ],
@@ -64,27 +67,43 @@
                 });
             });
         });
-            //.on('filedeleted', function (event, key, jqXHR, data) {
-            //    console.log("2555");
-            //    $headerIcon.attr('src', $.formatUrl('images/uploader/default.jpg'));
-            //});
 
-            //$.fn.fileinput.Constructor.prototype.default = function () {
-            //      console.log("2555");
 
-            //    $.extend(this, {
-            //        initialPreview: [
-            //            $.formatUrl('images/uploader/default.jpg')
-            //        ],
-            //        initialPreviewConfig: [
-            //            { caption: "", size: 7195, showZoom: true, showRemove: false, key: 'default.jpg' }
-            //        ]
-            //    });
-            //    this._initPreviewCache();
-            //    this._initPreview(true);
-            //    this._initPreviewActions();
-            //    this._initZoom();
-            //};
+        $btnSaveDisplayName.on('click', function () {
+            if ($displayName.val() != "")
+                edit('/api/User/1', { "showName": $displayName.val() });
+        });
+
+
+        $btnSavePassword.click(function () {
+            if ($('#confirmPassword').val() != "" && $('#currentPassword').val() != "" && $('#newPassword').val() != "")
+                edit('/api/User/2', { "Pwd": $('#confirmPassword').val(), "originalPwd": $('#currentPassword').val() });
+        });
+
+
+        function edit(_url, _data) {
+            $.ajax({
+                url: _url,
+                type: "Put",
+                dataType: "json",
+                data: JSON.stringify(_data),
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state == 200) {
+                        $('#dataFormPassword').find(".form-control").val("");
+                        $username.text($displayName.val());
+                        toastr.success(res.message);
+                    }
+                    else {
+                        toastr.error(res.message);
+                    }
+                },
+                error: function (e) {
+                    toastr.error(e.responseText);
+                }
+            });
+        }
+
     </script>
 
 
@@ -100,10 +119,10 @@
 <div class="card">
     <div class="card-header">基本资料</div>
     <div class="card-body" data-toggle="LgbValidate" data-valid-button="#btnSaveDisplayName">
-        <form class="form-inline">
+        <form class="form-inline" id="dataForm">
             <div class="row">
                 <div class="form-group col-sm-6 col-md-auto">
-                    <label class="control-label" for="userName">登录名称</label>
+                    <label class="control-label" for="userName">登录账户</label>
                     <input type="text" class="form-control ignore" id="userName" name="userName" value="@((await Model.GetUserinfo()).Name)" readonly="">
                 </div>
                 <div class="form-group col-sm-6 col-md-auto">
@@ -120,10 +139,7 @@
 <div class="card" asp-auth="savePassword">
     <div class="card-header">修改密码</div>
     <div class="card-body" data-toggle="LgbValidate" data-valid-button="#btnSavePassword">
-        @*<div class="alert alert-danger" role="alert">
-                <span>演示系统禁止更改管理员密码</span>
-            </div>*@
-        <form class="form-inline">
+        <form class="form-inline" id="dataFormPassword">
             <div class="row">
                 <div class="form-group col-sm-6 col-md-auto">
                     <label class="control-label" for="currentPassword">原密码: </label>

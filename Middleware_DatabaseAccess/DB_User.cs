@@ -98,6 +98,7 @@ namespace Middleware_DatabaseAccess
         {
             return CRUD.ExcuteSql(connection =>
             {
+                CacheFactory.GetCache.Remove(CacheKey);
                 return connection.ExecuteAsync(group) > 0;
             });
         }
@@ -111,12 +112,12 @@ namespace Middleware_DatabaseAccess
             });
         }
 
-        public bool Update(Userinfo group)
+        public bool Update(Userinfo user)
         {
             return CRUD.ExcuteSql(connection =>
             {
                 CacheFactory.GetCache.Remove(CacheKey);
-                return connection.Update(group) > 0;
+                return connection.Update(user) > 0;
             });
         }
 

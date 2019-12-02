@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware_Tool", "Middlewa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware_DatabaseAccess", "Middleware_DatabaseAccess\Middleware_DatabaseAccess.csproj", "{BE5C30DE-E5D2-4481-9675-C4A422D24CFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleware_DatabaseAccessTests", "Middleware_DatabaseAccessTests\Middleware_DatabaseAccessTests.csproj", "{DEDEA8DB-17A5-4F84-9492-7E27693BB0ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware_Tests", "Middleware_DatabaseAccessTests\Middleware_Tests.csproj", "{DEDEA8DB-17A5-4F84-9492-7E27693BB0ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -26,5 +26,21 @@ namespace Middleware_CoreWeb
 
 
         public async Task<Userinfo> GetUserinfo() => await controllerBase.HttpContext.GetUserAsync();
+
+        public string CoreWebTheme
+        {
+            get
+            {
+                var _WebTheme = controllerBase.HttpContext.GetCookie("WebTheme");
+                if (!string.IsNullOrWhiteSpace(_WebTheme))
+                {
+                    return _WebTheme;
+                }
+                else
+                {
+                    return "lte";
+                }
+            }
+        }
     }
 }
