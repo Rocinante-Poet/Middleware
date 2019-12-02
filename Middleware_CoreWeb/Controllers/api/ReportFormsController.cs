@@ -10,7 +10,7 @@ using Middleware_Tool;
 
 namespace Middleware_CoreWeb.Controllers.api
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReportFormsController : ApiBaseController
@@ -30,7 +30,7 @@ namespace Middleware_CoreWeb.Controllers.api
                     data = Get__StatisticsDb.GetErrorType();
                     break;
             }
-            if (data.Count() > 0)
+            if (data.Any())
             {
                 return succeed<Chart>(data);
             }
@@ -43,7 +43,7 @@ namespace Middleware_CoreWeb.Controllers.api
         public Basemessage Get()
         {
             var data = Get__StatisticsDb.GetErrorGroup();
-            if (data.Count() > 0)
+            if (data.Any())
             {
                 return succeed<ChartError<int>>(data);
             }

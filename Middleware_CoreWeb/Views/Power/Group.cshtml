@@ -396,11 +396,11 @@
                                     <div class="dd-handle dd3-handle"></div>
                                     <div class="dd3-content">
                                         <div class="checkbox">
-                                            <label><input type="checkbox" value="@itemMenu.FatherItem.id" group="@(itemMenu.sonMenuItem.Count()>0 ? 1:0)"><span><i class="@itemMenu.FatherItem.icon"></i>@itemMenu.FatherItem.name</span></label>
+                                            <label><input type="checkbox" value="@itemMenu.FatherItem.id" group="@(itemMenu.sonMenuItem.Any() ? 1:0)"><span><i class="@itemMenu.FatherItem.icon"></i>@itemMenu.FatherItem.name</span></label>
                                         </div>
                                         <span class="menuType">系统菜单</span><span class="menuOrder">@itemMenu.FatherItem.id</span>
                                     </div>
-                                    @if (itemMenu.sonMenuItem.Count() > 0)
+                                    @if (itemMenu.sonMenuItem.Any())
                                     {
                                         <ol class="dd-list">
                                             @foreach (var Sonitem in itemMenu.sonMenuItem)

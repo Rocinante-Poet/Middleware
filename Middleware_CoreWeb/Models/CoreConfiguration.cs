@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Middleware_Tool;
 
 namespace Middleware_CoreWeb
 {
-    public class CoreConfiguration
+    public  static class CoreConfiguration
     {
         public static string CookiesUserKey { get { return "access_User"; } }
 

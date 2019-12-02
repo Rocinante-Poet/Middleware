@@ -1,17 +1,61 @@
-﻿
+﻿@model SettingsModel
 @{
     Layout = "_Default";
 }
 
 @section css {
     <style>
-
     </style>
 }
 @section javascript{
+    <script>
+        $(function () {
+            var $btnSaveCss = $('#btnSaveCss');
+
+            $btnSaveCss.click(function () {
+                $.ajax({
+                    url: '/api/sysconfig',
+                    type: "get",
+                    data: { 'themeName': $('#themeList').val() },
+                    success: function (res) {
+                        if (res.state == 200) {
+                            toastr.success(res.message);
+                            setTimeout(function () { window.location.reload(); }, 500);
+                        }
+                        else {
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
+                    }
+                });
+            });
+
+            $('#ClearCache').click(function () {
+               $.ajax({
+                    url: '/api/sysconfig',
+                    type: "POST",
+                    success: function (res) {
+                        if (res.state == 200) {
+                            toastr.success(res.message);
+                            setTimeout(function () { window.location.reload(); }, 500);
+                        }
+                        else {
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
+                    }
+                });
+            });
+
+            $('#refreshCache').click(function () {window.location.reload(); });
+        });
+    </script>
 
 }
-
 <div class="main-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain"><i class="fa fa-home"></i>首页</a></li>
@@ -29,9 +73,17 @@
                 <div class="form-group col-sm-6 col-lg-auto">
                     <label class="control-label">系统主题</label>
                     <div class="input-group flex-sm-fill">
-                        <select class="selectpicker selectc" id="messageName" style="text-align: center; text-align-last: center;" name="messageName" data-dropup-auto="false">
-                            <option value="stockOut">默认样式</option>
-                            <option value="boxAnnounce">AdminLTE</option>
+                        <select class="selectpicker selectc" id="themeList" style="text-align: center; text-align-last: center;" name="messageName" data-dropup-auto="false">
+                            @if (Model.CoreWebTheme == "lte")
+                            {
+                                <option value="lte" selected>默认样式</option>
+                                <option value="blue" >Blue</option>
+                            }
+                            else
+                            {
+                                <option value="lte">默认样式</option>
+                                <option value="blue" selected>Blue</option>
+                            }
                         </select>
                     </div>
                 </div>
@@ -46,71 +98,28 @@
     <div class="card-header">
         <div class="d-flex align-items-center">
             <span class="flex-fill">网站缓存</span>
-            <a data-method="clear" href="#" class="fa fa-times-circle-o" title="" data-toggle="tooltip" data-placement="left" data-original-title="全部清除"></a>
-            <a data-method="refresh" href="#" class="fa fa-refresh ml-3" title="" data-toggle="tooltip" data-original-title="点击刷新"></a>
+            <a data-method="clear" href="#" class="fa fa-times-circle-o" id="ClearCache" title="" data-toggle="tooltip" data-placement="left" data-original-title="全部清除"></a>
+            <a data-method="refresh" href="#" class="fa fa-refresh ml-3" id="refreshCache"  title="" data-toggle="tooltip" data-original-title="点击刷新"></a>
         </div>
     </div>
     <div class="card-body" id="sortable">
         <div class="card-cache">
-            @*<h6>系统后台数据缓存</h6>*@
-            <div class="cache-item">
-                <i class="fa fa-ellipsis-v"></i>
-                <span data-toggle="tooltip" title="" data-original-title="指定用户授权应用数据缓存">指定用户授权应用数据缓存</span>
-                <span class="badge badge-pill badge-success">600</span>
-                <span title="List`1">List`1</span>
-                <div>
-                    <span></span>
-                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=AppHelper-RetrieveAppsByUserName-Admin" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="AppHelper-RetrieveAppsByUserName-Admin"><i class="fa fa-trash-o"></i></button>
+            <h6>系统后台数据缓存</h6>
+            @foreach (var item in Model.CacheKeyList)
+            {
+                <div class="cache-item">
+                    <i class="fa fa-ellipsis-v"></i>
+                    <span data-toggle="tooltip" title="" data-original-title="@item">@item</span>
+                    <span class="badge badge-pill badge-success"></span>
+                    <span title="List`1"></span>
+                    <div>
+                        <span></span>
+                        <button class="btn btn-danger" style="display:none"  data-toggle="tooltip" data-self="true" data-placement="left" >
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="cache-item">
-                <i class="fa fa-ellipsis-v"></i>
-                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
-                <span class="badge badge-pill badge-success">600</span>
-                <span title="List`1">List`1</span>
-                <div>
-                    <span></span>
-                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="cache-item">
-                <i class="fa fa-ellipsis-v"></i>
-                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
-                <span class="badge badge-pill badge-success">600</span>
-                <span title="List`1">List`1</span>
-                <div>
-                    <span></span>
-                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="cache-item">
-                <i class="fa fa-ellipsis-v"></i>
-                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
-                <span class="badge badge-pill badge-success">600</span>
-                <span title="List`1">List`1</span>
-                <div>
-                    <span></span>
-                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="cache-item">
-                <i class="fa fa-ellipsis-v"></i>
-                <span data-toggle="tooltip" title="" data-original-title="所有字典数据缓存">所有字典数据缓存</span>
-                <span class="badge badge-pill badge-success">600</span>
-                <span title="List`1">List`1</span>
-                <div>
-                    <span></span>
-                    <button class="btn btn-danger" title="" data-url="CacheList.axd?cacheKey=BootstrapDict-RetrieveDicts" data-toggle="tooltip" data-self="true" data-placement="left" data-original-title="BootstrapDict-RetrieveDicts">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>
