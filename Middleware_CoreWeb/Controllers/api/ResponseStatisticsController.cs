@@ -17,39 +17,10 @@ namespace Middleware_CoreWeb.Controllers.api
     {
         private DB_Task db = new DB_Task();
 
-        [HttpGet("{id}")]
-        public Basemessage Get(int id)
-        {
-            IEnumerable<Chart> data = new List<Chart>();
-            switch (id)
-            {
-                case 1:
-                    //data = db.GetStatisticsR();
-                    break;
-
-                case 10:
-                    data = db.GetTables(id);
-                    break;
-
-                case 11:
-                    data = db.GetTables(id);
-                    break;
-            }
-
-            if (data.Count() > 0)
-            {
-                return succeed<Chart>(data);
-            }
-            else
-            {
-                return Error();
-            }
-        }
-
         [HttpGet("Stack")]
-        public ChartDataPile ViveStack([FromQuery]string txt)
+        public ChartDataPile ViveStack([FromQuery]string txt, string line, string sum)
         {
-            ChartDataPile dt = db.GetChartDataWorkshop(txt);
+            ChartDataPile dt = db.GetChartDataWorkshop(txt, line, sum);
 
             return dt;
         }

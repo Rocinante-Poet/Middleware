@@ -51,21 +51,7 @@ namespace Middleware_DatabaseAccess
 
         #region 统计
 
-        public IEnumerable<Chart> GetTables(int id)
-        {
-            var connection = CRUD.GetOpenConnection();
-
-            if (id == 10)
-            {
-                return connection.Query<Chart>("select table_name name from information_schema.tables where table_schema='wcs' and table_name regexp '^signaliolog';");
-            }
-            else
-            {
-                return connection.Query<Chart>("select table_name name from information_schema.tables where table_schema='wcs' and table_name regexp '^workshoplog';");
-            }
-        }
-
-        public ChartDataPile GetChartDataWorkshop(string txt)
+        public ChartDataPile GetChartDataWorkshop(string txt, string line, string sum)
         {
             var connection = CRUD.GetOpenConnection();
 
@@ -81,19 +67,18 @@ namespace Middleware_DatabaseAccess
             //    connection.Execute($"INSERT INTO `wcs`.`workshoplog`(`Id`, `WSnum`, `WScommand`, `WSanswer`, `WStime`, `WHPrepare`, `AGVstart`, `AGVend`) VALUES ({i}, {random.Next(9, 13)}, '{sr[random.Next(0, 6)]}', 10, '{a}', '{b}', '{c}', '{y}')");
             //}
 
-            List<workshoplog_model> d = connection.Query<workshoplog_model>($"SELECT * FROM `wcs`.`workshoplog` WHERE `WScommand` = '{txt}' LIMIT 0,100").AsList();
+            List<workshoplog_model> d = connection.Query<workshoplog_model>($"SELECT * FROM `wcs`.`workshoplog` WHERE `WScommand` = '{txt}' AND `WSnum` = '{line}' LIMIT 0,{sum}").AsList();
 
             ChartDataPile cdp = new ChartDataPile();
 
             foreach (workshoplog_model w in d)
             {
-                if (w.WSanswer == 10 || w.WSanswer == 20)
                 {
                     if (w.WScommand == "成品" || w.WScommand == "返料")
                     {
                         if (!string.IsNullOrWhiteSpace(w.WStime) && !string.IsNullOrWhiteSpace(w.AGVstart) && !string.IsNullOrWhiteSpace(w.AGVend))
                         {
-                            cdp.xAxisTitle.Add($"{w.WStime}");
+                            cdp.xAxisTitle.Add($"{w.WStime.Substring(5, 11)}");
                             cdp.timeA.Add($"{(w.AGVstart.ToDateStr() - w.WStime.ToDateStr()).TotalSeconds}".ToInt());
                             cdp.timeB.Add(0);
                             cdp.timeC.Add($"{(w.AGVend.ToDateStr() - w.AGVstart.ToDateStr()).TotalSeconds}".ToInt());
@@ -103,7 +88,7 @@ namespace Middleware_DatabaseAccess
                     {
                         if (!string.IsNullOrWhiteSpace(w.WStime) && !string.IsNullOrWhiteSpace(w.WHPrepare) && !string.IsNullOrWhiteSpace(w.AGVstart) && !string.IsNullOrWhiteSpace(w.AGVend))
                         {
-                            cdp.xAxisTitle.Add($"{w.WStime}");
+                            cdp.xAxisTitle.Add($"{w.WStime.Substring(5, 11)}");
                             cdp.timeA.Add($"{(w.AGVstart.ToDateStr() - w.WStime.ToDateStr()).TotalSeconds}".ToInt());
                             cdp.timeB.Add($"{(w.AGVstart.ToDateStr() - w.WHPrepare.ToDateStr()).TotalSeconds}".ToInt());
                             cdp.timeC.Add($"{(w.AGVend.ToDateStr() - w.AGVstart.ToDateStr()).TotalSeconds}".ToInt());

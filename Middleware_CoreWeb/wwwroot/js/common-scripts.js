@@ -106,7 +106,6 @@ $(function () {
     // enable animoation effect
     $('body').removeClass('trans-mute');
 
-
     $('button[data-method="clear"]').on('click', function () {
         $(this).parent('.input-group-append').prev('input').val('');
     });
@@ -161,9 +160,7 @@ $(function () {
         $('body').toggleClass('sidebar-open');
     });
 
-
     window.CheckboxHtmlTemplate = '<div class="form-group col-md-3 col-sm-4 col-6"><label title="{3}" data-toggle="tooltip" role="checkbox" aria-checked="false" class="form-checkbox is-{2}"><span class="checkbox-input"><span class="checkbox-inner"></span><input type="checkbox" value="{0}" {2} /></span><span class="checkbox-label">{1}</span></label></div>';
-
 
     //$(window).on('resize', function () {
     //    $sidebar.addNiceScroll();

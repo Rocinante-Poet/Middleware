@@ -140,7 +140,7 @@
     <div class="nav-brand justify-content-center">
         <a href="#">
             @*<img src="~/images/favicon.svg" asp-append-version="true" />*@
-            <span>WCS后台管理系统</span>
+            <span>WCS</span>
         </a>
     </div>
     <div class="nav-header flex-fill align-items-center">
@@ -155,7 +155,7 @@
             @foreach (var itemMenu in await Model.NavigatorBarList())
             {
                 <li class="nav-item @(itemMenu.sonMenuItem.Count() > 0 ? "parent" : "")">
-                    @if (itemMenu.sonMenuItem.Count() >0)
+                    @if (itemMenu.sonMenuItem.Count() > 0)
                     {
                         <a href="@(itemMenu.sonMenuItem.Count() == 0 ? itemMenu.FatherItem.url:$"#collapse_{itemMenu.FatherItem.id}")" role="button" data-toggle="collapse" class="nav-link @(itemMenu.FatherItem.Active?"active":"collapse")">
                             <i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span><i class="fa fa-angle-left"></i>
@@ -197,7 +197,7 @@
     <script src="~/js/popper.min.js"></script>
     <script src="~/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     @*<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>*@
+        <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>*@
     @RenderSection("javascript", false)
-    <script src="~/js/common-scripts.js"></script>
+    @*<script src="~/js/common-scripts.js"></script>*@
 }

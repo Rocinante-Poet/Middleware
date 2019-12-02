@@ -1029,8 +1029,6 @@ a:focus {
         background-color: #B3B3B3;
     }
 
-
-
 -moz-scrollbar {
     width: 9px;
     height: 9px;
@@ -1062,8 +1060,6 @@ a:focus {
     -moz-scrollbar-thumb:hover {
         background-color: #B3B3B3;
     }
-
-
 
 .label-success {
     background-color: #5cb85c;

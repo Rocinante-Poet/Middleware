@@ -19,9 +19,9 @@
             var oTable = new TableInit();
             oTable.Init();
             $('#btn_repeat').on('click', function () {
-                $("#txt_errorType").val("");
+                $('#txt_errorType').selectpicker('val', 0);
                 $("#txt_errorCode").val("");
-                $("#txt_sbType").val("");
+                $('#txt_sbType').selectpicker('val', 0);
                 $("#txt_sbName").val("");
                 $("#TableGroup").bootstrapTable('refresh');
             });
@@ -185,10 +185,10 @@
                     limit: params.limit,   //页面大小
                     offset: params.offset, //页码
 
-                    sbType: $("#txt_sbType").val(),
+                    sbType: $("#txt_sbType").val() == 0 ? "" : $("#txt_sbType").val(),
                     sbName: $("#txt_sbName").val(),
                     errorCode: $("#txt_errorCode").val(),
-                    errorType: $("#txt_errorType").val(),
+                    errorType: $("#txt_errorType").val() == 0 ? "" : $("#txt_errorType").val(),
                 };
                 return temp;
             };
@@ -209,17 +209,33 @@
 
         <form class="form-inline">
             <div class="row">
+
                 <div class="form-group col-sm-6 col-lg-auto">
                     <label class="control-label">错误类型</label>
-                    <input type="text" class="form-control" id="txt_errorType">
+                    <div class="input-group flex-sm-fill">
+                        <select class="selectpicker selectc group-select" id="txt_errorType" data-dropup-auto="false">
+                            <option value="0">请选择</option>
+                            <option value="1">一般错误</option>
+                            <option value="2">设备异常</option>
+                            <option value="3">人工干预</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="form-group col-sm-6 col-lg-auto">
                     <label class="control-label">错误代码</label>
                     <input type="text" class="form-control" id="txt_errorCode">
                 </div>
                 <div class="form-group col-sm-6 col-lg-auto">
                     <label class="control-label">设备类型</label>
-                    <input type="text" class="form-control" id="txt_sbType">
+                    <div class="input-group flex-sm-fill">
+                        <select class="selectpicker selectc group-select" id="txt_sbType" data-dropup-auto="false">
+                            <option value="0">请选择</option>
+                            <option value="1">磁导设备</option>
+                            <option value="2">激光导航</option>
+                            <option value="3">环境导航</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group col-sm-6 col-lg-auto">
                     <label class="control-label">设备名称</label>

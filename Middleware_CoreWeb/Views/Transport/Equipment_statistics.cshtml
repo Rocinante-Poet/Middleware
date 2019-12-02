@@ -47,15 +47,17 @@
         $('#btn_repeat').on('click', function () {
             $('#menuSelectA').selectpicker('val', 0);
             $('#menuSelectB').selectpicker('val', 0);
+            $('#menuSelectC').selectpicker('val', 50);
         });
 
         $.ajax({
             url: '/api/ResponseStatistics/Stack/',
-            data: { txt: "成品" },
+            data: { txt: "成品", line: "9", sum: "50" },
             type: "get",
             contentType: 'application/json',
             success: function (res) {
                 if (res != null) {
+                    document.getElementById("title_txt1").innerHTML = "第9产线 成品";
                     viewAbinding(res);
                 }
             },
@@ -64,20 +66,29 @@
             }
         });
 
-        $("#menuSelectB").change(function () {
-            $.ajax({
-                url: '/api/ResponseStatistics/Stack/',
-                data: { txt: $("#menuSelectB").val() },
-                type: "Get",
-                success: function (res) {
-                    if (res != null) {
-                        viewAbinding(res);
+        $("#btn_query").on('click', function () {
+            if ($("#menuSelectA").val() == 0) {
+                toastr.error("请选择产线");
+            }
+            if ($("#menuSelectB").val() == 0) {
+                toastr.error("请选择任务类型");
+            }
+            if ($("#menuSelectB").val() != 0) {
+                $.ajax({
+                    url: '/api/ResponseStatistics/Stack/',
+                    data: { txt: $("#menuSelectB").val(), line: $("#menuSelectA").val(), sum: $("#menuSelectC").val() },
+                    type: "Get",
+                    success: function (res) {
+                        if (res != null) {
+                            document.getElementById("title_txt1").innerHTML = "第" + $("#menuSelectA").val() + "产线 " + $("#menuSelectB").val();
+                            viewAbinding(res);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error(e.responseText);
                     }
-                },
-                error: function (e) {
-                    toastr.error(e.responseText);
-                }
-            });
+                });
+            }
         });
 
         function viewAbinding(data) {
@@ -89,7 +100,7 @@
                     }
                 },
                 legend: {
-                    data: ['开始时间', '准备时间', '完成时间']
+                    data: ['开始时间(s)', '准备时间(s)', '完成时间(s)']
                 },
                 grid: {
                     left: '3%',
@@ -110,48 +121,24 @@
                     }
                 ],
                 series: [{
-                    name: '开始时间',
+                    name: '开始时间(s)',
                     type: 'bar',
                     stack: 'rw',
                     data: data.timeA
                 }, {
-                    name: '准备时间',
+                    name: '准备时间(s)',
                     type: 'bar',
                     stack: 'rw',
                     data: data.timeB
                 }, {
-                    name: '完成时间',
+                    name: '完成时间(s)',
                     type: 'bar',
                     stack: 'rw',
                     data: data.timeC
                 }]
             };
-            myChart1.setOption(option, true);
+            myChart1.setOption(option);
         };
-
-        //$("#menuSelectA").change(function () {
-        //    selectedA = $("#menuSelectA").val();
-        //    $.ajax({
-        //        url: '/api/ResponseStatistics/' + $("#menuSelectA").val(),
-        //        type: "get",
-        //        contentType: 'application/json',
-        //        success: function (res) {
-        //            if (res.state == 200) {
-        //                //var html = '';
-        //                //html += '<option selected value="0">请选择</option>';
-        //                //res.data.forEach(function (item, index) {
-        //                //    html += '<option value="' + item.name + '">' + item.name + '</option>';
-        //                //});
-        //                //console.log(html);
-        //                //$('#menuSelectB').html(html);
-        //                //$('#menuSelectB').selectpicker('refresh');
-        //            }
-        //        },
-        //        error: function (e) {
-        //            toastr.error(e.responseText);
-        //        }
-        //    });
-        //});
 
         $(window).resize(function () {
             myChart1.resize();
@@ -171,12 +158,14 @@
         <form class="form-inline">
             <div class="row">
                 <div class="form-group col-sm-6 col-lg-auto">
-                    <label class="control-label" for="txt_select">选择类型</label>
+                    <label class="control-label" for="txt_select">选择产线</label>
                     <div class="input-group flex-sm-fill">
                         <select class="selectpicker selectc group-select" id="menuSelectA" data-dropup-auto="false">
                             <option value="0">请选择</option>
-                            @*<option value="signaliolog">支持响应时间统计</option>*@
-                            <option value="workshoplog">任务响应时间统计</option>
+                            <option value="9" selected>L9</option>
+                            <option value="10">L10</option>
+                            <option value="11">L11</option>
+                            <option value="12">L12</option>
                         </select>
                     </div>
                 </div>
@@ -185,7 +174,7 @@
                     <div class="input-group flex-sm-fill">
                         <select class="selectpicker selectc group-select" id="menuSelectB" data-dropup-auto="false">
                             <option value="0">请选择</option>
-                            <option value="成品">成品</option>
+                            <option value="成品" selected>成品</option>
                             <option value="返料">返料</option>
                             <option value="外纸箱">外纸箱</option>
                             <option value="小纸盒">小纸盒</option>
@@ -195,15 +184,34 @@
                     </div>
                 </div>
 
+                <div class="form-group col-sm-6 col-lg-auto">
+                    <label class="control-label" for="txt_select">选择数量</label>
+                    <div class="input-group flex-sm-fill">
+                        <select class="selectpicker selectc group-select" id="menuSelectC" data-dropup-auto="false">
+                            <option value="50" selected>50条</option>
+                            <option value="100">100条</option>
+                            <option value="150">150条</option>
+                            <option value="200">150条</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-group col-sm-6 col-lg-auto flex-sm-fill justify-content-sm-end align-self-sm-end">
+                    <button style="margin:3px" type="button" id="btn_query" class="btn btn-primary btn-fill"><i class="fa fa-search" aria-hidden="true"></i><span>查询</span></button>
                     <button style="margin:3px" type="button" id="btn_repeat" class="btn btn-primary btn-fill"><i class="fa fa-repeat" aria-hidden="true"></i><span>重置</span></button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<div class="container-fluid">
-    <div id="container1"></div>
-    <div id="container2" class="col"></div>
-    <div id="container3" class="col"></div>
+<div>
+    <div class="card">
+        <div class="card-header" id="title_txt1"></div>
+        <div id="container1"></div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="title_txt2"></div>
+        <div id="container2" class="col"></div>
+        <div id="container3" class="col"></div>
+    </div>
 </div>
