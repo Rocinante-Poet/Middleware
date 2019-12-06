@@ -37,7 +37,6 @@ namespace Middleware_DatabaseAccess
 
         public IEnumerable<ChartError<int>> GetErrorGroup()
         {
-            //GetMainChart();
             return CRUD.ExcuteSql(connection =>
             {
                 var listTime = Date.WeekTime();

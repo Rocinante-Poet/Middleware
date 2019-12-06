@@ -12,7 +12,7 @@ namespace Middleware_Tests
         [TestMethod()]
         public void GetChartDataWorkshopTest()
         {
-            new DB_Task().GetChartDataWorkshop("workshoplog1911");
+            //new DB_Task().GetChartDataWorkshop("workshoplog1911");
         }
     }
 }

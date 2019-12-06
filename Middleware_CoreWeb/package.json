@@ -17,7 +17,7 @@
     "bootbox": "5.3.4",
     "nestable2": "1.6.0",
     "echarts": "4.5.0",
-    "bootstrap-datetimepicker.js": "1.0.0"
+    "bootstrap-datetimepicker.js": "1.0.0",
     "echarts": "4.5.0",
     "bootstrap-fileinput": "5.0.7"
   }

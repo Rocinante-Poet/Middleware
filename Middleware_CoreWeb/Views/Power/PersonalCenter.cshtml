@@ -74,7 +74,6 @@
                 edit('/api/User/1', { "showName": $displayName.val() });
         });
 
-
         $btnSavePassword.click(function () {
             if ($('#confirmPassword').val() != "" && $('#currentPassword').val() != "" && $('#newPassword').val() != "")
                 edit('/api/User/2', { "Pwd": $('#confirmPassword').val(), "originalPwd": $('#currentPassword').val() });

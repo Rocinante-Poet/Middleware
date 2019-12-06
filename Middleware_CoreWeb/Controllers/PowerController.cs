@@ -35,7 +35,7 @@ namespace Middleware_CoreWeb
         public IActionResult QuestionandAnswer()
         {
             MarkDownList md = new MarkDownList(this);
-            string _ndc = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\ndc.md"}", Encoding.UTF8);
+            string _ndc = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"/wwwroot/QA/ndc.md".Replace('/', Path.DirectorySeparatorChar)}", Encoding.UTF8);
 
             md.Listmd.Add(new MarkDownText()
             {
@@ -43,28 +43,28 @@ namespace Middleware_CoreWeb
                 MdContent = new MarkdownSharp.Markdown().Transform(_ndc)
             });
 
-            string _agv = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\agv.md"}", Encoding.UTF8);
+            string _agv = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"/wwwroot/QA/agv.md".Replace('/', Path.DirectorySeparatorChar)}", Encoding.UTF8);
             md.Listmd.Add(new MarkDownText()
             {
                 MdTitle = "agv",
                 MdContent = new MarkdownSharp.Markdown().Transform(_agv)
             });
 
-            string _a = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\2019-09-26 子网掩码.md"}", Encoding.UTF8);
+            string _a = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"/wwwroot/QA/2019-09-26.md".Replace('/', Path.DirectorySeparatorChar)}", Encoding.UTF8);
             md.Listmd.Add(new MarkDownText()
             {
                 MdTitle = "a",
                 MdContent = new MarkdownSharp.Markdown().Transform(_a)
             });
 
-            string _b = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\2018-10-06 被感染的蚂蚁会主动隔离自己.md"}", Encoding.UTF8);
+            string _b = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"/wwwroot/QA/2018-10-06.md".Replace('/', Path.DirectorySeparatorChar)}", Encoding.UTF8);
             md.Listmd.Add(new MarkDownText()
             {
                 MdTitle = "b",
                 MdContent = new MarkdownSharp.Markdown().Transform(_b)
             });
 
-            string _c = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"\wwwroot\QA\2019-01-03 WPF查找子控件.md"}", Encoding.UTF8);
+            string _c = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}{@"/wwwroot/QA/2019-01-03.md".Replace('/', Path.DirectorySeparatorChar)}", Encoding.UTF8);
             md.Listmd.Add(new MarkDownText()
             {
                 MdTitle = "c",
