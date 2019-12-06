@@ -3,202 +3,316 @@
     Layout = "_BaseLayout";
 }
 @section css {
-    <link href="~/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <link href="~/node_modules/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Theme style -->
     <link href="~/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    @*<link href="~/node_modules/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />*@
+    <link href="~/LTE/css/adminlte.min.css" rel="stylesheet" />
     @RenderSection("css", false)
-    <link href="~/css/theme.css" rel="stylesheet" />
-    <link href="~/css/theme-responsive.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
-    <link href="~/css/site-responsive.css" rel="stylesheet" />
-    @*<link href="~/css/lte.css" rel="stylesheet" />*@
-     <link href="~/css/@(Model.CoreWebTheme).css" rel="stylesheet" />
-}
-<header class="header">
-    <div class="bg"></div>
-    <div class="d-flex align-items-center">
-        <a id="navbar" href="#" class="sidebar-toggle-box">
-            <i class="fa fa-bars"></i>
-            <span id="websiteTitle">后台管理系统</span>
-        </a>
-        <div class="nav">
-            <!-- tasks start -->
-            <div class="dropdown">
-                <a data-toggle="dropdown" class="shadow-primary" href="#">
-                    <i class="fa fa-tasks"></i>
-                    <span id="msgHeaderTaskBadge" class="badge badge-pill badge-primary"></span>
-                </a>
-                <div class="dropdown-menu">
-                    <div class="dropdown-arrow arrow-primary"></div>
-                    <div id="msgHeaderTaskContent" class="dropdown-header bg-primary">您有 <span id="msgHeaderTask">0</span> 个未完成的任务</div>
-                    <div class="dropdown-footer">
-                        <a href="/Admin/Tasks">查看所有任务</a>
-                    </div>
-                </div>
-            </div>
-            <!-- tasks end -->
-            <!-- message dropdown start-->
-            <div class="dropdown">
-                <a data-toggle="dropdown" class="shadow-info" href="#">
-                    <i class="fa fa-envelope"></i>
-                    <span id="msgHeaderMsgBadge" class="badge badge-pill badge-info"></span>
-                </a>
-                <div class="dropdown-menu">
-                    <div class="dropdown-arrow arrow-info"></div>
-                    <div id="msgHeaderMsgContent" class="dropdown-header bg-info">您有 <span id="msgHeaderMsg">0</span> 个未读的消息</div>
-                    <div class="dropdown-footer">
-                        <a href="/Admin/Messages">查看所有消息</a>
-                    </div>
-                </div>
-            </div>
-            <!-- message dropdown end -->
-            <!-- users dropdown start-->
-            <div class="dropdown">
-                <a data-toggle="dropdown" class="shadow-success" href="#">
-                    <i class="fa fa-user-plus"></i>
-                    <span id="msgHeaderUserBadge" class="badge badge-pill badge-success"></span>
-                </a>
-                <div class="dropdown-menu">
-                    <div class="dropdown-arrow arrow-success"></div>
-                    <div id="msgHeaderUserContent" class="dropdown-header bg-success">您有 <span id="msgHeaderUser">0</span> 条新用户通知</div>
-                    <div class="dropdown-footer">
-                        <a href="/Admin/Notifications">查看所有通知</a>
-                    </div>
-                </div>
-            </div>
-            <!-- users dropdown end -->
-            <!-- apps dropdown start-->
-            <div class="dropdown">
-                <a data-toggle="dropdown" class="shadow-warning" href="#">
-                    <i class="fa fa-bug"></i>
-                    <span id="msgHeaderAppBadge" class="badge badge-pill badge-warning"></span>
-                </a>
-                <div class="dropdown-menu">
-                    <div class="dropdown-arrow arrow-warning"></div>
-                    <div id="msgHeaderAppContent" class="dropdown-header bg-warning">您有 <span id="msgHeaderApp">0</span> 条程序异常通知</div>
-                    <div class="dropdown-footer">
-                        <a href="/Admin/Exceptions">查看所有异常</a>
-                    </div>
-                </div>
-            </div>
-            <!-- apps dropdown end -->
-            <!-- db dropdown start-->
-            <div class="dropdown">
-                <a data-toggle="dropdown" class="shadow-danger" href="#">
-                    <i class="fa fa-database"></i>
-                    <span id="msgHeaderDbBadge" class="badge badge-pill badge-danger"></span>
-                </a>
-                <div class="dropdown-menu">
-                    <div class="dropdown-arrow arrow-danger"></div>
-                    <div id="msgHeaderDbContent" class="dropdown-header bg-danger">您有 <span id="msgHeaderDb">0</span> 条数据库异常通知</div>
-                    <div class="dropdown-footer">
-                        <a href="/Admin/Exceptions">查看所有异常</a>
-                    </div>
-                </div>
-            </div>
-            <!-- db dropdown end -->
-            <div class="dropdown">
-                <a class="shadow-success" href="/Account/Lock" data-toggle="tooltip" title="系统锁屏">
-                    <i class="fa fa-tv"></i>
-                </a>
-            </div>
-        </div>
-        <div class="dropdown userinfo">
-            <a data-toggle="dropdown" class="dropdown-toggle shadow-default" href="#">
-                <img id="headerIcon" alt="" src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" asp-append-version="true" />
-                <span id="userDisplayName" data-userName="Admin" class="username text-truncate d-inline-block">@((await Model.GetUserinfo()).group.name)</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-item">
-                    <div class="d-flex flex-fill align-items-center">
-                        <img src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" asp-append-version="true">
-                        <div class="flex-fill">
-                            <div class="username text-truncate">@((await Model.GetUserinfo()).group.name)</div>
-                            <div>登录名：<span class="show_Name">@((await Model.GetUserinfo()).showName)</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="dropdown-item">
-                    <a href="/Power/PersonalCenter/"><i class=" fa fa-suitcase"></i>个人中心</a>
-                    <a href="/Power/Settings/"><i class="fa fa-cog"></i>设置</a>
-                    <a href="/Admin/Notifications"><i class="fa fa-bell"></i>通知<span id="logoutNoti" class="badge badge-pill badge-success"></span></a>
-                </div>
-                <div class="dropdown-item">
-                    <a href="/Home/exit"><i class="fa fa-key"></i>注销</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
-            <li class="breadcrumb-item d-none" id="breadNav"></li>
-        </ol>
-    </nav>
-</header>
-<aside class="">
-    <div class="bg"></div>
-    <div class="nav-brand justify-content-center">
-        <a href="#">
-            @*<img src="~/images/favicon.svg" asp-append-version="true" />*@
-            <span>WCS</span>
-        </a>
-    </div>
-    <div class="nav-header flex-fill align-items-center">
-        <a href="javascript:">
-            <img src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" asp-append-version="true" />
-            <span class="username d-inline-block text-truncate flex-fill show_Name">@((await Model.GetUserinfo()).showName)</span>
-        </a>
-    </div>
-    <!-- sidebar menu start-->
-    <div class="sidebar">
-        <ul class="nav-sidebar nav nav-pills flex-column flex-nowrap">
-            @foreach (var itemMenu in await Model.NavigatorBarList())
-            {
-                <li class="nav-item @(itemMenu.sonMenuItem.Count() > 0 ? "parent" : "")">
-                    @if (itemMenu.sonMenuItem.Count() > 0)
-                    {
-                        <a href="@(itemMenu.sonMenuItem.Count() == 0 ? itemMenu.FatherItem.url:$"#collapse_{itemMenu.FatherItem.id}")" role="button" data-toggle="collapse" class="nav-link @(itemMenu.FatherItem.Active?"active":"collapse")">
-                            <i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span><i class="fa fa-angle-left"></i>
-                        </a>
-                    }
-                    @if (itemMenu.sonMenuItem.Count() == 0)
-                    {
-                        <a href="@itemMenu.FatherItem.url.Replace("~"," ")" class="nav-link @(itemMenu.FatherItem.Active?"active":"collapse")" target="_self"><i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span></a>
-                    }
-                    @if (itemMenu.sonMenuItem.Count() > 0)
-                    {
-                        <div class="collapse @(itemMenu.FatherItem.Active?"show":"")" id="@($"collapse_{itemMenu.FatherItem.id}")">
-                            <ul class="sub nav flex-column">
-                                @foreach (var Sonitem in itemMenu.sonMenuItem)
-                                {
-                                    <li class="nav-item">
-                                        <a href="@Sonitem.url.Replace("~"," ")" class="nav-link @(Sonitem.Active?"active":"collapse")" target="_self">
-                                            <i class="@Sonitem.icon"></i><span class="flex-fill">@Sonitem.name</span>
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    }
-                </li>
+    <style>
+        body, .form-control, .dropdown-menu, .btn:not(.btn-lg):not(.btn-xs), .input-group-text, .popover-header {
+            font-size: 0.875rem;
+        }
+
+        body {
+            color: #6c757d;
+            background: #f1f2f7;
+        }
+
+        .form-inline .form-group .control-label {
+            margin-right: 10px;
+            width: 90px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            justify-content: flex-start;
+        }
+
+        .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+            flex: 1 1 auto;
+        }
+
+        .form-inline .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-inline .form-group .control-label {
+                margin-right: 10px;
+                width: 90px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                justify-content: flex-start;
             }
+
+        .selectc {
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+
+        /*下拉阴影*/
+        .dropdown-menu {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.176);
+        }
+
+        .form-edit {
+            float: right;
+        }
+
+        .row {
+            flex: 1 1 100%;
+        }
+    </style>
+}
+
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+            </li>
         </ul>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Messages Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="fa fa-comments"></i>
+                    <span class="badge badge-danger navbar-badge">3</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <a href="#" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <img src="~/LTE/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">
+                                    Brad Diesel
+                                    <span class="float-right text-sm text-danger"><i class="fa fa-star"></i></span>
+                                </h3>
+                                <p class="text-sm">Call me whenever you can...</p>
+                                <p class="text-sm text-muted"><i class="fa fa-clock-o"></i> 4 Hours Ago</p>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <img src="~/LTE/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">
+                                    John Pierce
+                                    <span class="float-right text-sm text-muted"><i class="fa fa-star"></i></span>
+                                </h3>
+                                <p class="text-sm">I got your message bro</p>
+                                <p class="text-sm text-muted"><i class="fa fa-clock-o"></i> 4 Hours Ago</p>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <img src="~/LTE/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">
+                                    Nora Silvester
+                                    <span class="float-right text-sm text-warning"><i class="fa fa-star"></i></span>
+                                </h3>
+                                <p class="text-sm">The subject goes here</p>
+                                <p class="text-sm text-muted"><i class="fa fa-clock-o"></i> 4 Hours Ago</p>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                </div>
+            </li>
+            <!-- Notifications Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="fa fa-bell"></i>
+                    <span class="badge badge-warning navbar-badge">8</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <span class="dropdown-header">8 Notifications</span>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa fa-envelope mr-2"></i> 4 new messages
+                        <span class="float-right text-muted text-sm">3 mins</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa fa-users mr-2"></i> 8 friend requests
+                        <span class="float-right text-muted text-sm">12 hours</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa fa-file mr-2"></i> 3 new reports
+                        <span class="float-right text-muted text-sm">2 days</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                </div>
+            </li>
+            <!--user-->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <a href="#" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <img src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" alt="User Avatar" class="img-size-50 mr-2 img-circle">
+                            <div class="media-body">
+                                <h3>
+                                    @((await Model.GetUserinfo()).group.name)
+                                </h3>
+                                <p class="text-sm">@((await Model.GetUserinfo()).showName)</p>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa fa-envelope mr-2"></i>个人中心
+                        <span class="float-right text-muted text-sm">3 mins</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa fa-bell mr-2"></i>通知
+                        <span class="float-right text-muted text-sm">2 days</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fa fa-cog mr-2"></i>设置
+                        <span class="float-right text-muted text-sm"></span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/Home/exit" class="dropdown-item dropdown-footer"><i class="fa fa-key mr-2"></i>注销</a>
+                </div>
+            </li>
+            <!--./user-->
+            <!-- message dropdown end -->
+            <li class="nav-item">
+                <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
+                    <i class="fa fa-th-large"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="#" class="brand-link">
+            <img src="~/LTE/img/AdminLTELogo.png" alt="Middleware Logo" class="brand-image img-circle elevation-3"
+                 style="opacity: .8">
+            <span class="brand-text font-weight-light">Middleware</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">@((await Model.GetUserinfo()).showName)</a>
+                </div>
+            </div>
+
+            <!-- 侧边栏菜单 -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    @foreach (var itemMenu in await Model.NavigatorBarList())
+                    {
+                        <li class="nav-item @(itemMenu.sonMenuItem.Count() > 0 ? "has-treeview" : "") @(itemMenu.FatherItem.Active?"menu-open":"")">
+                            @if (itemMenu.sonMenuItem.Count() > 0)
+                            {
+                                <a href="#" class="nav-link @(itemMenu.FatherItem.Active?"active":"")">
+                                    <i class="nav-icon @itemMenu.FatherItem.icon"></i>
+                                    <p>
+                                        @itemMenu.FatherItem.name
+                                        <i class="right fa fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @foreach (var Sonitem in itemMenu.sonMenuItem)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@Sonitem.url.Replace("~"," ")" class="nav-link @(Sonitem.Active?"active":"")">
+                                                <i class="nav-icon @Sonitem.icon"></i>
+                                                <p>
+                                                    @Sonitem.name
+                                                </p>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            @if (itemMenu.sonMenuItem.Count() == 0)
+                            {
+                                <a href="@itemMenu.FatherItem.url.Replace("~"," ")" class="nav-link @(itemMenu.FatherItem.Active?"active":"")">
+                                    <i class="nav-icon @itemMenu.FatherItem.icon"></i>
+                                    <p>@itemMenu.FatherItem.name</p>
+                                </a>
+                            }
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- 内容包装器 包含页面内容 -->
+    <div class="content-wrapper">
+        @RenderBody()
     </div>
-    <!-- sidebar menu end-->
-</aside>
-<section id="main-content" class="main-content ">
-    @RenderBody()
-</section>
+
+    <!-- 控件侧边栏 -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- 控件侧边栏内容在这里 -->
+        <div class="p-3">
+            <h5>Title</h5>
+            <p>Sidebar content</p>
+        </div>
+    </aside>
+    <!-- 主要的页脚 -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="float-right d-none d-sm-inline">
+            Anything you want
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2019 <a href="http://www.galaxis.com.cn/">Galaxis Technology Co.,Ltd</a>.</strong> All rights reserved.
+    </footer>
+</div>
+
 @section modal {
     @RenderSection("modal", false)
 }
 @section javascript {
-    <script src="~/node_modules/jquery/dist/jquery.js"></script>
+
     <script src="~/js/popper.min.js"></script>
+    <!-- jQuery -->
+    <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    <!-- Bootstrap 4 -->
     <script src="~/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    @*<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>*@
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/LTE/js/adminlte.min.js"></script>
+
+    <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/js/common-scripts.js"></script>
+
     @RenderSection("javascript", false)
-    @*<script src="~/js/common-scripts.js"></script>*@
 }

@@ -225,8 +225,8 @@
                             field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
                                 TableArrar[row.id] = row;
                                 console.log(row);
-                                var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
-                                    '<a class="btn btn-xs btn-danger btn-remove" onclick="deleteTool(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
+                                var strHtml = '<button type="button" class="btn btn-primary btn-xs" onclick="edit(' + row.id + ')">编辑</button>&nbsp;' +
+                                    '<button type="button" class="btn btn-danger btn-xs" onclick="deleteTool(' + row.id + ')">删除</button>';
                                 return strHtml;
                             },
                             edit: false
@@ -247,12 +247,23 @@
         };
     </script>
 }
-<div class="main-header">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain"><i class="fa fa-home"></i>首页</a></li>
-        <li class="breadcrumb-item">用户管理</li>
-    </ol>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">用户管理</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain">首页</a></li>
+                    <li class="breadcrumb-item active">用户管理</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div class="card">
     <div class="card-header">查询条件</div>
     <div class="card-body">
@@ -288,18 +299,10 @@
         查询结果
     </div>
     <div class="card-body">
-        <div class="alert alert-danger" role="alert">
-            <span>非超级管理用户请谨慎修改</span>
+        <div class="alert alert-warning" role="alert">
+            <span>请谨慎修改</span>
         </div>
         <div id="toolbar" class="">
-            <div class="gear btn-group">
-                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
-                <div class="dropdown-menu">
-                    <a href="#" class="btn_add" title="新增"><i class="fa fa-plus"></i></a>
-                    <a class="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
-                    <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
-                </div>
-            </div>
             <div class="toolbar btn-group">
                 <button type="button" class="btn btn-info btn_add"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
                 <button type="button" class="btn btn-primary tb_edit"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
