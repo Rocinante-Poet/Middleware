@@ -12,7 +12,7 @@ namespace Middleware_DatabaseAccess
         /// <summary>
         /// 分页查询
         /// </summary>
-        public JsonData<object> GetList(int Pagelimit, int Pageoffset, string sbType, string sbName, int? errorCode, int? errorType)
+        public JsonData<object> GetList(int Pagelimit, int Pageoffset, string sbType, string sbName, int? errorCode, int? errorLevel)
         {
             var connection = CRUD.GetOpenConnection();
 
@@ -37,17 +37,17 @@ namespace Middleware_DatabaseAccess
                 strQuery.Append($" AND b.errorCode = @errorCode ");
                 strCount.Append($" AND c.type = @sbType ");
             }
-            if (errorType != null)
+            if (errorLevel != null)
             {
-                strQuery.Append($" AND b.errorType = @errorType ");
+                strQuery.Append($" AND b.errorLevel = @errorLevel ");
                 strCount.Append($" AND c.type = @sbType ");
             }
 
             strQuery.Append($" LIMIT {Pageoffset},{Pagelimit}; ");
 
-            var List = connection.Query(strQuery.ToString(), new { sbType, sbName, errorCode, errorType });
+            var List = connection.Query(strQuery.ToString(), new { sbType, sbName, errorCode, errorLevel });
 
-            var CountPage = connection.QueryFirstOrDefault(strCount.ToString(), new { sbType, sbName, errorCode, errorType });
+            var CountPage = connection.QueryFirstOrDefault(strCount.ToString(), new { sbType, sbName, errorCode, errorLevel });
 
             foreach (var item in CountPage)
             {

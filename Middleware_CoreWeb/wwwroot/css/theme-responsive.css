@@ -49,13 +49,14 @@
     .form-inline input.form-control, .form-inline .input-group, .form-select > input.form-control {
         width: 194px;
     }
+
     .form-inline select.form-control, .form-select > select.form-control {
         width: 194px;
     }
 
-        .form-inline .input-group input.form-control {
-            width: 1%;
-        }
+    .form-inline .input-group input.form-control {
+        width: 1%;
+    }
 
     .modal-lg {
         max-width: calc(90%);
@@ -104,8 +105,8 @@
         transform: translate(0);
         width: 13.375rem;
         overflow: hidden;
-       /* bottom: 40px; */
-	    bottom: 0px;
+        /* bottom: 40px; */
+        bottom: 0px;
     }
 
         aside .sidebar {

@@ -72,7 +72,6 @@
             display: inline-block;
         }
 
-
         .panel > .panel-heading {
             color: #666;
             border-bottom-left-radius: 0;
@@ -393,12 +392,10 @@
         mainChart(3);
         mainChart(4);
 
-
-
         optionData2 = {
             tooltip: {
                 trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                formatter: "{a} <br />{b}: {c} ({d}%)"
             },
             series: [
                 {
@@ -500,14 +497,9 @@
         $(window).resize(function () {
             ChartCenter.resize();
         });
-
     </script>
 }
-<div class="main-header">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="javascript:"><i class="fa fa-home"></i>系统</a></li>
-        <li class="breadcrumb-item">首页</li>
-    </ol>
+<div class="content-header">
 </div>
 <div class="row">
     <div class="col-xl-3 panel-ls">
@@ -598,7 +590,6 @@
             <div class="panel-body">
                 <div class="Chart-Order" style="position:relative;">
                     <div class="Chart-Order" id="chart-center">
-
                     </div>
                     <div class="Chart-Order order-lable">
                         <p class="lable-Count">
@@ -793,7 +784,6 @@
                             </i>
                         </li>
                     </ul>
-
                 </div>
             </div>
         </div>

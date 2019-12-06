@@ -1,0 +1,203 @@
+﻿@model NavigatorBarModel
+@{
+    Layout = "_BaseLayout";
+}
+@section css {
+    <link href="~/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    @*<link href="~/node_modules/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />*@
+    @RenderSection("css", false)
+    <link href="~/css/theme.css" rel="stylesheet" />
+    <link href="~/css/theme-responsive.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/site-responsive.css" rel="stylesheet" />
+    <link href="~/css/@(Model.CoreWebTheme).css" rel="stylesheet" />
+}
+<header class="header">
+    <div class="bg"></div>
+    <div class="d-flex align-items-center">
+        <a id="navbar" href="#" class="sidebar-toggle-box">
+            <i class="fa fa-bars"></i>
+            <span id="websiteTitle">后台管理系统</span>
+        </a>
+        <div class="nav">
+            <!-- tasks start -->
+            <div class="dropdown">
+                <a data-toggle="dropdown" class="shadow-primary" href="#">
+                    <i class="fa fa-tasks"></i>
+                    <span id="msgHeaderTaskBadge" class="badge badge-pill badge-primary"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-arrow arrow-primary"></div>
+                    <div id="msgHeaderTaskContent" class="dropdown-header bg-primary">您有 <span id="msgHeaderTask">0</span> 个未完成的任务</div>
+                    <div class="dropdown-footer">
+                        <a href="/Admin/Tasks">查看所有任务</a>
+                    </div>
+                </div>
+            </div>
+            <!-- tasks end -->
+            <!-- message dropdown start-->
+            <div class="dropdown">
+                <a data-toggle="dropdown" class="shadow-info" href="#">
+                    <i class="fa fa-envelope"></i>
+                    <span id="msgHeaderMsgBadge" class="badge badge-pill badge-info"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-arrow arrow-info"></div>
+                    <div id="msgHeaderMsgContent" class="dropdown-header bg-info">您有 <span id="msgHeaderMsg">0</span> 个未读的消息</div>
+                    <div class="dropdown-footer">
+                        <a href="/Admin/Messages">查看所有消息</a>
+                    </div>
+                </div>
+            </div>
+            <!-- message dropdown end -->
+            <!-- users dropdown start-->
+            <div class="dropdown">
+                <a data-toggle="dropdown" class="shadow-success" href="#">
+                    <i class="fa fa-user-plus"></i>
+                    <span id="msgHeaderUserBadge" class="badge badge-pill badge-success"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-arrow arrow-success"></div>
+                    <div id="msgHeaderUserContent" class="dropdown-header bg-success">您有 <span id="msgHeaderUser">0</span> 条新用户通知</div>
+                    <div class="dropdown-footer">
+                        <a href="/Admin/Notifications">查看所有通知</a>
+                    </div>
+                </div>
+            </div>
+            <!-- users dropdown end -->
+            <!-- apps dropdown start-->
+            <div class="dropdown">
+                <a data-toggle="dropdown" class="shadow-warning" href="#">
+                    <i class="fa fa-bug"></i>
+                    <span id="msgHeaderAppBadge" class="badge badge-pill badge-warning"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-arrow arrow-warning"></div>
+                    <div id="msgHeaderAppContent" class="dropdown-header bg-warning">您有 <span id="msgHeaderApp">0</span> 条程序异常通知</div>
+                    <div class="dropdown-footer">
+                        <a href="/Admin/Exceptions">查看所有异常</a>
+                    </div>
+                </div>
+            </div>
+            <!-- apps dropdown end -->
+            <!-- db dropdown start-->
+            <div class="dropdown">
+                <a data-toggle="dropdown" class="shadow-danger" href="#">
+                    <i class="fa fa-database"></i>
+                    <span id="msgHeaderDbBadge" class="badge badge-pill badge-danger"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-arrow arrow-danger"></div>
+                    <div id="msgHeaderDbContent" class="dropdown-header bg-danger">您有 <span id="msgHeaderDb">0</span> 条数据库异常通知</div>
+                    <div class="dropdown-footer">
+                        <a href="/Admin/Exceptions">查看所有异常</a>
+                    </div>
+                </div>
+            </div>
+            <!-- db dropdown end -->
+            <div class="dropdown">
+                <a class="shadow-success" href="/Account/Lock" data-toggle="tooltip" title="系统锁屏">
+                    <i class="fa fa-tv"></i>
+                </a>
+            </div>
+        </div>
+        <div class="dropdown userinfo">
+            <a data-toggle="dropdown" class="dropdown-toggle shadow-default" href="#">
+                <img id="headerIcon" alt="" src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" asp-append-version="true" />
+                <span id="userDisplayName" data-userName="Admin" class="username text-truncate d-inline-block">@((await Model.GetUserinfo()).group.name)</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-item">
+                    <div class="d-flex flex-fill align-items-center">
+                        <img src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" asp-append-version="true">
+                        <div class="flex-fill">
+                            <div class="username text-truncate">@((await Model.GetUserinfo()).group.name)</div>
+                            <div>登录名：<span class="show_Name">@((await Model.GetUserinfo()).showName)</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown-item">
+                    <a href="/Power/PersonalCenter/"><i class=" fa fa-suitcase"></i>个人中心</a>
+                    <a href="/Power/Settings/"><i class="fa fa-cog"></i>设置</a>
+                    <a href="/Admin/Notifications"><i class="fa fa-bell"></i>通知<span id="logoutNoti" class="badge badge-pill badge-success"></span></a>
+                </div>
+                <div class="dropdown-item">
+                    <a href="/Home/exit"><i class="fa fa-key"></i>注销</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Admin/Index"><i class="fa fa-home"></i>首页</a></li>
+            <li class="breadcrumb-item d-none" id="breadNav"></li>
+        </ol>
+    </nav>
+</header>
+<aside class="">
+    <div class="bg"></div>
+    <div class="nav-brand justify-content-center">
+        <a href="#">
+            @*<img src="~/images/favicon.svg" asp-append-version="true" />*@
+            <span>WCS</span>
+        </a>
+    </div>
+    <div class="nav-header flex-fill align-items-center">
+        <a href="javascript:">
+            <img src="~/images/uploader/@((await Model.GetUserinfo()).Imgurl)" asp-append-version="true" />
+            <span class="username d-inline-block text-truncate flex-fill show_Name">@((await Model.GetUserinfo()).showName)</span>
+        </a>
+    </div>
+    <!-- sidebar menu start-->
+    <div class="sidebar">
+        <ul class="nav-sidebar nav nav-pills flex-column flex-nowrap">
+            @foreach (var itemMenu in await Model.NavigatorBarList())
+            {
+                <li class="nav-item @(itemMenu.sonMenuItem.Count() > 0 ? "parent" : "")">
+                    @if (itemMenu.sonMenuItem.Count() > 0)
+                    {
+                        <a href="@(itemMenu.sonMenuItem.Count() == 0 ? itemMenu.FatherItem.url:$"#collapse_{itemMenu.FatherItem.id}")" role="button" data-toggle="collapse" class="nav-link @(itemMenu.FatherItem.Active?"active":"collapse")">
+                            <i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span><i class="fa fa-angle-left"></i>
+                        </a>
+                    }
+                    @if (itemMenu.sonMenuItem.Count() == 0)
+                    {
+                        <a href="@itemMenu.FatherItem.url.Replace("~"," ")" class="nav-link @(itemMenu.FatherItem.Active?"active":"collapse")" target="_self"><i class="@itemMenu.FatherItem.icon"></i><span class="flex-fill">@itemMenu.FatherItem.name</span></a>
+                    }
+                    @if (itemMenu.sonMenuItem.Count() > 0)
+                    {
+                        <div class="collapse @(itemMenu.FatherItem.Active?"show":"")" id="@($"collapse_{itemMenu.FatherItem.id}")">
+                            <ul class="sub nav flex-column">
+                                @foreach (var Sonitem in itemMenu.sonMenuItem)
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Sonitem.url.Replace("~"," ")" class="nav-link @(Sonitem.Active?"active":"collapse")" target="_self">
+                                            <i class="@Sonitem.icon"></i><span class="flex-fill">@Sonitem.name</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- sidebar menu end-->
+</aside>
+<section id="main-content" class="main-content ">
+    @RenderBody()
+</section>
+@section modal {
+    @RenderSection("modal", false)
+}
+@section javascript {
+    <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/node_modules/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    @RenderSection("javascript", false)
+    <script src="~/js/common-scripts.js"></script>
+}

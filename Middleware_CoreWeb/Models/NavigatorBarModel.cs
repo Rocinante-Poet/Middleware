@@ -10,7 +10,8 @@ namespace Middleware_CoreWeb
 {
     public class NavigatorBarModel : ModelBase
     {
-        ControllerBase controllerBase;
+        private ControllerBase controllerBase;
+
         public NavigatorBarModel(ControllerBase controller)
         {
             controllerBase = controller;
@@ -18,12 +19,9 @@ namespace Middleware_CoreWeb
 
         public async Task<IEnumerable<NavigatorItem>> NavigatorBarList() => new DB_detail().NavigatorBarList((await controllerBase.HttpContext.GetUserAsync()).Power_ID, controllerBase.Request.Path);
 
-
         public IEnumerable<NavigatorItem> NavigatorMenuList => new DB_Menu().GetFatherList();
 
-
         public IEnumerable<group_model> groupArray => new DB_Group().Get();
-
 
         public async Task<Userinfo> GetUserinfo() => await controllerBase.HttpContext.GetUserAsync();
 

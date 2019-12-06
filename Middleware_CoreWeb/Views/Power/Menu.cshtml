@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = "_Default";
     ViewData["Title"] = "_Default";
 }
@@ -32,16 +31,6 @@
                 $('#dialogNew').modal();
             });
 
-            //$('#btnMenuParent').click(function () {
-            //    $('#dialogNew').modal('hide');
-            //    $('#dialogMenu').modal();
-
-            //});
-            //$('#modal-close').click(function () {
-            //    //$('#dialogMenu').modal('hide');
-            //    //$('#dialogNew').modal();
-            //});
-
             $('.btn_delete').on('click', function () {
                 var data = $("#TableMenu").bootstrapTable('getSelections');
                 if (data.length > 0) {
@@ -68,7 +57,6 @@
                     toastr.error("请选中一行后删除！");
                 }
             });
-
 
             $('#btnSubmit').click(function () {
 
@@ -141,7 +129,6 @@
                 $btnPickIcon.find('i').attr('class', icon);
             });
             var $scroll = null;
-
 
             $.ajax({
                 method: "get",
@@ -274,8 +261,8 @@
                         {
                             field: "agvId", title: "操作", width: 200, align: "center", formatter: function (value, row, index) {
                                 menuArrar[row.id] = row;
-                                var strHtml = '<a class="btn btn-xs btn-success btn-update" onclick="edit(' + row.id + ')"><i class="fa fa-edit"></i>&nbsp;编辑</a>&nbsp;&nbsp;' +
-                                    '<a class="btn btn-xs btn-danger btn-remove" onclick="deletemenu(' + row.id + ')" ><i class="fa fa-trash-o"></i>&nbsp;删除</a>';
+                                var strHtml = '<button type="button" class="btn btn-primary btn-xs" onclick="edit(' + row.id + ')">编辑</button>&nbsp;' +
+                                    '<button type="button" class="btn btn-danger btn-xs" onclick="deleteTool(' + row.id + ')">删除</button>';
                                 return strHtml;
                             }, edit: false
                         }]
@@ -356,58 +343,59 @@
         }
     </script>
 }
-
-<div class="main-header">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain"><i class="fa fa-home"></i>首页</a></li>
-        <li class="breadcrumb-item">菜单管理</li>
-    </ol>
-</div>
-<div class="card">
-    <div class="card-header">查询条件</div>
-    <div class="card-body">
-
-        <form class="form-inline">
-            <div class="row">
-                <div class="form-group col-sm-6 col-lg-auto">
-                    <label class="control-label" for="txt_menus_name">菜单名称</label>
-                    <input type="text" class="form-control" id="txt_menus_name">
-                </div>
-                <div class="form-group col-sm-6 col-lg-auto flex-sm-fill justify-content-sm-end align-self-sm-end">
-                    <button style="margin:3px" type="button" id="btn_query" class="btn btn-primary btn-fill"><i class="fa fa-search" aria-hidden="true"></i><span>查询</span></button>
-                    <button style="margin:3px" type="button" id="btn_repeat" class="btn btn-primary btn-fill"><i class="fa fa-repeat" aria-hidden="true"></i><span>重置</span></button>
-                </div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">菜单管理</h1>
             </div>
-        </form>
-    </div>
-</div>
-<div class="card">
-    <div class="card-header">
-        查询结果
-    </div>
-    <div class="card-body">
-        <div class="alert alert-danger" role="alert">
-            <span>非超级管理用户请谨慎修改</span>
-        </div>
-        @*<div class="bootstrap-table bootstrap4">*@
-        <div id="toolbar" class="btn-group">
-            <div class="gear btn-group">
-                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
-                <div class="dropdown-menu">
-                    <a href="#" class="btn_add" title="新增"><i class="fa fa-plus"></i></a>
-                    <a class="tb_edit" href="#" title="编辑"><i class="fa fa-pencil"></i></a>
-                    <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
-                </div>
-            </div>
-            <div class="toolbar btn-group">
-                <button type="button" class="btn btn-info btn_add"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
-                <button type="button" class="btn btn-primary tb_edit"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
-                <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain">首页</a></li>
+                    <li class="breadcrumb-item active">菜单管理</li>
+                </ol>
             </div>
         </div>
-        <table id="TableMenu"></table>
-        @*</div>*@
-        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="content">
+    <div class="card">
+        <div class="card-header">查询条件</div>
+        <div class="card-body">
+
+            <form class="form-inline">
+                <div class="row">
+                    <div class="form-group col-sm-6 col-lg-auto">
+                        <label class="control-label" for="txt_menus_name">菜单名称</label>
+                        <input type="text" class="form-control" id="txt_menus_name">
+                    </div>
+                    <div class="form-group col-sm-6 col-lg-auto flex-sm-fill justify-content-sm-end align-self-sm-end">
+                        <button style="margin:3px" type="button" id="btn_query" class="btn btn-primary btn-fill"><i class="fa fa-search" aria-hidden="true"></i><span>查询</span></button>
+                        <button style="margin:3px" type="button" id="btn_repeat" class="btn btn-primary btn-fill"><i class="fa fa-repeat" aria-hidden="true"></i><span>重置</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            查询结果
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning" role="alert">
+                <span>请谨慎修改</span>
+            </div>
+            <div id="toolbar" class="btn-group">
+                <div class="toolbar btn-group">
+                    <button type="button" class="btn btn-info btn_add"><i class="fa fa-plus" aria-hidden="true"></i><span>新增</span></button>
+                    <button type="button" class="btn btn-primary tb_edit"><i class="fa fa-pencil" aria-hidden="true"></i><span>编辑</span></button>
+                    <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
+                </div>
+            </div>
+            <table id="TableMenu"></table>
+            @*</div>*@
+            <div class="clearfix"></div>
+        </div>
     </div>
 </div>
 @section modal {
@@ -471,31 +459,6 @@
 }
 
 @section customModal{
-    @*<div class="modal" id="dialogIcon" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myMenuModalLabel" aria-hidden="true">
-            <div id="dialogSubMenu" class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div id="dialogIcon" class="modal-content icon-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myIconModalLabel">请选择图标</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="loadIconView"><i class="fa fa-spinner fa-pulse"></i><span>正在加载图标...请稍等</span></div>
-                    </div>
-                    <div class="modal-footer">
-                        <span>被选择的图标</span><i class="fa fa-fa" id="pickIcon"></i>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                            <i class="fa fa-times"></i>
-                            <span>关闭</span>
-                        </button>
-                        <button type="button" class="btn btn-primary" id="btnSubmitIcon">
-                            <i class="fa fa-save"></i>
-                            <span>确定</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
     <div id="dialogIcon" class="modal-content icon-content">
         <div class="modal-header">
             <h5 class="modal-title" id="myIconModalLabel">请选择图标</h5>
@@ -517,6 +480,3 @@
         </div>
     </div>
 }
-
-
-

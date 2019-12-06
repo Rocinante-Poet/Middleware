@@ -10,7 +10,6 @@
     "startbootstrap-sb-admin": "5.1.1",
     "font-awesome": "4.7.0",
     "overlayscrollbars": "1.10.0",
-    "bootstrap-table": "1.15.5",
     "bootstrap-select": "1.13.7",
     "popper.js": "1.16.0",
     "validate": "5.1.0",
@@ -18,7 +17,7 @@
     "nestable2": "1.6.0",
     "echarts": "4.5.0",
     "bootstrap-datetimepicker.js": "1.0.0",
-    "echarts": "4.5.0",
-    "bootstrap-fileinput": "5.0.7"
+    "bootstrap-fileinput": "5.0.7",
+    "bootstrap-table": "1.15.5"
   }
 }

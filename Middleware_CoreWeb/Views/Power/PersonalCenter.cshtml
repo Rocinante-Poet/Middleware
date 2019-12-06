@@ -31,7 +31,7 @@
             theme: 'fa',
             language: 'zh',
             maxFileSize: 5000,
-            allowedFileExtensions: ['jpg', 'png', 'bmp', 'gif', 'jpeg','svg'],
+            allowedFileExtensions: ['jpg', 'png', 'bmp', 'gif', 'jpeg', 'svg'],
             initialPreview: [
                 preIcon
             ],
@@ -68,7 +68,6 @@
             });
         });
 
-
         $btnSaveDisplayName.on('click', function () {
             if ($displayName.val() != "")
                 edit('/api/User/1', { "showName": $displayName.val() });
@@ -78,7 +77,6 @@
             if ($('#confirmPassword').val() != "" && $('#currentPassword').val() != "" && $('#newPassword').val() != "")
                 edit('/api/User/2', { "Pwd": $('#confirmPassword').val(), "originalPwd": $('#currentPassword').val() });
         });
-
 
         function edit(_url, _data) {
             $.ajax({
@@ -102,19 +100,26 @@
                 }
             });
         }
-
     </script>
-
-
 
 }
 
-<div class="main-header">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain"><i class="fa fa-home"></i>首页</a></li>
-        <li class="breadcrumb-item">个人中心</li>
-    </ol>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">个人中心</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain">首页</a></li>
+                    <li class="breadcrumb-item active">个人中心</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div class="card">
     <div class="card-header">基本资料</div>
     <div class="card-body" data-toggle="LgbValidate" data-valid-button="#btnSaveDisplayName">

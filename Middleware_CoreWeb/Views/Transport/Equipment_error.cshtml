@@ -197,12 +197,22 @@
     </script>
 }
 
-<div class="main-he级别ader">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain"><i class="fa fa-home"></i>首页</a></li>
-        <li class="breadcrumb-item">设备错误汇总</li>
-    </ol>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">设备错误汇总</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@CoreConfiguration.DefaultMain">首页</a></li>
+                    <li class="breadcrumb-item active">设备错误汇总</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div class="card">
     <div class="card-header">查询条件</div>
     <div class="card-body">
@@ -254,16 +264,10 @@
         查询结果
     </div>
     <div class="card-body">
-        <div class="alert alert-danger" role="alert">
-            <span>非超级管理用户请谨慎修改</span>
+        <div class="alert alert-warning" role="alert">
+            <span>请谨慎修改</span>
         </div>
         @*<div id="toolbar" class="btn-group">
-                <div class="gear btn-group">
-                    <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-gear"></i></button>
-                    <div class="dropdown-menu">
-                        <a id="tb_delete" href="#" class="btn_delete" title="删除"><i class="fa fa-remove"></i></a>
-                    </div>
-                </div>
                 <div class="toolbar btn-group">
                     <button type="button" class="btn btn-danger btn_delete"><i class="fa fa-remove" aria-hidden="true"></i><span>删除</span></button>
                 </div>
